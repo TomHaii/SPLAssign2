@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class FutureTest {
+    Future<String> future;
     @BeforeEach
     public void setUp(){
 
