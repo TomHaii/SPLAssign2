@@ -1,12 +1,14 @@
 package bgu.spl.mics;
 
+import java.util.List;
+
 /**
  * The {@link MessageBrokerImpl class is the implementation of the MessageBroker interface.
  * Write your implementation here!
  * Only private fields and methods can be added to this class.
  */
 public class MessageBrokerImpl implements MessageBroker {
-
+	private List<Subscriber> subscriberList;
 	/**
 	 * Retrieves the single instance of this class.
 	 */
@@ -48,6 +50,7 @@ public class MessageBrokerImpl implements MessageBroker {
 
 	@Override
 	public void register(Subscriber m) {
+		subscriberList.add(m);
 		// TODO Auto-generated method stub
 
 	}
@@ -55,7 +58,7 @@ public class MessageBrokerImpl implements MessageBroker {
 	@Override
 	public void unregister(Subscriber m) {
 		// TODO Auto-generated method stub
-
+		subscriberList.remove(m);
 	}
 
 	@Override

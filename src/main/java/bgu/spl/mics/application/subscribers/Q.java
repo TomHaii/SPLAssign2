@@ -11,7 +11,7 @@ import bgu.spl.mics.Subscriber;
 public class Q extends Subscriber {
 
 	public Q() {
-		super("Change_This_Name");
+		super("Q");
 		// TODO Implement this
 	}
 
