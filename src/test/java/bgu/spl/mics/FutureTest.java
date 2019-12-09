@@ -8,7 +8,7 @@ public class FutureTest {
     Future<String> future;
     @BeforeEach
     public void setUp(){
-
+        future = new Future<String>();
     }
 
     @Test
