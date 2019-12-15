@@ -1,6 +1,7 @@
 package bgu.spl.mics.application.passiveObjects;
 
-import java.util.List;
+import java.util.Arrays;
+import java.util.LinkedList;
 
 /**
  *  That's where Q holds his gadget (e.g. an explosive pen was used in GoldenEye, a geiger counter in Dr. No, etc).
@@ -11,35 +12,42 @@ import java.util.List;
  * You can add ONLY private fields and methods to this class as you see fit.
  */
 public class Inventory {
-	private List<String> gadgets;
+	private static Inventory instance = null;
+	private LinkedList<String> gadgets;
+
+	private Inventory(){
+		gadgets = new LinkedList<String>();
+	}
 	/**
-     * Retrieves the single instance of this class.
-     */
+	 * Retrieves the single instance of this class.
+	 */
 	public static Inventory getInstance() {
-		//TODO: Implement this
-		return null;
+		return instance;
 	}
 
 	/**
-     * Initializes the inventory. This method adds all the items given to the gadget
-     * inventory.
-     * <p>
-     * @param inventory 	Data structure containing all data necessary for initialization
-     * 						of the inventory.
-     */
+	 * Initializes the inventory. This method adds all the items given to the gadget
+	 * inventory.
+	 * <p>
+	 * @param inventory 	Data structure containing all data necessary for initialization
+	 * 						of the inventory.
+	 */
 	public void load (String[] inventory) {
-		//TODO: Implement this
+		gadgets.addAll(Arrays.asList(inventory));
 	}
-	
+
 	/**
-     * acquires a gadget and returns 'true' if it exists.
-     * <p>
-     * @param gadget 		Name of the gadget to check if available
-     * @return 	‘false’ if the gadget is missing, and ‘true’ otherwise
-     */
+	 * acquires a gadget and returns 'true' if it exists.
+	 * <p>
+	 * @param gadget 		Name of the gadget to check if available
+	 * @return 	‘false’ if the gadget is missing, and ‘true’ otherwise
+	 */
 	public boolean getItem(String gadget){
-		//TODO: Implement this
-		return true;
+		if (gadgets != null && gadgets.contains(gadget)){
+			gadgets.remove(gadget);
+			return true;
+		}
+		return false;
 	}
 
 	/**

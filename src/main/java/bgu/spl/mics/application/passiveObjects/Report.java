@@ -9,49 +9,53 @@ import java.util.List;
  * You may add ONLY private fields and methods to this class.
  */
 public class Report {
+	private String missionName;
+	private int mId;
+	private int moneypennyId;
+	private List<String> serialAgentsNumbers;
+	private List<String> agentsNames;
+	private String gadgetName;
+
 	/**
      * Retrieves the mission name.
      */
 	public String getMissionName() {
-		// TODO Implement this
-		return null;
+		return missionName;
 	}
 
 	/**
 	 * Sets the mission name.
 	 */
 	public void setMissionName(String missionName) {
-		// TODO Implement this
+		this.missionName = missionName;
 	}
 
 	/**
 	 * Retrieves the M's id.
 	 */
 	public int getM() {
-		// TODO Implement this
-		return 0;
+		return mId;
 	}
 
 	/**
 	 * Sets the M's id.
 	 */
 	public void setM(int m) {
-		// TODO Implement this
+		this.mId = m;
 	}
 
 	/**
 	 * Retrieves the Moneypenny's id.
 	 */
 	public int getMoneypenny() {
-		// TODO Implement this
-		return 0;
+		return moneypennyId;
 	}
 
 	/**
 	 * Sets the Moneypenny's id.
 	 */
 	public void setMoneypenny(int moneypenny) {
-		// TODO Implement this
+		this.moneypennyId = moneypenny;
 	}
 
 	/**
@@ -60,15 +64,14 @@ public class Report {
 	 * @return The serial numbers of the agents.
 	 */
 	public List<String> getAgentsSerialNumbersNumber() {
-		// TODO Implement this
-		return null;
+		return serialAgentsNumbers;
 	}
 
 	/**
 	 * Sets the serial numbers of the agents.
 	 */
 	public void setAgentsSerialNumbersNumber(List<String> agentsSerialNumbersNumber) {
-		// TODO Implement this
+		this.serialAgentsNumbers = agentsSerialNumbersNumber;
 	}
 
 	/**
@@ -77,15 +80,14 @@ public class Report {
 	 * @return The agents names.
 	 */
 	public List<String> getAgentsNames() {
-		// TODO Implement this
-		return null;
+		return agentsNames;
 	}
 
 	/**
 	 * Sets the agents names.
 	 */
 	public void setAgentsNames(List<String> agentsNames) {
-		// TODO Implement this
+		this.agentsNames = agentsNames;
 	}
 
 	/**
@@ -94,15 +96,14 @@ public class Report {
 	 * @return the name of the gadget.
 	 */
 	public String getGadgetName() {
-		// TODO Implement this
-		return null;
+		return gadgetName;
 	}
 
 	/**
 	 * Sets the name of the gadget.
 	 */
 	public void setGadgetName(String gadgetName) {
-		// TODO Implement this
+		this.gadgetName = gadgetName;
 	}
 
 	/**

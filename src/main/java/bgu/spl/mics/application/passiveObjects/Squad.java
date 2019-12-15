@@ -1,23 +1,29 @@
 package bgu.spl.mics.application.passiveObjects;
-import java.util.List;
-import java.util.Map;
+import javax.swing.*;
+import java.util.*;
 
 /**
  * Passive data-object representing a information about an agent in MI6.
- * You must not alter any of the given public methods of this class. 
+ * You must not alter any of the given public methods of this class.
  * <p>
  * You may add ONLY private fields and methods to this class.
  */
 public class Squad {
 
+	private static Squad instance;
 	private Map<String, Agent> agents;
+
+	private Squad(){
+		agents = new HashMap<>();
+	}
 
 	/**
 	 * Retrieves the single instance of this class.
 	 */
 	public static Squad getInstance() {
-		//TODO: Implement this
-		return null;
+		if (instance == null)
+			instance = new Squad();
+		return instance;
 	}
 
 	/**
@@ -27,14 +33,18 @@ public class Squad {
 	 * 						of the squad.
 	 */
 	public void load (Agent[] agents) {
-		// TODO Implement this
+		for (Agent agent : agents) {
+			(this.agents).put(agent.getSerialNumber(), agent);
+		}
 	}
 
 	/**
 	 * Releases agents.
 	 */
 	public void releaseAgents(List<String> serials){
-		// TODO Implement this
+		for (String s : serials){
+			agents.get(s).release();
+		}
 	}
 
 	/**
@@ -51,18 +61,24 @@ public class Squad {
 	 * @return ‘false’ if an agent of serialNumber ‘serial’ is missing, and ‘true’ otherwise
 	 */
 	public boolean getAgents(List<String> serials){
-		// TODO Implement this
-		return false;
+		for (String s : serials){
+			if (!agents.containsKey(s))
+				return false;
+		}
+		return true;
 	}
 
-    /**
-     * gets the agents names
-     * @param serials the serial numbers of the agents
-     * @return a list of the names of the agents with the specified serials.
-     */
-    public List<String> getAgentsNames(List<String> serials){
-        // TODO Implement this
-	    return null;
-    }
+	/**
+	 * gets the agents names
+	 * @param serials the serial numbers of the agents
+	 * @return a list of the names of the agents with the specified serials.
+	 */
+	public List<String> getAgentsNames(List<String> serials){
+		List<String> list = new LinkedList<>();
+		for (String s : serials){
+			list.add(agents.get(s).getName());
+		}
+		return list;
+	}
 
 }
