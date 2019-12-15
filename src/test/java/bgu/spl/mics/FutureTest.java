@@ -17,6 +17,7 @@ public class FutureTest {
 
     @Test
     public void test(){
+        //hi
         assertNotNull(future);
         assertFalse(future.isDone());
         future.resolve("Hi");
