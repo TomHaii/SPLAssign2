@@ -1,5 +1,8 @@
 package bgu.spl.mics;
 
+import bgu.spl.mics.application.passiveObjects.Diary;
+
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -9,14 +12,19 @@ import java.util.List;
  */
 public class MessageBrokerImpl implements MessageBroker {
 	private List<Subscriber> subscriberList;
+	private static MessageBroker instance = null;
 	/**
 	 * Retrieves the single instance of this class.
 	 */
 	public static MessageBroker getInstance() {
-		//TODO: Implement this
-		return null;
+		if(instance == null){
+			instance = new MessageBrokerImpl();
+		}
+		return instance;
 	}
-
+	private MessageBrokerImpl(){
+		subscriberList = new LinkedList<Subscriber>();
+	}
 	@Override
 	public <T> void subscribeEvent(Class<? extends Event<T>> type, Subscriber m) {
 		// TODO Auto-generated method stub
