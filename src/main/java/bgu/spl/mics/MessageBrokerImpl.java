@@ -1,9 +1,7 @@
 package bgu.spl.mics;
 
-import bgu.spl.mics.application.passiveObjects.Diary;
-
-import java.util.LinkedList;
-import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.LinkedBlockingDeque;
 
 /**
  * The {@link MessageBrokerImpl class is the implementation of the MessageBroker interface.
@@ -11,8 +9,14 @@ import java.util.List;
  * Only private fields and methods can be added to this class.
  */
 public class MessageBrokerImpl implements MessageBroker {
-	private List<Subscriber> subscriberList;
 	private static MessageBroker instance = null;
+	private ConcurrentHashMap<Event<?>, Future<?>> futureMap;
+	private ConcurrentHashMap<Subscriber, LinkedBlockingDeque<Message>> subscriberList;
+	private ConcurrentHashMap<Subscriber, LinkedBlockingDeque<Class<? extends Message>>> topicsList;
+	private ConcurrentHashMap<Class<? extends Broadcast>, LinkedBlockingDeque<Subscriber>> broadcastMap;
+	private ConcurrentHashMap<Class<? extends Event<?>>, LinkedBlockingDeque<Subscriber>> eventMap;
+
+
 	/**
 	 * Retrieves the single instance of this class.
 	 */
@@ -23,30 +27,35 @@ public class MessageBrokerImpl implements MessageBroker {
 		return instance;
 	}
 	private MessageBrokerImpl(){
-		subscriberList = new LinkedList<Subscriber>();
+		subscriberList = new ConcurrentHashMap<>();
+		eventMap = new ConcurrentHashMap<>();
+		futureMap = new ConcurrentHashMap<>();
+		broadcastMap = new ConcurrentHashMap<>();
 	}
 	@Override
 	public <T> void subscribeEvent(Class<? extends Event<T>> type, Subscriber m) {
-		// TODO Auto-generated method stub
-
+		if(!eventMap.containsKey(type)){
+			eventMap.put(type, new LinkedBlockingDeque<>());
+		}
+		eventMap.get(type).add(m);
 	}
 
 	@Override
 	public void subscribeBroadcast(Class<? extends Broadcast> type, Subscriber m) {
-		// TODO Auto-generated method stub
-
+		if(!broadcastMap.containsKey(type)){
+			broadcastMap.put(type, new LinkedBlockingDeque<>());
+		}
+		broadcastMap.get(type).add(m);
 	}
 
 	@Override
 	public <T> void complete(Event<T> e, T result) {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void sendBroadcast(Broadcast b) {
 		// TODO Auto-generated method stub
-
 	}
 
 	
@@ -58,15 +67,20 @@ public class MessageBrokerImpl implements MessageBroker {
 
 	@Override
 	public void register(Subscriber m) {
-		subscriberList.add(m);
+		subscriberList.put(m, new LinkedBlockingDeque<>());
+		topicsList.put(m, new LinkedBlockingDeque<>());
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void unregister(Subscriber m) {
-		// TODO Auto-generated method stub
 		subscriberList.remove(m);
+		for(Class<? extends Message> type: topicsList.get(m)){
+			eventMap.get(type).remove(m);
+			broadcastMap.get(type).remove(m);
+		}
+		topicsList.remove(m);
 	}
 
 	@Override
