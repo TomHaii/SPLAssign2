@@ -11,9 +11,15 @@ import bgu.spl.mics.Subscriber;
  */
 public class Moneypenny extends Subscriber {
 
+	private int serialNumber;
+
+	public Moneypenny(int i){
+		super("MoneyPenny");
+		serialNumber = i;
+	}
+
 	public Moneypenny() {
-		super("moneypenny");
-		// TODO Implement this
+		super("MoneyPenny");
 	}
 
 	@Override

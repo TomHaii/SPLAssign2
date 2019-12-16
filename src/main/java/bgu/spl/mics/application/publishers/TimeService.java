@@ -13,8 +13,16 @@ import bgu.spl.mics.Publisher;
  */
 public class TimeService extends Publisher {
 
+	private int time;
+
+	public TimeService(int time) {
+		super("TimeService");
+		this.time = time;
+	}
+
+
 	public TimeService() {
-		super("Change_This_Name");
+		super("TimeService");
 		// TODO Implement this
 	}
 

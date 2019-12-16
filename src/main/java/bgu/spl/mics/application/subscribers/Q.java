@@ -1,6 +1,9 @@
 package bgu.spl.mics.application.subscribers;
 
 import bgu.spl.mics.Subscriber;
+import bgu.spl.mics.application.passiveObjects.Inventory;
+
+import java.util.LinkedList;
 
 /**
  * Q is the only Subscriber\Publisher that has access to the {@link bgu.spl.mics.application.passiveObjects.Inventory}.
@@ -10,9 +13,10 @@ import bgu.spl.mics.Subscriber;
  */
 public class Q extends Subscriber {
 
+	private static Inventory instance = Inventory.getInstance();
+
 	public Q() {
 		super("Q");
-		// TODO Implement this
 	}
 
 	@Override

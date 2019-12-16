@@ -10,9 +10,15 @@ import bgu.spl.mics.Subscriber;
  */
 public class M extends Subscriber {
 
+	private int serialNumber;
+
+	public M (int i){
+		super("M");
+		serialNumber = i;
+	}
+
 	public M() {
-		super("Change_This_Name");
-		// TODO Implement this
+		super("M");
 	}
 
 	@Override
@@ -21,4 +27,7 @@ public class M extends Subscriber {
 		
 	}
 
+	protected void setSerialNumber(int i) {
+		serialNumber = i;
+	}
 }
