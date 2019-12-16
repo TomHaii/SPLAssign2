@@ -15,6 +15,7 @@ import java.util.List;
 public class Diary {
 	private static Diary instance = null;
 	private List<Report> reports;
+	private int totalMissions;
 
 	private Diary(){
 		reports = new LinkedList<Report>();
@@ -58,6 +59,12 @@ public class Diary {
 	 */
 	public int getTotal(){
 		//TODO: Implement this
-		return reports.size();
+		return totalMissions;
+	}
+	/**
+	 * Increments the total number of received missions by 1
+	 */
+	public void incrementTotal(){
+		totalMissions++;
 	}
 }

@@ -63,15 +63,15 @@ public class Report {
 	 * <p>
 	 * @return The serial numbers of the agents.
 	 */
-	public List<String> getAgentsSerialNumbersNumber() {
+	public List<String> getAgentsSerialNumbers() {
 		return serialAgentsNumbers;
 	}
 
 	/**
 	 * Sets the serial numbers of the agents.
 	 */
-	public void setAgentsSerialNumbersNumber(List<String> agentsSerialNumbersNumber) {
-		this.serialAgentsNumbers = agentsSerialNumbersNumber;
+	public void setAgentsSerialNumbers(List<String> agentsSerialNumbers) {
+		this.serialAgentsNumbers = agentsSerialNumbers;
 	}
 
 	/**

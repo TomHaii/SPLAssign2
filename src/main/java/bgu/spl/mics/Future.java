@@ -31,7 +31,6 @@ public class Future<T> {
      * 	       
      */
 	public T get() {
-		//TODO: implement this.
 		return result;
 	}
 	
@@ -39,7 +38,6 @@ public class Future<T> {
      * Resolves the result of this Future object.
      */
 	public void resolve (T result) {
-		//TODO: implement this.
 		resolved = true;
 		this.result = result;
 	}
@@ -48,7 +46,6 @@ public class Future<T> {
      * @return true if this object has been resolved, false otherwise
      */
 	public boolean isDone() {
-		//TODO: implement this.
 		return resolved;
 	}
 	
@@ -64,7 +61,6 @@ public class Future<T> {
      *         elapsed, return null.
      */
 	public T get(long timeout, TimeUnit unit) {
-		//TODO: implement this.
 		try{
 			wait(unit.toSeconds(timeout));
 			return result;

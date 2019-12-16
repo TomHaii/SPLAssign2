@@ -17,7 +17,7 @@ public class SquadTest {
 
     @BeforeEach
     public void setUp(){
-        squad = new Squad();
+      //  squad = new Squad();
     }
 
     @Test

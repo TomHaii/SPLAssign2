@@ -20,7 +20,7 @@ public class MessageBrokerTest {
     ExampleEventHandlerSubscriber s3;
     @BeforeEach
     public void setUp(){
-        broker = new MessageBrokerImpl();
+      //  broker = new MessageBrokerImpl();
         String[] args = new String[2];
         exampleBroadcast = new ExampleBroadcast("006");
         exampleEvent = new ExampleEvent("006");

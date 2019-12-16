@@ -22,6 +22,8 @@ public class Inventory {
 	 * Retrieves the single instance of this class.
 	 */
 	public static Inventory getInstance() {
+		if (instance == null)
+			instance = new Inventory();
 		return instance;
 	}
 
