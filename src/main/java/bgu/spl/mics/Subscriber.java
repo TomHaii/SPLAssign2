@@ -1,5 +1,7 @@
 package bgu.spl.mics;
 
+import java.util.HashMap;
+
 /**
  * The Subscriber is an abstract class that any subscriber in the system
  * must extend. The abstract Subscriber class is responsible to get and
@@ -17,6 +19,8 @@ package bgu.spl.mics;
  */
 public abstract class Subscriber extends RunnableSubPub {
     private boolean terminated = false;
+    private static MessageBroker broker = MessageBrokerImpl.getInstance();
+    private HashMap<Class <? extends Message>, Callback> que;
 
     /**
      * @param name the Subscriber name (used mainly for debugging purposes -
@@ -24,7 +28,10 @@ public abstract class Subscriber extends RunnableSubPub {
      */
     public Subscriber(String name) {
         super(name);
+        que = new HashMap<>();
     }
+
+
 
     /**
      * Subscribes to events of type {@code type} with the callback
@@ -49,6 +56,8 @@ public abstract class Subscriber extends RunnableSubPub {
      */
     protected final <T, E extends Event<T>> void subscribeEvent(Class<E> type, Callback<E> callback) {
         //TODO: implement this.
+        que.put(type, callback);
+
     }
 
     /**
