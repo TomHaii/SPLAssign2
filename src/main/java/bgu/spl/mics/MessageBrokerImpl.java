@@ -27,6 +27,7 @@ public class MessageBrokerImpl implements MessageBroker {
 		return instance;
 	}
 	private MessageBrokerImpl(){
+		topicsList = new ConcurrentHashMap<>();
 		subscriberList = new ConcurrentHashMap<>();
 		eventMap = new ConcurrentHashMap<>();
 		futureMap = new ConcurrentHashMap<>();
