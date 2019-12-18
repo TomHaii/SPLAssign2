@@ -44,6 +44,7 @@ public class MessageBrokerImpl implements MessageBroker {
 			broadcastMap.put(type, new ConcurrentLinkedQueue<>());
 		}
 		broadcastMap.get(type).add(m);
+		System.out.println(topicsList.get(m));
 		topicsList.get(m).add(type);
 
 	}

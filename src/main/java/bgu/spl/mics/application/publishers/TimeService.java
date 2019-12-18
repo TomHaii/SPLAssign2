@@ -3,6 +3,7 @@ package bgu.spl.mics.application.publishers;
 import bgu.spl.mics.MessageBrokerImpl;
 import bgu.spl.mics.Publisher;
 import bgu.spl.mics.application.messages.TickBroadcast;
+import bgu.spl.mics.application.messages.TimeEndedBroadcast;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -40,6 +41,10 @@ public class TimeService extends Publisher {
 				if(timeTicks>0) {
 					MessageBrokerImpl.getInstance().sendBroadcast(new TickBroadcast());
 					timeTicks--;
+				}
+				else{
+					timer.cancel();
+					MessageBrokerImpl.getInstance().sendBroadcast(new TimeEndedBroadcast());
 				}
 			}
 		},0, 100);
