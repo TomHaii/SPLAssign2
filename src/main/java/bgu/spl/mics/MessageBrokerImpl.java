@@ -53,7 +53,7 @@ public class MessageBrokerImpl implements MessageBroker {
 	public <T> void complete(Event<T> e, T result) {
 		Future<T> future = futureMap.get(e);
 		future.resolve(result);
-		//futureMap.remove(e);
+		futureMap.remove(e);
 	}
 
 	@Override
@@ -64,7 +64,6 @@ public class MessageBrokerImpl implements MessageBroker {
 			while (!tmpQ.isEmpty()) {
 				Subscriber tmpSub = tmpQ.poll();
 				subscriberList.get(tmpSub).add(b);
-				subscriberList.get(tmpSub).notify();
 			}
 		}
 	}
@@ -80,7 +79,6 @@ public class MessageBrokerImpl implements MessageBroker {
 					Future<T> future = new Future<>();
 					futureMap.put(e, future);
 					eventMap.get(e.getClass()).add(subToSendEvent);
-					subscriberList.get(subToSendEvent).notify();
 					return future;
 				}
 			}
@@ -108,10 +106,7 @@ public class MessageBrokerImpl implements MessageBroker {
 
 	@Override
 	public Message awaitMessage(Subscriber m) throws InterruptedException {
-		while(subscriberList.get(m).isEmpty()){
-			subscriberList.get(m).wait();
-		}
-		return subscriberList.get(m).poll();
+			return subscriberList.get(m).poll();
 	}
 
 	
