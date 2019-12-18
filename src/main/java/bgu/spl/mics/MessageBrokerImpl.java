@@ -50,17 +50,17 @@ public class MessageBrokerImpl implements MessageBroker {
 
 	@Override
 	public <T> void complete(Event<T> e, T result) {
-		Future<T> future = futureMap.get(e);
-		future.resolve(result);
-		futureMap.remove(e);
+			Future<T> future = futureMap.get(e);
+			future.resolve(result);
+			futureMap.remove(e);
 	}
 
 	@Override
 	public void sendBroadcast(Broadcast b) {
 		if(broadcastMap.containsKey(b.getClass())) {
 			ConcurrentLinkedQueue<Subscriber> tmpQ = new ConcurrentLinkedQueue<>(broadcastMap.get(b.getClass()));
-			Future future = new Future<>();
-			futureMap.putIfAbsent(b, future);
+			//Future future = new Future<>();
+			//futureMap.putIfAbsent(b, future);
 			while (!tmpQ.isEmpty()) {
 				Subscriber tmpSub = tmpQ.poll();
 				subscriberList.get(tmpSub).add(b);

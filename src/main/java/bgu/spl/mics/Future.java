@@ -2,6 +2,8 @@ package bgu.spl.mics;
 
 import java.util.concurrent.TimeUnit;
 
+import static java.lang.Thread.sleep;
+
 /**
  * A Future object represents a promised result - an object that will
  * eventually be resolved to hold a result of some operation. The class allows
@@ -38,8 +40,8 @@ public class Future<T> {
 					System.out.println("Thread " +Thread.currentThread().getId() +" was interrupted");
 				}
 			}
+			return result;
 		}
-		return result;
 	}
 	
 	/**
@@ -56,6 +58,7 @@ public class Future<T> {
 				System.out.println("Future object has been resolved already");
 			}
 		}
+
 	}
 	
 	/**
@@ -81,13 +84,12 @@ public class Future<T> {
 			while (!isDone()) {
 				try {
 					wait(unit.toSeconds(timeout));
-					return result;
 				} catch (InterruptedException e) {
 					System.out.println("Thread " +Thread.currentThread().getId() +" was interrupted");
 				}
 			}
+			return result;
 		}
-		return result;
 	}
 
 }
