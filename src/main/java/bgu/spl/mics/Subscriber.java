@@ -29,6 +29,7 @@ public abstract class Subscriber extends RunnableSubPub {
     public Subscriber(String name) {
         super(name);
         callbacks = new HashMap<>();
+        broker.register(this);
     }
 
 
@@ -57,7 +58,6 @@ public abstract class Subscriber extends RunnableSubPub {
     protected final <T, E extends Event<T>> void subscribeEvent(Class<E> type, Callback<E> callback) {
         broker.subscribeEvent(type, this);
         callbacks.put(type, callback);
-
     }
 
     /**

@@ -70,15 +70,18 @@ public class MessageBrokerImpl implements MessageBroker {
 
 	@Override
 	public <T> Future<T> sendEvent(Event<T> e) {
+
 		if(eventMap.containsKey(e.getClass()) && !eventMap.get(e.getClass()).isEmpty()){
 			synchronized (eventMap.get(e.getClass())){
 				Subscriber subToSendEvent = eventMap.get(e.getClass()).poll();
-				subscriberList.get(subToSendEvent).add(e);
-				Future<T> future = new Future<>();
-				futureMap.put(e,future);
-				eventMap.get(e.getClass()).add(subToSendEvent);
-				subscriberList.get(subToSendEvent).notify();
-				return future;
+				if(subToSendEvent != null) {
+					subscriberList.get(subToSendEvent).add(e);
+					Future<T> future = new Future<>();
+					futureMap.put(e, future);
+					eventMap.get(e.getClass()).add(subToSendEvent);
+					subscriberList.get(subToSendEvent).notify();
+					return future;
+				}
 			}
 		}
 		return null;
@@ -86,8 +89,8 @@ public class MessageBrokerImpl implements MessageBroker {
 
 	@Override
 	public void register(Subscriber m) {
-		subscriberList.put(m, new LinkedBlockingQueue<>());
-		topicsList.put(m, new ConcurrentLinkedQueue<>());
+		subscriberList.putIfAbsent(m, new LinkedBlockingQueue<>());
+		topicsList.putIfAbsent(m, new ConcurrentLinkedQueue<>());
 	}
 
 	@Override
