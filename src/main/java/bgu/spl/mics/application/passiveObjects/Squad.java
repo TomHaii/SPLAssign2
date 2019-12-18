@@ -9,8 +9,9 @@ import java.util.*;
  * You may add ONLY private fields and methods to this class.
  */
 public class Squad {
-
-	private static Squad instance;
+	private static class SquadSingletonHolder {
+		private static Squad instance = new Squad();
+	}
 	private Map<String, Agent> agents;
 
 	private Squad(){
@@ -21,9 +22,7 @@ public class Squad {
 	 * Retrieves the single instance of this class.
 	 */
 	public static Squad getInstance() {
-		if (instance == null)
-			instance = new Squad();
-		return instance;
+		return SquadSingletonHolder.instance;
 	}
 
 	/**

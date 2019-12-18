@@ -12,7 +12,9 @@ import java.util.LinkedList;
  * You can add ONLY private fields and methods to this class as you see fit.
  */
 public class Inventory {
-	private static Inventory instance = null;
+	private static class InventorySingletonHolder {
+		private static Inventory instance = new Inventory();
+	}
 	private LinkedList<String> gadgets;
 
 	private Inventory(){
@@ -22,9 +24,7 @@ public class Inventory {
 	 * Retrieves the single instance of this class.
 	 */
 	public static Inventory getInstance() {
-		if (instance == null)
-			instance = new Inventory();
-		return instance;
+		return InventorySingletonHolder.instance;
 	}
 
 	/**

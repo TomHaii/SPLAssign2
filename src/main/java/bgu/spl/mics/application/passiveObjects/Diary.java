@@ -1,5 +1,8 @@
 package bgu.spl.mics.application.passiveObjects;
 
+import bgu.spl.mics.MessageBroker;
+import bgu.spl.mics.MessageBrokerImpl;
+
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -13,7 +16,9 @@ import java.util.List;
  * You can add ONLY private fields and methods to this class as you see fit.
  */
 public class Diary {
-	private static Diary instance = null;
+	private static class DiarySingletonHolder {
+		private static Diary instance = new Diary();
+	}
 	private List<Report> reports;
 	private int totalMissions;
 
@@ -24,10 +29,7 @@ public class Diary {
 	 * Retrieves the single instance of this class.
 	 */
 	public static Diary getInstance() {
-		if(instance == null){
-			instance = new Diary();
-		}
-		return instance;
+		return DiarySingletonHolder.instance;
 	}
 
 	public List<Report> getReports() {
