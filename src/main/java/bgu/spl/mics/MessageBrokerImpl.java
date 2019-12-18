@@ -11,11 +11,11 @@ public class MessageBrokerImpl implements MessageBroker {
 	private static class MessageBrokerSingletonHolder {
 		private static MessageBroker instance = new MessageBrokerImpl();
 	}
-	private ConcurrentHashMap<Event<?>, Future<?>> futureMap;
+	private ConcurrentHashMap<Event, Future> futureMap;
 	private ConcurrentHashMap<Subscriber, LinkedBlockingQueue<Message>> subscriberList;
-	private ConcurrentHashMap<Subscriber, LinkedBlockingQueue<Class<? extends Message>>> topicsList;
-	private ConcurrentHashMap<Class<? extends Broadcast>, LinkedBlockingQueue<Subscriber>> broadcastMap;
-	private ConcurrentHashMap<Class<? extends Event<?>>, LinkedBlockingQueue<Subscriber>> eventMap;
+	private ConcurrentHashMap<Subscriber, ConcurrentLinkedQueue<Class<? extends Message>>> topicsList;
+	private ConcurrentHashMap<Class<? extends Broadcast>, ConcurrentLinkedQueue<Subscriber>> broadcastMap;
+	private ConcurrentHashMap<Class<? extends Event<?>>, ConcurrentLinkedQueue<Subscriber>> eventMap;
 	/**
 	 * Retrieves the single instance of this class.
 	 */
@@ -32,7 +32,7 @@ public class MessageBrokerImpl implements MessageBroker {
 	@Override
 	public <T> void subscribeEvent(Class<? extends Event<T>> type, Subscriber m) {
 		if(!eventMap.containsKey(type)){
-			eventMap.put(type, new LinkedBlockingQueue<>());
+			eventMap.put(type, new ConcurrentLinkedQueue<>());
 		}
 		eventMap.get(type).add(m);
 		topicsList.get(m).add(type);
@@ -41,7 +41,7 @@ public class MessageBrokerImpl implements MessageBroker {
 	@Override
 	public void subscribeBroadcast(Class<? extends Broadcast> type, Subscriber m) {
 		if(!broadcastMap.containsKey(type)){
-			broadcastMap.put(type, new LinkedBlockingQueue<>());
+			broadcastMap.put(type, new ConcurrentLinkedQueue<>());
 		}
 		broadcastMap.get(type).add(m);
 		topicsList.get(m).add(type);
@@ -50,20 +50,20 @@ public class MessageBrokerImpl implements MessageBroker {
 
 	@Override
 	public <T> void complete(Event<T> e, T result) {
-		for(Event<?> event: futureMap.keySet()){
-			if(event.equals(e))
-				futureMap.get(e).resolve(result);
-		}
+		Future<T> future = futureMap.get(e);
+		future.resolve(result);
+		//futureMap.remove(e);
 	}
 
 	@Override
 	public void sendBroadcast(Broadcast b) {
-		LinkedBlockingQueue<Subscriber> tmpQ;
+		ConcurrentLinkedQueue<Subscriber> tmpQ;
 		if(broadcastMap.containsKey(b.getClass())) {
 			tmpQ = broadcastMap.get(b.getClass());
 			while (!tmpQ.isEmpty()) {
 				Subscriber tmpSub = tmpQ.poll();
 				subscriberList.get(tmpSub).add(b);
+				subscriberList.get(tmpSub).notify();
 			}
 		}
 	}
@@ -77,6 +77,7 @@ public class MessageBrokerImpl implements MessageBroker {
 				Future<T> future = new Future<>();
 				futureMap.put(e,future);
 				eventMap.get(e.getClass()).add(subToSendEvent);
+				subscriberList.get(subToSendEvent).notify();
 				return future;
 			}
 		}
@@ -86,7 +87,7 @@ public class MessageBrokerImpl implements MessageBroker {
 	@Override
 	public void register(Subscriber m) {
 		subscriberList.put(m, new LinkedBlockingQueue<>());
-		topicsList.put(m, new LinkedBlockingQueue<>());
+		topicsList.put(m, new ConcurrentLinkedQueue<>());
 	}
 
 	@Override
@@ -103,8 +104,10 @@ public class MessageBrokerImpl implements MessageBroker {
 
 	@Override
 	public Message awaitMessage(Subscriber m) throws InterruptedException {
-		// TODO Auto-generated method stub
-		return null;
+		while(subscriberList.get(m).isEmpty()){
+			wait();
+		}
+		return subscriberList.get(m).poll();
 	}
 
 	
