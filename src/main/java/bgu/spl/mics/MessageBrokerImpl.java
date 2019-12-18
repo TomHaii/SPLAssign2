@@ -11,7 +11,7 @@ public class MessageBrokerImpl implements MessageBroker {
 	private static class MessageBrokerSingletonHolder {
 		private static MessageBroker instance = new MessageBrokerImpl();
 	}
-	private ConcurrentHashMap<Event, Future> futureMap;
+	private ConcurrentHashMap<Message, Future> futureMap;
 	private ConcurrentHashMap<Subscriber, LinkedBlockingQueue<Message>> subscriberList;
 	private ConcurrentHashMap<Subscriber, ConcurrentLinkedQueue<Class<? extends Message>>> topicsList;
 	private ConcurrentHashMap<Class<? extends Broadcast>, ConcurrentLinkedQueue<Subscriber>> broadcastMap;
@@ -44,7 +44,6 @@ public class MessageBrokerImpl implements MessageBroker {
 			broadcastMap.put(type, new ConcurrentLinkedQueue<>());
 		}
 		broadcastMap.get(type).add(m);
-//		System.out.println(topicsList.get(m));
 		topicsList.get(m).add(type);
 
 	}
@@ -58,9 +57,10 @@ public class MessageBrokerImpl implements MessageBroker {
 
 	@Override
 	public void sendBroadcast(Broadcast b) {
-		ConcurrentLinkedQueue<Subscriber> tmpQ;
 		if(broadcastMap.containsKey(b.getClass())) {
-			tmpQ = broadcastMap.get(b.getClass());
+			ConcurrentLinkedQueue<Subscriber> tmpQ = new ConcurrentLinkedQueue<>(broadcastMap.get(b.getClass()));
+			Future future = new Future<>();
+			futureMap.putIfAbsent(b, future);
 			while (!tmpQ.isEmpty()) {
 				Subscriber tmpSub = tmpQ.poll();
 				subscriberList.get(tmpSub).add(b);
@@ -70,14 +70,13 @@ public class MessageBrokerImpl implements MessageBroker {
 
 	@Override
 	public <T> Future<T> sendEvent(Event<T> e) {
-
 		if(eventMap.containsKey(e.getClass()) && !eventMap.get(e.getClass()).isEmpty()){
 			synchronized (eventMap.get(e.getClass())){
 				Subscriber subToSendEvent = eventMap.get(e.getClass()).poll();
 				if(subToSendEvent != null) {
 					subscriberList.get(subToSendEvent).add(e);
 					Future<T> future = new Future<>();
-					futureMap.put(e, future);
+					futureMap.putIfAbsent(e, future);
 					eventMap.get(e.getClass()).add(subToSendEvent);
 					return future;
 				}

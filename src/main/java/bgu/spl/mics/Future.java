@@ -53,7 +53,7 @@ public class Future<T> {
 				this.result = result;
 				notifyAll();
 			}
-			else{
+			else {
 				System.out.println("Future object has been resolved already");
 			}
 		}
