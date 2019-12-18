@@ -50,9 +50,9 @@ public class MessageBrokerImpl implements MessageBroker {
 
 	@Override
 	public <T> void complete(Event<T> e, T result) {
-			Future<T> future = futureMap.get(e);
-			future.resolve(result);
-			futureMap.remove(e);
+		Future<T> future = futureMap.get(e);
+		future.resolve(result);
+		futureMap.remove(e);
 	}
 
 	@Override
