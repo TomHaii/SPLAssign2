@@ -18,13 +18,7 @@ import java.util.TimerTask;
  */
 
 
-public class TimeService extends Publisher {
-
-	private static class TimerTaskHelper extends TimerTask{
-		public void run(){
-			MessageBrokerImpl.getInstance().sendBroadcast(new TickBroadcast());
-		}
-	}
+class TimeService extends Publisher {
 
 	private int timeTicks;
 	private Timer timer;
@@ -41,7 +35,14 @@ public class TimeService extends Publisher {
 
 	@Override
 	protected void initialize() {
-		timer.schedule(new TimerTaskHelper(), 100);
+		timer.schedule(new TimerTask(){
+			public void run(){
+				if(timeTicks>0) {
+					MessageBrokerImpl.getInstance().sendBroadcast(new TickBroadcast());
+					timeTicks--;
+				}
+			}
+		},0, 100);
 		
 	}
 
