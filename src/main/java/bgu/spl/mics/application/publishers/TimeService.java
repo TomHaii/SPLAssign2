@@ -18,7 +18,7 @@ import java.util.TimerTask;
  */
 
 
-class TimeService extends Publisher {
+public class TimeService extends Publisher {
 
 	private int timeTicks;
 	private Timer timer;

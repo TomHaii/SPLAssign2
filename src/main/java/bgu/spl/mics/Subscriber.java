@@ -20,7 +20,7 @@ import java.util.HashMap;
 public abstract class Subscriber extends RunnableSubPub {
     private boolean terminated = false;
     private static MessageBroker broker = MessageBrokerImpl.getInstance();
-    private HashMap<Class <? extends Message>, Callback> que;
+    private HashMap<Class <? extends Message>, Callback> callbacks;
 
     /**
      * @param name the Subscriber name (used mainly for debugging purposes -
@@ -28,7 +28,7 @@ public abstract class Subscriber extends RunnableSubPub {
      */
     public Subscriber(String name) {
         super(name);
-        que = new HashMap<>();
+        callbacks = new HashMap<>();
     }
 
 
@@ -55,8 +55,8 @@ public abstract class Subscriber extends RunnableSubPub {
      *                 queue.
      */
     protected final <T, E extends Event<T>> void subscribeEvent(Class<E> type, Callback<E> callback) {
-        //TODO: implement this.
-        que.put(type, callback);
+        broker.subscribeEvent(type, this);
+        callbacks.put(type, callback);
 
     }
 
@@ -81,7 +81,8 @@ public abstract class Subscriber extends RunnableSubPub {
      *                 queue.
      */
     protected final <B extends Broadcast> void subscribeBroadcast(Class<B> type, Callback<B> callback) {
-        //TODO: implement this.
+        broker.subscribeBroadcast(type, this);
+        callbacks.put(type, callback);
     }
 
     /**
@@ -95,7 +96,7 @@ public abstract class Subscriber extends RunnableSubPub {
      *               {@code e}.
      */
     protected final <T> void complete(Event<T> e, T result) {
-        //TODO: implement this.
+        broker.complete(e, result);
     }
 
     /**
@@ -114,7 +115,12 @@ public abstract class Subscriber extends RunnableSubPub {
     public final void run() {
         initialize();
         while (!terminated) {
-            System.out.println("NOT IMPLEMENTED!!!"); //TODO: you should delete this line :)
+            System.out.println("Subscriber " + getName() + " is waiting for a message");
+            try {
+                Message message = broker.awaitMessage(this);
+                callbacks.get(message.getClass()).call(message);
+            } catch (InterruptedException ignored) {
+            }
         }
     }
 
