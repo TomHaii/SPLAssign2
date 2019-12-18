@@ -119,7 +119,6 @@ public abstract class Subscriber extends RunnableSubPub {
     public final void run() {
         initialize();
         while (!terminated) {
-//            System.out.println("Subscriber " + getName() + " is waiting for a message");
             try {
                 Message message = broker.awaitMessage(this);
                 callbacks.get(message.getClass()).call(message);

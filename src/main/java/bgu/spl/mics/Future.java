@@ -19,7 +19,6 @@ public class Future<T> {
 	public Future() {
 		resolved = false;
 		result = null;
-		//TODO: implement this
 	}
 	
 	/**
