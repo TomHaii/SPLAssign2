@@ -15,6 +15,9 @@ public class Report {
 	private List<String> serialAgentsNumbers;
 	private List<String> agentsNames;
 	private String gadgetName;
+	private int qTime;
+	private int timeIssued;
+	private int timeCreated;
 
 	/**
      * Retrieves the mission name.
@@ -110,44 +113,41 @@ public class Report {
 	 * Retrieves the time-tick in which Q Received the GadgetAvailableEvent for that mission.
 	 */
 	public int getQTime() {
-		// TODO Implement this
-		return 0;
+		return qTime;
 	}
 
 	/**
 	 * Sets the time-tick in which Q Received the GadgetAvailableEvent for that mission.
 	 */
 	public void setQTime(int qTime) {
-		// TODO Implement this
+		this.qTime = qTime;
 	}
 
 	/**
 	 * Retrieves the time when the mission was sent by an Intelligence Publisher.
 	 */
 	public int getTimeIssued() {
-		// TODO Implement this
-		return 0;
+		return timeIssued;
 	}
 
 	/**
 	 * Sets the time when the mission was sent by an Intelligence Publisher.
 	 */
 	public void setTimeIssued(int timeIssued) {
-		// TODO Implement this
+		this.timeIssued = timeIssued;
 	}
 
 	/**
 	 * Retrieves the time-tick when the report has been created.
 	 */
 	public int getTimeCreated() {
-		// TODO Implement this
-		return 0;
+		return timeCreated;
 	}
 
 	/**
 	 * Sets the time-tick when the report has been created.
 	 */
 	public void setTimeCreated(int timeCreated) {
-		// TODO Implement this
+		this.timeCreated = timeCreated;
 	}
 }

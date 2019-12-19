@@ -1,6 +1,7 @@
 package bgu.spl.mics.application.subscribers;
 
 import bgu.spl.mics.Subscriber;
+import bgu.spl.mics.application.messages.GadgetAvailableEvent;
 import bgu.spl.mics.application.passiveObjects.Inventory;
 
 import java.util.LinkedList;
@@ -13,16 +14,20 @@ import java.util.LinkedList;
  */
 public class Q extends Subscriber {
 
-	private static Inventory instance = Inventory.getInstance();
+	private static Inventory inventoryInstance = Inventory.getInstance();
 
 	public Q() {
 		super("Q");
 	}
 
+
+
 	@Override
 	protected void initialize() {
-		// TODO Implement this
-		
+		System.out.println(getName() + " started");
+		subscribeEvent(GadgetAvailableEvent.class, ev->{
+			complete(ev, inventoryInstance.getItem(ev.getGadget()));
+		});
 	}
 
 }

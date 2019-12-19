@@ -1,4 +1,7 @@
 package bgu.spl.mics.application.messages;
 
-public class AgentsAvailableEvent {
+import bgu.spl.mics.Event;
+import bgu.spl.mics.application.passiveObjects.Agent;
+
+public class AgentsAvailableEvent implements Event<Agent> {
 }

@@ -14,6 +14,8 @@ public class MissionInfo {
 	private String gadget;
 	private int timeIssued;
 	private int timeExpired;
+	private int duration;
+
     /**
      * Sets the name of the mission.
      */
@@ -88,14 +90,13 @@ public class MissionInfo {
      * Sets the duration of the mission in time-ticks.
      */
     public void setDuration(int duration) {
-        // TODO Implement this
+        this.duration = duration;
     }
 
 	/**
 	 * Retrieves the duration of the mission in time-ticks.
 	 */
 	public int getDuration() {
-		// TODO Implement this
-		return 0;
+		return duration;
 	}
 }

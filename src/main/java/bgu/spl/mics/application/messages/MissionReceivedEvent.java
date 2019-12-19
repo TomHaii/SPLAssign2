@@ -1,4 +1,7 @@
 package bgu.spl.mics.application.messages;
 
-public class MissionReceivedEvent {
+import bgu.spl.mics.Event;
+import bgu.spl.mics.application.passiveObjects.MissionInfo;
+
+public class MissionReceivedEvent implements Event<MissionInfo> {
 }
