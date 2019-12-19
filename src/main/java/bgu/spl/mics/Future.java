@@ -36,11 +36,12 @@ public class Future<T> {
 			while (!isDone()) {
 				try {
 					wait();
+					return result;
 				} catch (InterruptedException ignored) {
 					System.out.println("Thread " +Thread.currentThread().getId() +" was interrupted");
 				}
 			}
-			return result;
+			return null;
 		}
 	}
 	
