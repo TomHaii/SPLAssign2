@@ -30,14 +30,14 @@ public class MI6Runner {
         JsonObject object = (JsonObject) new JsonParser().parse(new FileReader(args[0]));
         JsonArray inv = object.get("inventory").getAsJsonArray();
         JsonArray squ =  object.get("squad").getAsJsonArray();
-        JsonArray services = object.get("services").getAsJsonArray();
+        JsonObject services = object.get("services").getAsJsonObject();
         loadInventory(inv);
         loadSquad(squ);
         LinkedList<M> mList = new LinkedList<>();
         LinkedList<Moneypenny> mpList = new LinkedList<>();
         LinkedList<Intelligence> intelligenceList = new LinkedList<>();
         Q q = new Q();
-        TimeService ts = new TimeService(services.get(3).getAsInt());
+        TimeService ts = new TimeService(services.get("time").getAsInt());
         createServices(services, mList, mpList, intelligenceList);
     }
 
@@ -64,14 +64,14 @@ public class MI6Runner {
         inventory.load(items);
     }
 
-    private static void createServices(JsonArray services, LinkedList<M> mList, LinkedList<Moneypenny> mpList, LinkedList<Intelligence> intelligenceList) {
-        int mNumber = services.get(0).getAsInt();
-        int mpNumber = services.get(1).getAsInt();
-        JsonArray allMissions = services.get(2).getAsJsonArray();
+    private static void createServices(JsonObject services, LinkedList<M> mList, LinkedList<Moneypenny> mpList, LinkedList<Intelligence> intelligenceList) {
+        int mNumber = services.get("M").getAsInt();
+        int mpNumber = services.get("Moneypenny").getAsInt();
+        JsonArray allMissions = services.get("intelligence").getAsJsonArray();
         int iNumber = allMissions.size();
         for (int i = 0; i< iNumber; i++){
-            JsonArray missions = allMissions.get(i).getAsJsonArray();
-            Intelligence intelligence = new Intelligence(i, missions);
+            JsonObject missions = allMissions.get(i).getAsJsonObject();
+            Intelligence intelligence = new Intelligence(i, missions.getAsJsonArray());
             intelligenceList.add(intelligence);
 
         }
