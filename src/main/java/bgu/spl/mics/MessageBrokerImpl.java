@@ -9,13 +9,13 @@ import java.util.concurrent.*;
  */
 public class MessageBrokerImpl implements MessageBroker {
 	private static class MessageBrokerSingletonHolder {
-		private static MessageBroker instance = new MessageBrokerImpl();
+		private volatile static MessageBroker instance = new MessageBrokerImpl();
 	}
-	private ConcurrentHashMap<Message, Future> futureMap;
-	private ConcurrentHashMap<Subscriber, LinkedBlockingQueue<Message>> subscriberList;
-	private ConcurrentHashMap<Subscriber, ConcurrentLinkedQueue<Class<? extends Message>>> topicsList;
-	private ConcurrentHashMap<Class<? extends Broadcast>, ConcurrentLinkedQueue<Subscriber>> broadcastMap;
-	private ConcurrentHashMap<Class<? extends Event<?>>, ConcurrentLinkedQueue<Subscriber>> eventMap;
+	private volatile ConcurrentHashMap<Message, Future> futureMap;
+	private volatile ConcurrentHashMap<Subscriber, LinkedBlockingQueue<Message>> subscriberList;
+	private volatile ConcurrentHashMap<Subscriber, ConcurrentLinkedQueue<Class<? extends Message>>> topicsList;
+	private volatile ConcurrentHashMap<Class<? extends Broadcast>, ConcurrentLinkedQueue<Subscriber>> broadcastMap;
+	private volatile ConcurrentHashMap<Class<? extends Event<?>>, ConcurrentLinkedQueue<Subscriber>> eventMap;
 	/**
 	 * Retrieves the single instance of this class.
 	 */
@@ -50,17 +50,15 @@ public class MessageBrokerImpl implements MessageBroker {
 
 	@Override
 	public <T> void complete(Event<T> e, T result) {
-		Future<T> future = futureMap.get(e);
-		future.resolve(result);
-		futureMap.remove(e);
+			Future<T> future = futureMap.get(e);
+			future.resolve(result);
+			futureMap.remove(e);
 	}
 
 	@Override
 	public void sendBroadcast(Broadcast b) {
 		if(broadcastMap.containsKey(b.getClass())) {
 			ConcurrentLinkedQueue<Subscriber> tmpQ = new ConcurrentLinkedQueue<>(broadcastMap.get(b.getClass()));
-			//Future future = new Future<>();
-			//futureMap.putIfAbsent(b, future);
 			while (!tmpQ.isEmpty()) {
 				Subscriber tmpSub = tmpQ.poll();
 				subscriberList.get(tmpSub).add(b);
@@ -70,15 +68,19 @@ public class MessageBrokerImpl implements MessageBroker {
 
 	@Override
 	public <T> Future<T> sendEvent(Event<T> e) {
-		if(eventMap.containsKey(e.getClass()) && !eventMap.get(e.getClass()).isEmpty()){
-			synchronized (eventMap.get(e.getClass())){
+		if (eventMap.containsKey(e.getClass()) && !eventMap.get(e.getClass()).isEmpty()) {
+			synchronized (eventMap.get(e.getClass())) {
 				Subscriber subToSendEvent = eventMap.get(e.getClass()).poll();
-				if(subToSendEvent != null) {
+				Future<T> future = new Future<>();
+				futureMap.putIfAbsent(e, future);
+				if (subToSendEvent != null) {
 					subscriberList.get(subToSendEvent).add(e);
-					Future<T> future = new Future<>();
-					futureMap.putIfAbsent(e, future);
 					eventMap.get(e.getClass()).add(subToSendEvent);
 					return future;
+				}
+				else{
+					System.out.println("None of the subscribers is capable of handling this event");
+					future.resolve(null);
 				}
 			}
 		}
@@ -93,7 +95,14 @@ public class MessageBrokerImpl implements MessageBroker {
 
 	@Override
 	public void unregister(Subscriber m) {
-		subscriberList.remove(m);
+		synchronized (subscriberList.get(m)) {
+			while (!subscriberList.get(m).isEmpty()) {
+				try {
+					subscriberList.get(m).wait();
+				} catch (Exception ignored) {}
+				subscriberList.remove(m);
+			}
+		}
 		for(Class<? extends Message> type: topicsList.get(m)){
 			if(eventMap.containsKey(type))
 				eventMap.get(type).remove(m);
