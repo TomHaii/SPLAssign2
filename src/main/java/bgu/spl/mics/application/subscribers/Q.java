@@ -26,7 +26,10 @@ public class Q extends Subscriber {
 	protected void initialize() {
 		System.out.println(getName() + " started");
 		subscribeEvent(GadgetAvailableEvent.class, ev->{
-			complete(ev, inventoryInstance.getItem(ev.getGadget()));
+			if(!inventoryInstance.getItem(ev.getGadget()))
+				complete(ev, "fail");
+			else
+				complete(ev, "success");
 		});
 	}
 

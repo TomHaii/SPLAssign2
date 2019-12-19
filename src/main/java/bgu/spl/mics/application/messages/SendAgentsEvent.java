@@ -6,7 +6,7 @@ import bgu.spl.mics.Event;
 import java.awt.*;
 import java.util.List;
 
-public class SendAgentsEvent implements Event<Boolean> {
+public class SendAgentsEvent implements Event<String> {
     private List<String> agentSerialNumbers;
     private int time;
 

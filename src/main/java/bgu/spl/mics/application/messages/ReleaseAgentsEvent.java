@@ -4,7 +4,7 @@ import bgu.spl.mics.Event;
 
 import java.util.List;
 
-public class ReleaseAgentsEvent implements Event<Boolean> {
+public class ReleaseAgentsEvent implements Event<String> {
     private List<String> agentSerialNumbers;
 
     public ReleaseAgentsEvent(List<String> agentsSerialNumbers){

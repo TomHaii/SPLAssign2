@@ -38,15 +38,15 @@ public class Moneypenny extends Subscriber {
 				} catch (Exception ignored) {
 				}
 			}
-			complete(ev, squadInstance.getAgents(ev.getAgentSerialNumbers()));
+			complete(ev, "success");
 		});
 		subscribeEvent(SendAgentsEvent.class, ev -> {
 			squadInstance.sendAgents(ev.getAgentSerialNumbers(), ev.getTime());
-			complete(ev, Boolean.TRUE);
+			complete(ev, "success");
 		});
 		subscribeEvent(ReleaseAgentsEvent.class, ev -> {
 			squadInstance.releaseAgents(ev.getAgentSerialNumbers());
-			complete(ev, Boolean.TRUE);
+			complete(ev, "success");
 		});
 	}
 }
