@@ -97,7 +97,7 @@ public class MessageBrokerImpl implements MessageBroker {
 		for(Class<? extends Message> type: topicsList.get(m)){
 			if(eventMap.containsKey(type))
 				eventMap.get(type).remove(m);
-			else
+			if(broadcastMap.containsKey(type))
 				broadcastMap.get(type).remove(m);
 		}
 		topicsList.remove(m);

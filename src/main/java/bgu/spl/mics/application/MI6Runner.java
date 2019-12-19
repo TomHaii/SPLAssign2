@@ -68,10 +68,7 @@ public class MI6Runner {
         int mNumber = services.get("M").getAsInt();
         int mpNumber = services.get("Moneypenny").getAsInt();
         JsonArray allMissions = services.get("intelligence").getAsJsonArray();
-        System.out.println(allMissions);
-
         int iNumber = allMissions.size();
-        System.out.println(iNumber);
         for (int i = 0; i< iNumber; i++){
             JsonObject missions = allMissions.get(i).getAsJsonObject();
             JsonArray missionArray = missions.get("missions").getAsJsonArray();

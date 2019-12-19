@@ -32,8 +32,6 @@ public abstract class Subscriber extends RunnableSubPub {
         super(name);
         callbacks = new HashMap<>();
         broker.register(this);
-        Broadcast timeEnded = new TimeEndedBroadcast();
-        broker.subscribeBroadcast(timeEnded.getClass(), this);
     }
 
 
