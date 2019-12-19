@@ -44,6 +44,7 @@ public class Squad {
 		for (String s : serials){
 			agents.get(s).release();
 		}
+		notifyAll();
 	}
 
 	/**
@@ -51,7 +52,11 @@ public class Squad {
 	 * @param time   milliseconds to sleep
 	 */
 	public void sendAgents(List<String> serials, int time){
-		//TODO Implement this
+		try {
+			Thread.sleep(time);
+		}
+		catch (Exception ignored){}
+		releaseAgents(serials);
 	}
 
 	/**
@@ -62,13 +67,16 @@ public class Squad {
 	public boolean getAgents(List<String> serials){
 		synchronized (this) {
 			for (String s : serials) {
-				Agent agent = agents.get(s);
-				if(!agent.isAvailable())
-					return false;
-				agent.acquire();
+				if(agents.containsKey(s)) {
+					Agent agent = agents.get(s);
+					if (!agent.isAvailable())
+						return false;
+					agent.acquire();
+				}
+				else{ return false; }
 			}
+			return true;
 		}
-		return true;
 	}
 
 	/**

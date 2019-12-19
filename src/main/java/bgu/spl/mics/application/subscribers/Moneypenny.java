@@ -1,6 +1,12 @@
 package bgu.spl.mics.application.subscribers;
 
+import bgu.spl.mics.Future;
 import bgu.spl.mics.Subscriber;
+import bgu.spl.mics.application.messages.AgentsAvailableEvent;
+import bgu.spl.mics.application.messages.ReleaseAgentsEvent;
+import bgu.spl.mics.application.messages.SendAgentsEvent;
+import bgu.spl.mics.application.passiveObjects.Inventory;
+import bgu.spl.mics.application.passiveObjects.Squad;
 
 /**
  * Only this type of Subscriber can access the squad.
@@ -11,9 +17,10 @@ import bgu.spl.mics.Subscriber;
  */
 public class Moneypenny extends Subscriber {
 
+	private static Squad squadInstance = Squad.getInstance();
 	private int serialNumber;
 
-	public Moneypenny(int i){
+	public Moneypenny(int i) {
 		super("MoneyPenny");
 		serialNumber = i;
 	}
@@ -24,8 +31,22 @@ public class Moneypenny extends Subscriber {
 
 	@Override
 	protected void initialize() {
-		// TODO Implement this
-		
+		subscribeEvent(AgentsAvailableEvent.class, ev -> {
+			while (!squadInstance.getAgents(ev.getAgentSerialNumbers())) {
+				try {
+					squadInstance.wait();
+				} catch (Exception ignored) {
+				}
+			}
+			complete(ev, squadInstance.getAgents(ev.getAgentSerialNumbers()));
+		});
+		subscribeEvent(SendAgentsEvent.class, ev -> {
+			squadInstance.sendAgents(ev.getAgentSerialNumbers(), ev.getTime());
+			complete(ev, Boolean.TRUE);
+		});
+		subscribeEvent(ReleaseAgentsEvent.class, ev -> {
+			squadInstance.releaseAgents(ev.getAgentSerialNumbers());
+			complete(ev, Boolean.TRUE);
+		});
 	}
-
 }
