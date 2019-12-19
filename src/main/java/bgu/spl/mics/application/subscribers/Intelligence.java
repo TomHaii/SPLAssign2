@@ -3,6 +3,7 @@ package bgu.spl.mics.application.subscribers;
 import bgu.spl.mics.Subscriber;
 import bgu.spl.mics.application.passiveObjects.MissionInfo;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 
 import java.util.LinkedList;
 
@@ -23,15 +24,15 @@ public class Intelligence extends Subscriber {
 		serialNumber = _serialNumber+1;
 		missions =  new LinkedList<>();
 		for (int i = 0; i < _missions.size(); i++) {
-			JsonArray mission = _missions.get(i).getAsJsonArray();
+			JsonObject mission = _missions.get(i).getAsJsonObject();
 			MissionInfo mi = new MissionInfo();
-			LinkedList<String> serialNumbers = createSerialNumbersList(mission.get(0).getAsJsonArray());
+			LinkedList<String> serialNumbers = createSerialNumbersList(mission.get("serialAgentsNumbers").getAsJsonArray());
 			mi.setSerialAgentsNumbers(serialNumbers);
-			mi.setDuration(mission.get(1).getAsInt());
-			mi.setGadget(mission.get(2).toString());
-			mi.setMissionName(mission.get(3).toString());
-			mi.setTimeExpired(mission.get(4).getAsInt());
-			mi.setTimeExpired(mission.get(5).getAsInt());
+			mi.setDuration(mission.get("duration").getAsInt());
+			mi.setGadget(mission.get("gadget").toString());
+			mi.setMissionName(mission.get("missionName").toString());
+			mi.setTimeExpired(mission.get("timeExpired").getAsInt());
+			mi.setTimeExpired(mission.get("timeIssued").getAsInt());
 			missions.add(mi);
 		}
 	}
@@ -42,7 +43,7 @@ public class Intelligence extends Subscriber {
 
 	private LinkedList<String> createSerialNumbersList(JsonArray tmp) {
 		LinkedList<String> list = new LinkedList<>();
-		JsonArray numbers = tmp.get(0).getAsJsonArray();
+		JsonArray numbers = tmp.getAsJsonArray();
 		for (int k = 0; k < numbers.size(); k++){
 			list.add(numbers.get(k).toString());
 		}
