@@ -11,7 +11,7 @@ public class MessageBrokerImpl implements MessageBroker {
 	private static class MessageBrokerSingletonHolder {
 		private volatile static MessageBroker instance = new MessageBrokerImpl();
 	}
-	private volatile ConcurrentHashMap<Message, Future> futureMap;
+	private volatile ConcurrentHashMap<Event, Future> futureMap;
 	private volatile ConcurrentHashMap<Subscriber, LinkedBlockingQueue<Message>> subscriberList;
 	private volatile ConcurrentHashMap<Subscriber, ConcurrentLinkedQueue<Class<? extends Message>>> topicsList;
 	private volatile ConcurrentHashMap<Class<? extends Broadcast>, ConcurrentLinkedQueue<Subscriber>> broadcastMap;
@@ -80,7 +80,7 @@ public class MessageBrokerImpl implements MessageBroker {
 				}
 				else{
 					System.out.println("None of the subscribers is capable of handling this event");
-					future.resolve(null);
+					complete(e, null);
 				}
 			}
 		}
