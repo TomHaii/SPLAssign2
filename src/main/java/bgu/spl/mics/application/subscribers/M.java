@@ -31,8 +31,8 @@ public class M extends Subscriber {
 	protected void initialize() {
 		System.out.println(getName() + " " + getSerialNumber() + " started");
 		subscribeBroadcast(TimeEndedBroadcast.class, b->{terminate();});
-		subscribeBroadcast(TickBroadcast.class, ev->{
-			mTime++;
+		subscribeBroadcast(TickBroadcast.class, b->{
+			mTime = b.getTime();
 		});
 		subscribeEvent(MissionReceivedEvent.class, ev->{
 			MissionInfo missionInfo = ev.getMissionInfo();

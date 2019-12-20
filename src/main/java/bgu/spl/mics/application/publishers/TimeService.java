@@ -53,8 +53,8 @@ public class TimeService extends Publisher {
 		timer.schedule(new TimerTask(){
 			public void run(){
 				if(currTime<timeTicks) {
-					MessageBrokerImpl.getInstance().sendBroadcast(new TickBroadcast());
 					currTime++;
+					MessageBrokerImpl.getInstance().sendBroadcast(new TickBroadcast(currTime));
 				}
 				else{
 					timer.cancel();
