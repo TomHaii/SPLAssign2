@@ -24,7 +24,6 @@ public class M extends Subscriber {
 		initialize();
 	}
 
-
 	@Override
 	protected void initialize() {
 		System.out.println(getName() + " " + getSerialNumber() + " started");

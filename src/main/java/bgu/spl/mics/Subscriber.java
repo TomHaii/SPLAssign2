@@ -60,6 +60,8 @@ public abstract class Subscriber extends RunnableSubPub {
     protected final <T, E extends Event<T>> void subscribeEvent(Class<E> type, Callback<E> callback) {
         broker.subscribeEvent(type, this);
         callbacks.put(type, callback);
+//        System.out.println("check subscribe event at subscriber");
+
     }
 
     /**
@@ -85,6 +87,7 @@ public abstract class Subscriber extends RunnableSubPub {
     protected final <B extends Broadcast> void subscribeBroadcast(Class<B> type, Callback<B> callback) {
         broker.subscribeBroadcast(type, this);
         callbacks.put(type, callback);
+//        System.out.println("check subscribe broadcast at subscriber");
     }
 
     /**
