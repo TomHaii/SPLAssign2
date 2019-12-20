@@ -42,8 +42,18 @@ public class M extends Subscriber {
 				if(gadgetAvailable.get().equals("success")){
 					if(mTime < missionInfo.getTimeExpired()){
 						getSimplePublisher().sendEvent(new SendAgentsEvent(ev.getMissionInfo().getSerialAgentsNumbers(), missionInfo.getDuration()));
+						complete(ev, "success");
+					}
+					else{
+						complete(ev, "fail - mission time expired");
 					}
 				}
+				else{
+					complete(ev, "fail - gadget not available");
+				}
+			}
+			else{
+				complete(ev, "fail - agents are not available");
 			}
 		});
 		

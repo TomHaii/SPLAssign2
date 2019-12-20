@@ -29,7 +29,7 @@ public class Q extends Subscriber {
 		subscribeBroadcast(TimeEndedBroadcast.class, b->{terminate();});
 		subscribeEvent(GadgetAvailableEvent.class, ev->{
 			if(!inventoryInstance.getItem(ev.getGadget()))
-				complete(ev, "fail");
+				complete(ev, "fail - gadget is not available");
 			else
 				complete(ev, "success");
 		});
