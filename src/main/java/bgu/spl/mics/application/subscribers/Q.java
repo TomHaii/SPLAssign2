@@ -28,11 +28,20 @@ public class Q extends Subscriber {
 		System.out.println(getName() + " started");
 		subscribeBroadcast(TimeEndedBroadcast.class, b->{terminate();});
 		subscribeEvent(GadgetAvailableEvent.class, ev->{
-			if(!inventoryInstance.getItem(ev.getGadget()))
+			if(!inventoryInstance.getItem(ev.getGadget())) {
 				complete(ev, "fail - gadget is not available");
-			else
+				print("fail - gadget is not available");
+			}
+			else {
 				complete(ev, "success");
+				print("success");
+
+			}
 		});
+	}
+
+	private void print(String msg){
+		System.out.println(getName() + " finished handling missionReceivedEvent. result: " +msg);
 	}
 
 }

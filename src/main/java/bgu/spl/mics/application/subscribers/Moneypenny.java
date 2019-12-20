@@ -1,5 +1,6 @@
 package bgu.spl.mics.application.subscribers;
 
+import bgu.spl.mics.Event;
 import bgu.spl.mics.Future;
 import bgu.spl.mics.Subscriber;
 import bgu.spl.mics.application.messages.AgentsAvailableEvent;
@@ -50,10 +51,13 @@ public class Moneypenny extends Subscriber {
 			subscribeEvent(SendAgentsEvent.class, ev -> {
 				squadInstance.sendAgents(ev.getAgentSerialNumbers(), ev.getTime());
 				complete(ev, "success");
+				print(SendAgentsEvent.class, "success");
 			});
 			subscribeEvent(ReleaseAgentsEvent.class, ev -> {
 				squadInstance.releaseAgents(ev.getAgentSerialNumbers());
 				complete(ev, "success");
+				print(ReleaseAgentsEvent.class, "success");
+
 			});
 		}
 		else{
@@ -65,8 +69,28 @@ public class Moneypenny extends Subscriber {
 					}
 				}
 				complete(ev, "success");
+				print(AgentsAvailableEvent.class, "success");
 			});
 		}
 	}
 
-}
+	private void print(Class<? extends Event<?>> cl, String msg){
+		if(cl == SendAgentsEvent.class){
+			print("SendAgentEvent", msg);
+		}
+		else if(cl == ReleaseAgentsEvent.class){
+			print("ReleaseAgentsEvent", msg);
+		}
+		else{
+			print("AgentsAvailableEvent", msg);
+
+		}
+	}
+
+	private void print(String cl, String msg) {
+		System.out.println(getName() + " " + getSerialNumber() + " finished handling " +cl +" result: " +msg);
+
+	}
+
+
+	}
