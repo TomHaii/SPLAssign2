@@ -27,7 +27,7 @@ public class Intelligence extends Subscriber {
 	public Intelligence(int _serialNumber, JsonArray _missions) {
 		super("Intelligence");
 		serialNumber = _serialNumber+1;
-		missionMap = new HashMap<Integer, LinkedList<MissionInfo>>();
+		missionMap = new HashMap<>();
 		for (int i = 0; i < _missions.size(); i++) {
 			JsonObject mission = _missions.get(i).getAsJsonObject();
 			MissionInfo mi = new MissionInfo();
@@ -62,6 +62,7 @@ public class Intelligence extends Subscriber {
 		System.out.println(getName() + " " + getSerialNumber() + " started");
 		subscribeBroadcast(TickBroadcast.class, b->{
 			if(missionMap.containsKey(b.getTime())){
+				System.out.println(b.getTime());
 				for(int i = 0; i < missionMap.get(b.getTime()).size(); i++) {
 					System.out.println(getName() + " " + getSerialNumber() + " sent a missionReceivedEvent");
 					getSimplePublisher().sendEvent(new MissionReceivedEvent(missionMap.get(b.getTime()).get(i)));

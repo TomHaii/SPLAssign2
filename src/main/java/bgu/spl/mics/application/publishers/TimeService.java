@@ -28,12 +28,11 @@ public class TimeService extends Publisher {
 	private Timer timer;
 
 
-
-
 	public TimeService(int timeTicks) {
 		super("TimeService");
 		this.timeTicks = timeTicks;
 		timer = new Timer();
+		initialize();
 
 	}
 
@@ -43,13 +42,9 @@ public class TimeService extends Publisher {
 		
 	}
 
-	public int getCurrTime(){
-		return currTime;
-	}
 
 	@Override
 	public void run() {
-		initialize();
 		timer.schedule(new TimerTask(){
 			public void run(){
 				if(currTime<timeTicks) {
