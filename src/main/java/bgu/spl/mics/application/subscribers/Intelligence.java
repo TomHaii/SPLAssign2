@@ -1,6 +1,7 @@
 package bgu.spl.mics.application.subscribers;
 
 import bgu.spl.mics.Subscriber;
+import bgu.spl.mics.application.messages.TimeEndedBroadcast;
 import bgu.spl.mics.application.passiveObjects.MissionInfo;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -52,7 +53,12 @@ public class Intelligence extends Subscriber {
 
 	@Override
 	protected void initialize() {
-
+		System.out.println(getName() + " " + getSerialNumber() + " started");
+		subscribeBroadcast(TimeEndedBroadcast.class, b->{terminate();});
 		// TODO Implement this
+	}
+
+	public int getSerialNumber(){
+		return serialNumber;
 	}
 }

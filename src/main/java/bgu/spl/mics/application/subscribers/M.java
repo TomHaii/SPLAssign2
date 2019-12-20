@@ -29,6 +29,8 @@ public class M extends Subscriber {
 
 	@Override
 	protected void initialize() {
+		System.out.println(getName() + " " + getSerialNumber() + " started");
+		subscribeBroadcast(TimeEndedBroadcast.class, b->{terminate();});
 		subscribeBroadcast(TickBroadcast.class, ev->{
 			mTime++;
 		});
@@ -45,6 +47,10 @@ public class M extends Subscriber {
 			}
 		});
 		
+	}
+
+	private int getSerialNumber() {
+		return serialNumber;
 	}
 
 	protected void setSerialNumber(int i) {

@@ -2,6 +2,7 @@ package bgu.spl.mics.application.subscribers;
 
 import bgu.spl.mics.Subscriber;
 import bgu.spl.mics.application.messages.GadgetAvailableEvent;
+import bgu.spl.mics.application.messages.TimeEndedBroadcast;
 import bgu.spl.mics.application.passiveObjects.Inventory;
 
 import java.util.LinkedList;
@@ -25,6 +26,7 @@ public class Q extends Subscriber {
 	@Override
 	protected void initialize() {
 		System.out.println(getName() + " started");
+		subscribeBroadcast(TimeEndedBroadcast.class, b->{terminate();});
 		subscribeEvent(GadgetAvailableEvent.class, ev->{
 			if(!inventoryInstance.getItem(ev.getGadget()))
 				complete(ev, "fail");

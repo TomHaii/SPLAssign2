@@ -13,6 +13,7 @@ import com.google.gson.*;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.util.Arrays;
 import java.util.LinkedList;
 
 
@@ -26,6 +27,7 @@ public class MI6Runner {
             System.out.println("Invalid Arguments");
             return;
         }
+
         //Gson gson = new Gson();
         JsonObject object = (JsonObject) new JsonParser().parse(new FileReader(args[0]));
         JsonArray inv = object.get("inventory").getAsJsonArray();
@@ -38,7 +40,26 @@ public class MI6Runner {
         LinkedList<Intelligence> intelligenceList = new LinkedList<>();
         Q q = new Q();
         TimeService ts = new TimeService(services.get("time").getAsInt());
+        LinkedList<Thread> allThreads = new LinkedList<>();
         createServices(services, mList, mpList, intelligenceList);
+        for(Intelligence intelligence : intelligenceList){
+            Thread t = new Thread(intelligence);
+            t.start();
+            allThreads.add(t);
+        }
+        for (Moneypenny mp : mpList){
+            Thread t = new Thread(mp);
+            t.start();
+            allThreads.add(t);
+        }
+        for (M m : mList){
+            Thread t = new Thread(m);
+            t.start();
+            allThreads.add(t);
+        }
+        new Thread(ts).start();
+        new Thread(q).start();
+
     }
 
 

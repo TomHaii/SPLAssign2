@@ -5,6 +5,7 @@ import bgu.spl.mics.Subscriber;
 import bgu.spl.mics.application.messages.AgentsAvailableEvent;
 import bgu.spl.mics.application.messages.ReleaseAgentsEvent;
 import bgu.spl.mics.application.messages.SendAgentsEvent;
+import bgu.spl.mics.application.messages.TimeEndedBroadcast;
 import bgu.spl.mics.application.passiveObjects.Inventory;
 import bgu.spl.mics.application.passiveObjects.Squad;
 
@@ -43,6 +44,8 @@ public class Moneypenny extends Subscriber {
 
 	@Override
 	protected void initialize() {
+		System.out.println(getName() + " " + getSerialNumber() + " started");
+		subscribeBroadcast(TimeEndedBroadcast.class, b->{terminate();});
 		if (isAgentSender()) {
 			subscribeEvent(SendAgentsEvent.class, ev -> {
 				squadInstance.sendAgents(ev.getAgentSerialNumbers(), ev.getTime());

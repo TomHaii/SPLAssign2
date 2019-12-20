@@ -43,6 +43,10 @@ public class TimeService extends Publisher {
 		
 	}
 
+	public int getCurrTime(){
+		return currTime;
+	}
+
 	@Override
 	public void run() {
 		initialize();
