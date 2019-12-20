@@ -19,9 +19,8 @@ public class Q extends Subscriber {
 
 	public Q() {
 		super("Q");
+		initialize();
 	}
-
-
 
 	@Override
 	protected void initialize() {

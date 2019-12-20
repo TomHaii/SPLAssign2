@@ -44,11 +44,9 @@ public class Intelligence extends Subscriber {
 			}
 			missionMap.get(mi.getTimeIssued()).add(mi);
 		}
+		initialize();
 	}
 
-	public Intelligence() {
-		super("Intelligence");
-	}
 
 	private LinkedList<String> createSerialNumbersList(JsonArray tmp) {
 		LinkedList<String> list = new LinkedList<>();
