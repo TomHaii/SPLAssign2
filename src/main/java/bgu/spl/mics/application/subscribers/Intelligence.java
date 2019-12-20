@@ -50,9 +50,6 @@ public class Intelligence extends Subscriber {
 		super("Intelligence");
 	}
 
-	private void setMissionsMap(){
-
-	}
 	private LinkedList<String> createSerialNumbersList(JsonArray tmp) {
 		LinkedList<String> list = new LinkedList<>();
 		JsonArray numbers = tmp.getAsJsonArray();
@@ -68,6 +65,7 @@ public class Intelligence extends Subscriber {
 		subscribeBroadcast(TickBroadcast.class, b->{
 			if(missionMap.containsKey(b.getTime())){
 				for(int i = 0; i < missionMap.get(b.getTime()).size(); i++) {
+					System.out.println(getName() + " " + getSerialNumber() + " sent a missionReceivedEvent");
 					getSimplePublisher().sendEvent(new MissionReceivedEvent(missionMap.get(b.getTime()).get(i)));
 				}
 			}
