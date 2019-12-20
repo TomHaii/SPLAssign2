@@ -19,34 +19,51 @@ public class Moneypenny extends Subscriber {
 
 	private static Squad squadInstance = Squad.getInstance();
 	private int serialNumber;
+	private boolean agentSender;
 
 	public Moneypenny(int i) {
 		super("MoneyPenny");
 		serialNumber = i;
+		agentSender = (i%2 == 0);
 	}
 
 	public Moneypenny() {
 		super("MoneyPenny");
 	}
 
+
+	public int getSerialNumber(){
+		return serialNumber;
+	}
+
+	public boolean isAgentSender(){
+		return agentSender;
+	}
+
+
 	@Override
 	protected void initialize() {
-		subscribeEvent(AgentsAvailableEvent.class, ev -> {
-			while (!squadInstance.getAgents(ev.getAgentSerialNumbers())) {
-				try {
-					squadInstance.wait();
-				} catch (Exception ignored) {
+		if (isAgentSender()) {
+			subscribeEvent(SendAgentsEvent.class, ev -> {
+				squadInstance.sendAgents(ev.getAgentSerialNumbers(), ev.getTime());
+				complete(ev, "success");
+			});
+			subscribeEvent(ReleaseAgentsEvent.class, ev -> {
+				squadInstance.releaseAgents(ev.getAgentSerialNumbers());
+				complete(ev, "success");
+			});
+		}
+		else{
+			subscribeEvent(AgentsAvailableEvent.class, ev -> {
+				while (!squadInstance.getAgents(ev.getAgentSerialNumbers())) {
+					try {
+						squadInstance.wait();
+					} catch (Exception ignored) {
+					}
 				}
-			}
-			complete(ev, "success");
-		});
-		subscribeEvent(SendAgentsEvent.class, ev -> {
-			squadInstance.sendAgents(ev.getAgentSerialNumbers(), ev.getTime());
-			complete(ev, "success");
-		});
-		subscribeEvent(ReleaseAgentsEvent.class, ev -> {
-			squadInstance.releaseAgents(ev.getAgentSerialNumbers());
-			complete(ev, "success");
-		});
+				complete(ev, "success");
+			});
+		}
 	}
+
 }
