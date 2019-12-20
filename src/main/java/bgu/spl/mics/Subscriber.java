@@ -120,7 +120,13 @@ public abstract class Subscriber extends RunnableSubPub {
         while (!terminated) {
             try {
                 Message message = broker.awaitMessage(this);
-                callbacks.get(message.getClass()).call(message);
+                Callback callbackFunction = callbacks.getOrDefault(callbacks.getClass(), null);
+                if(callbackFunction == null){
+             //       System.out.println("no callback available for message : "+message.toString());
+                }
+                else{
+                    callbackFunction.call(message);
+                }
             } catch (Exception ignored) {
             }
         }
