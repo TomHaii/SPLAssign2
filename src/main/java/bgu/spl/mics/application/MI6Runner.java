@@ -29,13 +29,6 @@ public class MI6Runner {
             System.out.println("Invalid Arguments");
             return;
         }
-
-        Gson gson = new Gson();
-        try {
-            gson.toJson("hello", new FileWriter("kakai.json"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         JsonObject object = (JsonObject) new JsonParser().parse(new FileReader(args[0]));
         JsonArray inv = object.get("inventory").getAsJsonArray();
         JsonArray squ =  object.get("squad").getAsJsonArray();
