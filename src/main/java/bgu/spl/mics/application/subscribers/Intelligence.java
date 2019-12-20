@@ -1,12 +1,16 @@
 package bgu.spl.mics.application.subscribers;
 
 import bgu.spl.mics.Subscriber;
+import bgu.spl.mics.application.messages.MissionReceivedEvent;
+import bgu.spl.mics.application.messages.TickBroadcast;
 import bgu.spl.mics.application.messages.TimeEndedBroadcast;
 import bgu.spl.mics.application.passiveObjects.MissionInfo;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 
 /**
  * A Publisher\Subscriber.
@@ -18,12 +22,12 @@ import java.util.LinkedList;
 public class Intelligence extends Subscriber {
 
 	private int serialNumber;
-	private LinkedList<MissionInfo> missions;
+	private HashMap<Integer, LinkedList<MissionInfo>> missionMap;
 
 	public Intelligence(int _serialNumber, JsonArray _missions) {
 		super("Intelligence");
 		serialNumber = _serialNumber+1;
-		missions =  new LinkedList<>();
+		missionMap = new HashMap<Integer, LinkedList<MissionInfo>>();
 		for (int i = 0; i < _missions.size(); i++) {
 			JsonObject mission = _missions.get(i).getAsJsonObject();
 			MissionInfo mi = new MissionInfo();
@@ -34,7 +38,11 @@ public class Intelligence extends Subscriber {
 			mi.setMissionName(mission.get("missionName").toString());
 			mi.setTimeExpired(mission.get("timeExpired").getAsInt());
 			mi.setTimeExpired(mission.get("timeIssued").getAsInt());
-			missions.add(mi);
+			if(!missionMap.containsKey(mi.getTimeIssued())){
+				LinkedList<MissionInfo> missionList = new LinkedList<MissionInfo>();
+				missionMap.putIfAbsent(mi.getTimeIssued(), missionList);
+			}
+			missionMap.get(mi.getTimeIssued()).add(mi);
 		}
 	}
 
@@ -42,6 +50,9 @@ public class Intelligence extends Subscriber {
 		super("Intelligence");
 	}
 
+	private void setMissionsMap(){
+
+	}
 	private LinkedList<String> createSerialNumbersList(JsonArray tmp) {
 		LinkedList<String> list = new LinkedList<>();
 		JsonArray numbers = tmp.getAsJsonArray();
@@ -54,8 +65,15 @@ public class Intelligence extends Subscriber {
 	@Override
 	protected void initialize() {
 		System.out.println(getName() + " " + getSerialNumber() + " started");
+		subscribeBroadcast(TickBroadcast.class, b->{
+			if(missionMap.containsKey(b.getTime())){
+				for(int i = 0; i < missionMap.get(b.getTime()).size(); i++) {
+					getSimplePublisher().sendEvent(new MissionReceivedEvent(missionMap.get(b.getTime()).get(i)));
+				}
+			}
+		});
 		subscribeBroadcast(TimeEndedBroadcast.class, b->{terminate();});
-		// TODO Implement this
+
 	}
 
 	public int getSerialNumber(){

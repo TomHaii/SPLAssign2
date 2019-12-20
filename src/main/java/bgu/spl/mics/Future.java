@@ -51,8 +51,8 @@ public class Future<T> {
 	public void resolve (T result) {
 		synchronized(this) {
 			if(!isDone()) {
-				resolved = true;
 				this.result = result;
+				resolved = true;
 				notifyAll();
 			}
 			else {
@@ -85,6 +85,7 @@ public class Future<T> {
 			while (!isDone()) {
 				try {
 					wait(unit.toSeconds(timeout));
+					return result;
 				} catch (InterruptedException e) {
 					System.out.println("Thread " +Thread.currentThread().getId() +" was interrupted");
 				}
