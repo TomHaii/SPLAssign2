@@ -1,5 +1,7 @@
 package bgu.spl.mics.application.publishers;
 
+import bgu.spl.mics.Message;
+import bgu.spl.mics.MessageBroker;
 import bgu.spl.mics.MessageBrokerImpl;
 import bgu.spl.mics.Publisher;
 import bgu.spl.mics.application.messages.TickBroadcast;
@@ -22,6 +24,7 @@ import java.util.TimerTask;
 public class TimeService extends Publisher {
 
 	private int timeTicks;
+	private int currTime = 0;
 	private Timer timer;
 
 
@@ -36,11 +39,18 @@ public class TimeService extends Publisher {
 
 	@Override
 	protected void initialize() {
+		System.out.println("TimeService started");
+		
+	}
+
+	@Override
+	public void run() {
+		initialize();
 		timer.schedule(new TimerTask(){
 			public void run(){
-				if(timeTicks>0) {
+				if(currTime<timeTicks) {
 					MessageBrokerImpl.getInstance().sendBroadcast(new TickBroadcast());
-					timeTicks--;
+					currTime++;
 				}
 				else{
 					timer.cancel();
@@ -48,12 +58,6 @@ public class TimeService extends Publisher {
 				}
 			}
 		},0, 100);
-		
-	}
-
-	@Override
-	public void run() {
-		initialize();
 	}
 
 }
