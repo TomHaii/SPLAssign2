@@ -117,7 +117,6 @@ public abstract class Subscriber extends RunnableSubPub {
      */
     @Override
     public final void run() {
-        initialize();
         while (!terminated) {
             try {
                 Message message = broker.awaitMessage(this);

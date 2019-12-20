@@ -27,11 +27,9 @@ public class Moneypenny extends Subscriber {
 		super("MoneyPenny");
 		serialNumber = i;
 		agentSender = (i%2 == 0);
+		initialize();
 	}
 
-	public Moneypenny() {
-		super("MoneyPenny");
-	}
 
 
 	public int getSerialNumber(){
