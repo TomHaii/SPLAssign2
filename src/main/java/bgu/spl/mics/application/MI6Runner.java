@@ -13,6 +13,8 @@ import com.google.gson.*;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.LinkedList;
 
@@ -28,7 +30,12 @@ public class MI6Runner {
             return;
         }
 
-        //Gson gson = new Gson();
+        Gson gson = new Gson();
+        try {
+            gson.toJson("hello", new FileWriter("kakai.json"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         JsonObject object = (JsonObject) new JsonParser().parse(new FileReader(args[0]));
         JsonArray inv = object.get("inventory").getAsJsonArray();
         JsonArray squ =  object.get("squad").getAsJsonArray();
@@ -59,7 +66,8 @@ public class MI6Runner {
         }
         new Thread(ts).start();
         new Thread(q).start();
-
+        Inventory inventory = Inventory.getInstance();
+        inventory.printToFile("inventory.json");
     }
 
 
