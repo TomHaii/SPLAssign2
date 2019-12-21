@@ -96,18 +96,17 @@ public class MessageBrokerImpl implements MessageBroker {
 
 	@Override
 	public void unregister(Subscriber m) {
-		/* synchronized (subscriberList.get(m)) {
-			while (!subscriberList.get(m).isEmpty()) {
-				try {
-					subscriberList.get(m).wait();
-				} catch (Exception ignored) {}
-				subscriberList.remove(m);
+		while (!subscriberList.get(m).isEmpty()) {
+			try {
+				subscriberList.get(m).wait();
+			} catch (Exception ignored) {
 			}
-		} */
-		for(Class<? extends Message> type: topicsList.get(m)){
-			if(eventMap.containsKey(type))
+			subscriberList.remove(m);
+		}
+		for (Class<? extends Message> type : topicsList.get(m)) {
+			if (eventMap.containsKey(type))
 				eventMap.get(type).remove(m);
-			if(broadcastMap.containsKey(type))
+			if (broadcastMap.containsKey(type))
 				broadcastMap.get(type).remove(m);
 		}
 		topicsList.remove(m);

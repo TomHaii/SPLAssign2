@@ -2,7 +2,6 @@ package bgu.spl.mics.application;
 
 import bgu.spl.mics.application.passiveObjects.Agent;
 import bgu.spl.mics.application.passiveObjects.Inventory;
-import bgu.spl.mics.application.passiveObjects.MissionInfo;
 import bgu.spl.mics.application.passiveObjects.Squad;
 import bgu.spl.mics.application.publishers.TimeService;
 import bgu.spl.mics.application.subscribers.Intelligence;
@@ -13,9 +12,7 @@ import com.google.gson.*;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.Arrays;
+
 import java.util.LinkedList;
 
 
@@ -29,11 +26,6 @@ public class MI6Runner {
             System.out.println("Invalid Arguments");
             return;
         }
-
-
-
-
-
         JsonObject object = (JsonObject) new JsonParser().parse(new FileReader(args[0]));
         JsonArray inv = object.get("inventory").getAsJsonArray();
         JsonArray squ =  object.get("squad").getAsJsonArray();
@@ -85,9 +77,7 @@ public class MI6Runner {
         String[] items = new String[inv.size()];
         for(int i = 0; i < items.length; i++) {
             items[i] = inv.get(i).getAsString();
-            System.out.println(items[i]);
         }
-        //hi
         inventory.load(items);
     }
 
