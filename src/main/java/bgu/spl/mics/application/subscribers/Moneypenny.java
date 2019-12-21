@@ -43,7 +43,9 @@ public class Moneypenny extends Subscriber {
 	@Override
 	protected void initialize() {
 		System.out.println(getName() + getSerialNumber() + " started");
-		subscribeBroadcast(TimeEndedBroadcast.class, b->{terminate();});
+		subscribeBroadcast(TimeEndedBroadcast.class, b->{terminate();
+			System.out.println(getName() + getSerialNumber() + " terminated");
+		});
 		if (isAgentSender()) {
 			subscribeEvent(SendAgentsEvent.class, ev -> {
 				System.out.println(getName() + getSerialNumber() + " is handling a sendAgentsEvent");

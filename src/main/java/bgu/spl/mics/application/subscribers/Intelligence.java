@@ -57,16 +57,19 @@ public class Intelligence extends Subscriber {
 
 	@Override
 	protected void initialize() {
-		System.out.println(getName()+ getSerialNumber() + " started");
-		subscribeBroadcast(TickBroadcast.class,  b->{
-			if(missionMap.containsKey(b.getTime())){
-				for(int i = 0; i < missionMap.get(b.getTime()).size(); i++) {
-					System.out.println(getName()+ getSerialNumber() + " sent a missionReceivedEvent");
+		System.out.println(getName() + getSerialNumber() + " started");
+		subscribeBroadcast(TickBroadcast.class, b -> {
+			if (missionMap.containsKey(b.getTime())) {
+				for (int i = 0; i < missionMap.get(b.getTime()).size(); i++) {
+					System.out.println(getName() + getSerialNumber() + " sent a missionReceivedEvent");
 					getSimplePublisher().sendEvent(new MissionReceivedEvent(missionMap.get(b.getTime()).get(i)));
 				}
 			}
 		});
-		subscribeBroadcast(TimeEndedBroadcast.class, b->{terminate();});
+		subscribeBroadcast(TimeEndedBroadcast.class, b -> {
+			terminate();
+			System.out.println(getName() + getSerialNumber() + " terminated");
+		});
 
 	}
 

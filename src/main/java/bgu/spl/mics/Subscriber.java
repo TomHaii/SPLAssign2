@@ -107,8 +107,9 @@ public abstract class Subscriber extends RunnableSubPub {
      * message.
      */
     protected final void terminate() {
-            this.terminated = true;
-            broker.unregister(this);
+        this.terminated = true;
+        broker.unregister(this);
+
     }
 
     /**

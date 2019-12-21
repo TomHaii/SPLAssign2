@@ -55,7 +55,6 @@ public class Inventory {
 	public boolean getItem(String gadget) {
 		if (gadgets.contains(gadget)) {
 			gadgets.remove(gadget);
-			System.out.println("checking getItem inventory");
 			return true;
 		}
 		return false;

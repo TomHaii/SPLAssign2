@@ -25,20 +25,21 @@ public class Q extends Subscriber {
 	@Override
 	protected void initialize() {
 		System.out.println(getName() + " started");
-		subscribeBroadcast(TimeEndedBroadcast.class, b->{terminate();
-		inventoryInstance.printToFile("inventory.json");
+		subscribeBroadcast(TimeEndedBroadcast.class, b -> {
+			terminate();
+			inventoryInstance.printToFile("inventory.json");
+			System.out.println(getName() + " terminated");
 		});
-		subscribeBroadcast(TickBroadcast.class, b->{
+		subscribeBroadcast(TickBroadcast.class, b -> {
 			qTime = b.getTime();
 		});
-		subscribeEvent(GadgetAvailableEvent.class, ev->{
+		subscribeEvent(GadgetAvailableEvent.class, ev -> {
 			ev.getReport().setQTime(qTime);
 			ev.getReport().setGadgetName(ev.getGadget());
-			if(!inventoryInstance.getItem(ev.getGadget())) {
+			if (!inventoryInstance.getItem(ev.getGadget())) {
 				complete(ev, "fail - gadget is not available");
 				print("fail - gadget is not available");
-			}
-			else {
+			} else {
 				complete(ev, "success");
 				print("success");
 

@@ -54,6 +54,7 @@ public class TimeService extends Publisher {
 				else{
 					timer.cancel();
 					getSimplePublisher().sendBroadcast(new TimeEndedBroadcast());
+					System.out.println("TimeService terminated");
 				}
 			}
 		},0, 100);
