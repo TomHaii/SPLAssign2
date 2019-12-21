@@ -21,7 +21,6 @@ public class M extends Subscriber {
 		super("M");
 		serialNumber = i;
 		mTime = 0;
-		initialize();
 	}
 
 	@Override

@@ -35,8 +35,8 @@ public class MessageBrokerImpl implements MessageBroker {
 			eventMap.put(type, new ConcurrentLinkedQueue<>());
 		}
 		eventMap.get(type).add(m);
-		topicsList.get(m).add(type);
-	}
+		if(topicsList.get(m) != null)
+			topicsList.get(m).add(type);	}
 
 	@Override
 	public void subscribeBroadcast(Class<? extends Broadcast> type, Subscriber m) {
@@ -44,7 +44,8 @@ public class MessageBrokerImpl implements MessageBroker {
 			broadcastMap.put(type, new ConcurrentLinkedQueue<>());
 		}
 		broadcastMap.get(type).add(m);
-		topicsList.get(m).add(type);
+		if(topicsList.get(m) != null)
+			topicsList.get(m).add(type);
 
 	}
 
@@ -115,7 +116,7 @@ public class MessageBrokerImpl implements MessageBroker {
 
 	@Override
 	public Message awaitMessage(Subscriber m) throws InterruptedException {
-		Message msg = subscriberList.get(m).poll();
+		Message msg = subscriberList.get(m).take();
 		return msg;
 	}
 

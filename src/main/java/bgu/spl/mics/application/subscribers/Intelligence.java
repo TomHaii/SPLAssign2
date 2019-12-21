@@ -44,7 +44,6 @@ public class Intelligence extends Subscriber {
 			}
 			missionMap.get(mi.getTimeIssued()).add(mi);
 		}
-		initialize();
 	}
 
 

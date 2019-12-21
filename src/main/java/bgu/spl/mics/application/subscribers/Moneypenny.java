@@ -27,7 +27,6 @@ public class Moneypenny extends Subscriber {
 		super("MoneyPenny");
 		serialNumber = i;
 		agentSender = (i%2 == 0);
-		initialize();
 	}
 
 

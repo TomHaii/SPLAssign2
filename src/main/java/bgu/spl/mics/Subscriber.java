@@ -31,7 +31,6 @@ public abstract class Subscriber extends RunnableSubPub {
     public Subscriber(String name) {
         super(name);
         callbacks = new HashMap<>();
-        broker.register(this);
     }
 
 
@@ -120,12 +119,14 @@ public abstract class Subscriber extends RunnableSubPub {
      */
     @Override
     public final void run() {
+        broker.register(this);
+        initialize();
         while (!terminated) {
             try {
                 Message message = broker.awaitMessage(this);
                 Callback callbackFunction = callbacks.getOrDefault(callbacks.getClass(), null);
                 if(callbackFunction == null){
-             //       System.out.println("no callback available for message : "+message.toString());
+                    System.out.println("no callback available for message : "+message.toString());
                 }
                 else{
                     callbackFunction.call(message);
