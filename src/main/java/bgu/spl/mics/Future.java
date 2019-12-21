@@ -36,12 +36,11 @@ public class Future<T> {
 			while (!isDone()) {
 				try {
 					wait();
-					return result;
 				} catch (InterruptedException ignored) {
 					System.out.println("Thread " +Thread.currentThread().getId() +" was interrupted");
 				}
 			}
-			return null;
+			return result;
 		}
 	}
 	
@@ -50,7 +49,7 @@ public class Future<T> {
      */
 	public void resolve (T result) {
 		synchronized(this) {
-			if(!isDone()) {
+			if	(!isDone()) {
 				this.result = result;
 				resolved = true;
 				notifyAll();
