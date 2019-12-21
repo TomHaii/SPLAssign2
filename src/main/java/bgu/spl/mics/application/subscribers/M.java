@@ -51,8 +51,8 @@ public class M extends Subscriber {
 				}
 				else{
 					getSimplePublisher().sendEvent(new ReleaseAgentsEvent(ev.getMissionInfo().getSerialAgentsNumbers()));
-					complete(ev, "fail - gadget not available");
-					print("fail - gadget not available");
+					complete(ev, "fail - gadget is not available");
+					print("fail - gadget is not available");
 
 				}
 			}
