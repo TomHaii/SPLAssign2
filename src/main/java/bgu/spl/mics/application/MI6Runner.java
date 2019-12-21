@@ -89,6 +89,7 @@ public class MI6Runner {
             items[i] = inv.get(i).getAsString();
             System.out.println(items[i]);
         }
+        //hi
         inventory.load(items);
     }
 
