@@ -43,9 +43,8 @@ public class Moneypenny extends Subscriber {
 	protected void initialize() {
 		System.out.println(getName() + getSerialNumber() + " started");
 		subscribeBroadcast(TimeEndedBroadcast.class, b -> {
-			System.out.println(getName() + getSerialNumber() + " terminated");
 			terminate();
-			System.out.println(getName() + getSerialNumber() + " finished terminating");
+			System.out.println(getName() + getSerialNumber() + " terminated");
 
 		});
 		if (isAgentSender()) {
@@ -76,9 +75,6 @@ public class Moneypenny extends Subscriber {
 				}
 				complete(ev, "success");
 				print(AgentsAvailableEvent.class, "success");
-//				complete(ev, "fail - agents are not available");
-//					print(AgentsAvailableEvent.class, "fail - agents are not available");
-//				}
 			});
 		}
 	}

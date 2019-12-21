@@ -67,9 +67,8 @@ public class Intelligence extends Subscriber {
 			}
 		});
 		subscribeBroadcast(TimeEndedBroadcast.class, b -> {
-			System.out.println(getName() + getSerialNumber() + " terminated");
 			terminate();
-			System.out.println(getName() + getSerialNumber() + " finished terminating");
+			System.out.println(getName() + getSerialNumber() + " terminated");
 		});
 
 	}

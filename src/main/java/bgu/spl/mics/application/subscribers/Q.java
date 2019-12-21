@@ -27,17 +27,15 @@ public class Q extends Subscriber {
 		System.out.println(getName() + " started");
 		subscribeBroadcast(TimeEndedBroadcast.class, b -> {
 			inventoryInstance.printToFile("inventory.json");
-			System.out.println(getName() + " terminated");
 			terminate();
-			System.out.println(getName() + " finished terminating");
-
+			System.out.println(getName() + " terminated");
 
 		});
 		subscribeBroadcast(TickBroadcast.class, b -> {
 			qTime = b.getTime();
 		});
 		subscribeEvent(GadgetAvailableEvent.class, ev -> {
-			System.out.println(getName() + " Started handling gadgetAvailableEvent");
+			System.out.println(getName() + " started handling gadgetAvailableEvent");
 			ev.getReport().setQTime(qTime);
 			ev.getReport().setGadgetName(ev.getGadget());
 			if (!inventoryInstance.getItem(ev.getGadget())) {
