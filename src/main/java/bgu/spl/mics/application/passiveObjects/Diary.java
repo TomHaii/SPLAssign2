@@ -75,7 +75,6 @@ public class Diary {
 	 * @return the total number of received missions (executed / aborted) be all the M-instances.
 	 */
 	public int getTotal(){
-		//TODO: Implement this
 		return totalMissions;
 	}
 	/**

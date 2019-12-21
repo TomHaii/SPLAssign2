@@ -72,8 +72,8 @@ public class Inventory {
 			Writer writer = new FileWriter(filename);
 			Gson gson = new GsonBuilder().create();
 			gson.toJson(gadgets, writer);
-			writer.flush(); //flush data to file   <---
-			writer.close(); //close write          <---
+			writer.flush();
+			writer.close();
 		}
 		catch(Exception e) {
 			e.printStackTrace();

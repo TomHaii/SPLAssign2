@@ -34,6 +34,7 @@ public class Q extends Subscriber {
 			qTime = b.getTime();
 		});
 		subscribeEvent(GadgetAvailableEvent.class, ev -> {
+			System.out.println(getName() + " Started handling gadgetAvailableEvent");
 			ev.getReport().setQTime(qTime);
 			ev.getReport().setGadgetName(ev.getGadget());
 			if (!inventoryInstance.getItem(ev.getGadget())) {
@@ -48,7 +49,7 @@ public class Q extends Subscriber {
 	}
 
 	private void print(String msg){
-		System.out.println(getName() + " finished handling missionReceivedEvent. result: " +msg);
+		System.out.println(getName() + " finished handling gadgetAvailableEvent. result: " +msg);
 	}
 
 }
