@@ -69,6 +69,7 @@ public class Inventory {
 	 * This method is called by the main method in order to generate the output.
 	 */
 	public void printToFile(String filename){
+		//hi
 		try {
 			Writer writer = new FileWriter(filename);
 			Gson gson = new GsonBuilder().create();
