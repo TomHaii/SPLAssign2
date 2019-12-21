@@ -72,7 +72,6 @@ public class Moneypenny extends Subscriber {
 					while (!squadInstance.getAgents(ev.getAgentSerialNumbers())) {
 						try {
 							squadInstance.wait();
-							System.out.println("dddd");
 						} catch (Exception ignored) {
 						}
 					}
