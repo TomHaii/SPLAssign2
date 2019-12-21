@@ -73,8 +73,10 @@ public class Squad {
 				Agent agent = agents.get(s);
 				synchronized (agent) {
 					try {
-						while (!agent.isAvailable())
+						while (!agent.isAvailable()) {
+							System.out.println("Waiting for agents");
 							agent.wait();
+						}
 						agent.acquire();
 					} catch (Exception ignored) {}
 				}
