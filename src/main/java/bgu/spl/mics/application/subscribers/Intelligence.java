@@ -33,8 +33,8 @@ public class Intelligence extends Subscriber {
 			LinkedList<String> serialNumbers = createSerialNumbersList(mission.get("serialAgentsNumbers").getAsJsonArray());
 			mi.setSerialAgentsNumbers(serialNumbers);
 			mi.setDuration(mission.get("duration").getAsInt());
-			mi.setGadget(mission.get("gadget").toString());
-			mi.setMissionName(mission.get("name").toString());
+			mi.setGadget(mission.get("gadget").getAsString());
+			mi.setMissionName(mission.get("name").getAsString());
 			mi.setTimeExpired(mission.get("timeExpired").getAsInt());
 			mi.setTimeIssued(mission.get("timeIssued").getAsInt());
 			if(!missionMap.containsKey(mi.getTimeIssued())){

@@ -26,6 +26,7 @@ public class Q extends Subscriber {
 		System.out.println(getName() + " started");
 		subscribeBroadcast(TimeEndedBroadcast.class, b->{terminate();});
 		subscribeEvent(GadgetAvailableEvent.class, ev->{
+			System.out.println(ev.getGadget().toString());
 			if(!inventoryInstance.getItem(ev.getGadget())) {
 				complete(ev, "fail - gadget is not available");
 				print("fail - gadget is not available");
