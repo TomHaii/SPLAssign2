@@ -81,7 +81,7 @@ public class MI6Runner {
         Inventory inventory = Inventory.getInstance();
         String[] items = new String[inv.size()];
         for(int i = 0; i < items.length; i++){
-            items[i] = inv.get(i).toString();
+            items[i] = inv.get(i).getAsString();
         }
         inventory.load(items);
     }

@@ -37,7 +37,7 @@ public class Intelligence extends Subscriber {
 			mi.setGadget(mission.get("gadget").toString());
 			mi.setMissionName(mission.get("missionName").toString());
 			mi.setTimeExpired(mission.get("timeExpired").getAsInt());
-			mi.setTimeExpired(mission.get("timeIssued").getAsInt());
+			mi.setTimeIssued(mission.get("timeIssued").getAsInt());
 			if(!missionMap.containsKey(mi.getTimeIssued())){
 				LinkedList<MissionInfo> missionList = new LinkedList<MissionInfo>();
 				missionMap.putIfAbsent(mi.getTimeIssued(), missionList);
