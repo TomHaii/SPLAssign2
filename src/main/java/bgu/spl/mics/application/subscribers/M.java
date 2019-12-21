@@ -52,11 +52,11 @@ public class M extends Subscriber {
 					if (mTime < missionInfo.getTimeExpired()) {
 						getSimplePublisher().sendEvent(new SendAgentsEvent(ev.getMissionInfo().getSerialAgentsNumbers(), missionInfo.getDuration()));
 						complete(ev, "success");
+						diary.addReport(report);
 						print("success");
 
 					} else {
 						getSimplePublisher().sendEvent(new ReleaseAgentsEvent(ev.getMissionInfo().getSerialAgentsNumbers()));
-
 						complete(ev, "fail - mission time expired");
 						print("fail - mission time expired");
 					}
@@ -70,7 +70,6 @@ public class M extends Subscriber {
 				complete(ev, "fail - agents are not available");
 				print("fail - agents are not available");
 			}
-			diary.addReport(report);
 			diary.incrementTotal();
 		});
 	}
