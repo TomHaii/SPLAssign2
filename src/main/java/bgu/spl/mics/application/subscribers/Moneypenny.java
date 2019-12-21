@@ -68,13 +68,17 @@ public class Moneypenny extends Subscriber {
 				ev.getReport().setMoneypenny(getSerialNumber());
 				ev.getReport().setAgentsSerialNumbers(ev.getAgentSerialNumbers());
 				ev.getReport().setAgentsNames(squadInstance.getAgentsNames(ev.getAgentSerialNumbers()));
-				if (squadInstance.getAgents(ev.getAgentSerialNumbers())) {
-					complete(ev, "success");
-					print(AgentsAvailableEvent.class, "success");
-				} else {
-					complete(ev, "fail - agents are not available");
-					print(AgentsAvailableEvent.class, "fail - agents are not available");
+				while (!squadInstance.getAgents(ev.getAgentSerialNumbers())) {
+					try {
+						squadInstance.wait();
+					} catch (Exception ignored) {
+					}
 				}
+				complete(ev, "success");
+				print(AgentsAvailableEvent.class, "success");
+//				complete(ev, "fail - agents are not available");
+//					print(AgentsAvailableEvent.class, "fail - agents are not available");
+//				}
 			});
 		}
 	}

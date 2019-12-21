@@ -40,12 +40,12 @@ public class Squad {
 	/**
 	 * Releases agents.
 	 */
-	public void releaseAgents(List<String> serials){
-		for (String s : serials){
-			synchronized (agents.get(s)) {
+	public void releaseAgents(List<String> serials) {
+		synchronized (this) {
+			for (String s : serials) {
 				agents.get(s).release();
-				agents.get(s).notifyAll();
 			}
+			notifyAll();
 		}
 	}
 
@@ -57,7 +57,6 @@ public class Squad {
 		try {
 			Thread.sleep(time * 100);
 			releaseAgents(serials);
-
 		}
 		catch (Exception ignored){}
 	}
@@ -68,23 +67,22 @@ public class Squad {
 	 * @return ‘false’ if an agent of serialNumber ‘serial’ is missing, and ‘true’ otherwise
 	 */
 	public boolean getAgents(List<String> serials) {
-		for (String s : serials) {
-			if (agents.containsKey(s)) {
+		synchronized (this) {
+			LinkedList<Agent> acquiredAgents = new LinkedList<>();
+			for (String s : serials) {
 				Agent agent = agents.get(s);
-				synchronized (agent) {
-					try {
-						while (!agent.isAvailable()) {
-							System.out.println("Waiting for agents");
-							agent.wait();
-						}
-						agent.acquire();
-					} catch (Exception ignored) {}
+				if (agent.isAvailable()) {
+					acquiredAgents.add(agent);
+					agent.acquire();
+				} else {
+					for (Agent a : acquiredAgents) {
+						a.release();
+					}
+					return false;
 				}
-			} else {
-				return false;
 			}
+			return true;
 		}
-		return true;
 	}
 
 
