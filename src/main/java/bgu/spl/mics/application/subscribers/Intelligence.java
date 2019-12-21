@@ -50,7 +50,7 @@ public class Intelligence extends Subscriber {
 		LinkedList<String> list = new LinkedList<>();
 		JsonArray numbers = tmp.getAsJsonArray();
 		for (int k = 0; k < numbers.size(); k++){
-			list.add(numbers.get(k).toString());
+			list.add(numbers.get(k).getAsString());
 		}
 		return list;
 	}

@@ -2,6 +2,7 @@ package bgu.spl.mics.application.passiveObjects;
 
 import bgu.spl.mics.MessageBroker;
 import bgu.spl.mics.MessageBrokerImpl;
+import bgu.spl.mics.application.Reports;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -57,9 +58,10 @@ public class Diary {
 	 */
 	public void printToFile(String filename){
 		try {
+			Reports repos = new Reports(getReports(), getTotal());
 			Writer writer = new FileWriter(filename);
-			Gson gson = new GsonBuilder().create();
-			gson.toJson(getReports(), writer);
+			Gson gson = new GsonBuilder().setPrettyPrinting().create();
+			gson.toJson(repos, writer);
 			writer.flush();
 			writer.close();
 		}

@@ -74,8 +74,8 @@ public class MI6Runner {
             JsonElement name = ((JsonObject) squ.get(i)).get("name");
             JsonElement serialNumber = ((JsonObject) squ.get(i)).get("serialNumber");
             Agent agent = new Agent();
-            agent.setSerialNumber(serialNumber.toString());
-            agent.setName(name.toString());
+            agent.setSerialNumber(serialNumber.getAsString());
+            agent.setName(name.getAsString());
             agents[i] = agent;
         }
         squad.load(agents);
