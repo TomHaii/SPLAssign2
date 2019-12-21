@@ -3,6 +3,7 @@ package bgu.spl.mics;
 import bgu.spl.mics.application.messages.TimeEndedBroadcast;
 
 import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * The Subscriber is an abstract class that any subscriber in the system
@@ -22,7 +23,7 @@ import java.util.HashMap;
 public abstract class Subscriber extends RunnableSubPub {
     private boolean terminated = false;
     private static MessageBroker broker = MessageBrokerImpl.getInstance();
-    private HashMap<Class <? extends Message>, Callback> callbacks;
+    private ConcurrentHashMap<Class <? extends Message>, Callback> callbacks;
 
     /**
      * @param name the Subscriber name (used mainly for debugging purposes -
@@ -30,7 +31,7 @@ public abstract class Subscriber extends RunnableSubPub {
      */
     public Subscriber(String name) {
         super(name);
-        callbacks = new HashMap<>();
+        callbacks = new ConcurrentHashMap<>();
     }
 
 

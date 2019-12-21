@@ -32,7 +32,7 @@ public class MessageBrokerImpl implements MessageBroker {
 	@Override
 	public <T> void subscribeEvent(Class<? extends Event<T>> type, Subscriber m) {
 		if(!eventMap.containsKey(type)){
-			eventMap.put(type, new ConcurrentLinkedQueue<>());
+			eventMap.putIfAbsent(type, new ConcurrentLinkedQueue<>());
 		}
 		eventMap.get(type).add(m);
 		if(topicsList.get(m) != null)
@@ -40,13 +40,12 @@ public class MessageBrokerImpl implements MessageBroker {
 
 	@Override
 	public void subscribeBroadcast(Class<? extends Broadcast> type, Subscriber m) {
-		if(!broadcastMap.containsKey(type)){
-			broadcastMap.put(type, new ConcurrentLinkedQueue<>());
-		}
-		broadcastMap.get(type).add(m);
-		if(topicsList.get(m) != null)
-			topicsList.get(m).add(type);
-
+			if (!broadcastMap.containsKey(type)) {
+				broadcastMap.putIfAbsent(type, new ConcurrentLinkedQueue<>());
+			}
+			broadcastMap.get(type).add(m);
+			if (topicsList.get(m) != null)
+				topicsList.get(m).add(type);
 	}
 
 	@Override
@@ -98,9 +97,6 @@ public class MessageBrokerImpl implements MessageBroker {
 
 	@Override
 	public void unregister(Subscriber m) {
-		synchronized (subscriberList.get(m)) {
-			subscriberList.remove(m);
-		}
 		for (Class<? extends Message> type : topicsList.get(m)) {
 				if (eventMap.containsKey(type)){
 					eventMap.get(type).remove(m);
