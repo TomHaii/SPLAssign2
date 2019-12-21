@@ -2,6 +2,7 @@ package bgu.spl.mics.application.subscribers;
 
 import bgu.spl.mics.Subscriber;
 import bgu.spl.mics.application.messages.GadgetAvailableEvent;
+import bgu.spl.mics.application.messages.TickBroadcast;
 import bgu.spl.mics.application.messages.TimeEndedBroadcast;
 import bgu.spl.mics.application.passiveObjects.Inventory;
 
@@ -16,7 +17,7 @@ import java.util.LinkedList;
 public class Q extends Subscriber {
 
 	private static Inventory inventoryInstance = Inventory.getInstance();
-
+	private int qTime = 0;
 	public Q() {
 		super("Q");
 	}
@@ -27,8 +28,12 @@ public class Q extends Subscriber {
 		subscribeBroadcast(TimeEndedBroadcast.class, b->{terminate();
 		inventoryInstance.printToFile("inventory.json");
 		});
+		subscribeBroadcast(TickBroadcast.class, b->{
+			qTime = b.getTime();
+		});
 		subscribeEvent(GadgetAvailableEvent.class, ev->{
-			System.out.println(ev.getGadget().toString());
+			ev.getReport().setQTime(qTime);
+			ev.getReport().setGadgetName(ev.getGadget());
 			if(!inventoryInstance.getItem(ev.getGadget())) {
 				complete(ev, "fail - gadget is not available");
 				print("fail - gadget is not available");

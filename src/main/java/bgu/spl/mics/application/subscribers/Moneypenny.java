@@ -62,6 +62,9 @@ public class Moneypenny extends Subscriber {
 		else{
 			subscribeEvent(AgentsAvailableEvent.class, ev -> {
 				System.out.println(getName() + getSerialNumber() + " is handling an AgentsAvailableEvent");
+				ev.getReport().setMoneypenny(getSerialNumber());
+				ev.getReport().setAgentsSerialNumbers(ev.getAgentSerialNumbers());
+				ev.getReport().setAgentsNames(squadInstance.getAgentsNames(ev.getAgentSerialNumbers()));
 				while (!squadInstance.getAgents(ev.getAgentSerialNumbers())) {
 					try {
 						squadInstance.wait();

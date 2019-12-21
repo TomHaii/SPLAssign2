@@ -2,7 +2,11 @@ package bgu.spl.mics.application.passiveObjects;
 
 import bgu.spl.mics.MessageBroker;
 import bgu.spl.mics.MessageBrokerImpl;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
+import java.io.FileWriter;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -52,7 +56,16 @@ public class Diary {
 	 * This method is called by the main method in order to generate the output.
 	 */
 	public void printToFile(String filename){
-		//TODO: Implement this
+		try {
+			Writer writer = new FileWriter(filename);
+			Gson gson = new GsonBuilder().create();
+			gson.toJson(getReports(), writer);
+			writer.flush();
+			writer.close();
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**

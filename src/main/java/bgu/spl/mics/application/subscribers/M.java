@@ -3,7 +3,9 @@ package bgu.spl.mics.application.subscribers;
 import bgu.spl.mics.Future;
 import bgu.spl.mics.Subscriber;
 import bgu.spl.mics.application.messages.*;
+import bgu.spl.mics.application.passiveObjects.Diary;
 import bgu.spl.mics.application.passiveObjects.MissionInfo;
+import bgu.spl.mics.application.passiveObjects.Report;
 
 /**
  * M handles ReadyEvent - fills a report and sends agents to mission.
@@ -12,7 +14,7 @@ import bgu.spl.mics.application.passiveObjects.MissionInfo;
  * You MAY change constructor signatures and even add new public constructors.
  */
 public class M extends Subscriber {
-
+	private Diary diary = Diary.getInstance();
 	private int serialNumber;
 	private int mTime;
 
@@ -26,16 +28,25 @@ public class M extends Subscriber {
 	@Override
 	protected void initialize() {
 		System.out.println(getName() + getSerialNumber() + " started");
-		subscribeBroadcast(TimeEndedBroadcast.class, b->{terminate();});
+		subscribeBroadcast(TimeEndedBroadcast.class, b->{terminate();
+		diary.printToFile("diary.json");
+		});
 		subscribeBroadcast(TickBroadcast.class, b->{
 			mTime = b.getTime();
 		});
 		subscribeEvent(MissionReceivedEvent.class, ev->{
+			Report report = new Report();
+			report.setTimeCreated(mTime);
+			report.setMissionName(ev.getMissionInfo().getMissionName());
+			report.setTimeIssued(ev.getMissionInfo().getTimeIssued());
+
 			System.out.println(getName() + getSerialNumber() + " is handling a missionReceivedEvent");
 			MissionInfo missionInfo = ev.getMissionInfo();
-			Future agentsAvailable = getSimplePublisher().sendEvent(new AgentsAvailableEvent(ev.getMissionInfo().getSerialAgentsNumbers()));
+			report.setM(serialNumber);
+			//report.setMoneypenny();
+			Future agentsAvailable = getSimplePublisher().sendEvent(new AgentsAvailableEvent(ev.getMissionInfo().getSerialAgentsNumbers(), report));
 			if(agentsAvailable.get().equals("success")){
-				Future gadgetAvailable = getSimplePublisher().sendEvent(new GadgetAvailableEvent(missionInfo.getGadget()));
+				Future gadgetAvailable = getSimplePublisher().sendEvent(new GadgetAvailableEvent(missionInfo.getGadget(), report));
 				if(gadgetAvailable.get().equals("success")){
 					if(mTime < missionInfo.getTimeExpired()){
 						getSimplePublisher().sendEvent(new SendAgentsEvent(ev.getMissionInfo().getSerialAgentsNumbers(), missionInfo.getDuration()));
@@ -60,8 +71,9 @@ public class M extends Subscriber {
 				complete(ev, "fail - agents are not available");
 				print("fail - agents are not available");
 			}
+			diary.addReport(report);
+			diary.incrementTotal();
 		});
-		
 	}
 
 	private int getSerialNumber() {
