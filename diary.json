@@ -5,12 +5,12 @@
       "mId": 1,
       "moneypennyId": 1,
       "serialAgentsNumbers": [
-        "006",
-        "007"
+        "007",
+        "006"
       ],
       "agentsNames": [
-        "Alec Trevelyan",
-        "James Bond"
+        "James Bond",
+        "Alec Trevelyan"
       ],
       "gadgetName": "Sky Hook",
       "qTime": 3,

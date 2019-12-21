@@ -113,8 +113,7 @@ public class MessageBrokerImpl implements MessageBroker {
 
 	@Override
 	public Message awaitMessage(Subscriber m) throws InterruptedException {
-		Message msg = subscriberList.get(m).take();
-		return msg;
+		return subscriberList.get(m).take();
 	}
 
 	
