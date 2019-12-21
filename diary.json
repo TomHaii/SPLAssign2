@@ -2,23 +2,6 @@
   "reports": [
     {
       "missionName": "Thunderball",
-      "mId": 1,
-      "moneypennyId": 1,
-      "serialAgentsNumbers": [
-        "006",
-        "007"
-      ],
-      "agentsNames": [
-        "Alec Trevelyan",
-        "James Bond"
-      ],
-      "gadgetName": "Sky Hook",
-      "qTime": 3,
-      "timeIssued": 3,
-      "timeCreated": 3
-    },
-    {
-      "missionName": "Thunderball",
       "mId": 2,
       "moneypennyId": 1,
       "serialAgentsNumbers": [
@@ -30,7 +13,7 @@
         "Alec Trevelyan"
       ],
       "gadgetName": "Sky Hook",
-      "qTime": 10,
+      "qTime": 3,
       "timeIssued": 3,
       "timeCreated": 3
     },
@@ -48,21 +31,6 @@
       "qTime": 10,
       "timeIssued": 6,
       "timeCreated": 6
-    },
-    {
-      "missionName": "From Russia With Love",
-      "mId": 1,
-      "moneypennyId": 1,
-      "serialAgentsNumbers": [
-        "007"
-      ],
-      "agentsNames": [
-        "James Bond"
-      ],
-      "gadgetName": "Dagger shoe",
-      "qTime": 15,
-      "timeIssued": 15,
-      "timeCreated": 15
     },
     {
       "missionName": "The World Is Not Enough",

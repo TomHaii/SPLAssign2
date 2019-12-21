@@ -37,22 +37,18 @@ public class MI6Runner {
         LinkedList<Intelligence> intelligenceList = new LinkedList<>();
         Q q = new Q();
         TimeService ts = new TimeService(services.get("time").getAsInt());
-        LinkedList<Thread> allThreads = new LinkedList<>();
         createServices(services, mList, mpList, intelligenceList);
         for(Intelligence intelligence : intelligenceList){
             Thread t = new Thread(intelligence);
             t.start();
-            allThreads.add(t);
         }
         for (Moneypenny mp : mpList){
             Thread t = new Thread(mp);
             t.start();
-            allThreads.add(t);
         }
         for (M m : mList){
             Thread t = new Thread(m);
             t.start();
-            allThreads.add(t);
         }
         new Thread(ts).start();
         new Thread(q).start();

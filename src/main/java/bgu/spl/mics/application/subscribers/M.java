@@ -7,6 +7,8 @@ import bgu.spl.mics.application.passiveObjects.Diary;
 import bgu.spl.mics.application.passiveObjects.MissionInfo;
 import bgu.spl.mics.application.passiveObjects.Report;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * M handles ReadyEvent - fills a report and sends agents to mission.
  *
@@ -16,12 +18,14 @@ import bgu.spl.mics.application.passiveObjects.Report;
 public class M extends Subscriber {
 	private Diary diary = Diary.getInstance();
 	private int serialNumber;
+	private int remainingTime;
 	private int mTime;
 
 
 	public M (int i){
 		super("M");
 		serialNumber = i;
+		remainingTime = 0;
 		mTime = 0;
 	}
 
@@ -35,6 +39,7 @@ public class M extends Subscriber {
 
 		});
 		subscribeBroadcast(TickBroadcast.class, b -> {
+			remainingTime = b.getRemainingTime();
 			mTime = b.getTime();
 		});
 		subscribeEvent(MissionReceivedEvent.class, ev -> {
@@ -46,8 +51,10 @@ public class M extends Subscriber {
 			MissionInfo missionInfo = ev.getMissionInfo();
 			report.setM(serialNumber);
 			Future agentsAvailable = getSimplePublisher().sendEvent(new AgentsAvailableEvent(ev.getMissionInfo().getSerialAgentsNumbers(), report));
+//			if (agentsAvailable.get(remainingTime*100,TimeUnit.MILLISECONDS).equals("success")) {
 			if (agentsAvailable.get().equals("success")) {
 				Future gadgetAvailable = getSimplePublisher().sendEvent(new GadgetAvailableEvent(missionInfo.getGadget(), report));
+//				if (gadgetAvailable.get(remainingTime * 100, TimeUnit.MILLISECONDS).equals("success")) {
 				if (gadgetAvailable.get().equals("success")) {
 					if (mTime < missionInfo.getTimeExpired()) {
 						getSimplePublisher().sendEvent(new SendAgentsEvent(ev.getMissionInfo().getSerialAgentsNumbers(), missionInfo.getDuration()));

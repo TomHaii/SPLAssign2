@@ -59,10 +59,12 @@ public class MessageBrokerImpl implements MessageBroker {
 	@Override
 	public void sendBroadcast(Broadcast b) {
 		if(broadcastMap.containsKey(b.getClass())) {
-			ConcurrentLinkedQueue<Subscriber> tmpQ = new ConcurrentLinkedQueue<>(broadcastMap.get(b.getClass()));
-			while (!tmpQ.isEmpty()) {
-				Subscriber tmpSub = tmpQ.poll();
-				subscriberList.get(tmpSub).add(b);
+			synchronized (broadcastMap.get(b.getClass())) {
+				ConcurrentLinkedQueue<Subscriber> tmpQ = new ConcurrentLinkedQueue<>(broadcastMap.get(b.getClass()));
+				while (!tmpQ.isEmpty()) {
+					Subscriber tmpSub = tmpQ.poll();
+					subscriberList.get(tmpSub).add(b);
+				}
 			}
 		}
 	}
