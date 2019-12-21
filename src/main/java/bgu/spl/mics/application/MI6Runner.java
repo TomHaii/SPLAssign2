@@ -80,8 +80,9 @@ public class MI6Runner {
     private static void loadInventory(JsonArray inv){
         Inventory inventory = Inventory.getInstance();
         String[] items = new String[inv.size()];
-        for(int i = 0; i < items.length; i++){
+        for(int i = 0; i < items.length; i++) {
             items[i] = inv.get(i).getAsString();
+            System.out.println(inv.get(i).toString());
         }
         inventory.load(items);
     }

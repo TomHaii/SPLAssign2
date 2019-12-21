@@ -34,7 +34,7 @@ public class Intelligence extends Subscriber {
 			mi.setSerialAgentsNumbers(serialNumbers);
 			mi.setDuration(mission.get("duration").getAsInt());
 			mi.setGadget(mission.get("gadget").toString());
-			mi.setMissionName(mission.get("missionName").toString());
+			mi.setMissionName(mission.get("name").toString());
 			mi.setTimeExpired(mission.get("timeExpired").getAsInt());
 			mi.setTimeIssued(mission.get("timeIssued").getAsInt());
 			if(!missionMap.containsKey(mi.getTimeIssued())){
