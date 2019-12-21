@@ -43,7 +43,6 @@ public class M extends Subscriber {
 			System.out.println(getName() + getSerialNumber() + " is handling a missionReceivedEvent");
 			MissionInfo missionInfo = ev.getMissionInfo();
 			report.setM(serialNumber);
-			//report.setMoneypenny();
 			Future agentsAvailable = getSimplePublisher().sendEvent(new AgentsAvailableEvent(ev.getMissionInfo().getSerialAgentsNumbers(), report));
 			if(agentsAvailable.get().equals("success")){
 				Future gadgetAvailable = getSimplePublisher().sendEvent(new GadgetAvailableEvent(missionInfo.getGadget(), report));
@@ -56,6 +55,7 @@ public class M extends Subscriber {
 					}
 					else{
 						getSimplePublisher().sendEvent(new ReleaseAgentsEvent(ev.getMissionInfo().getSerialAgentsNumbers()));
+
 						complete(ev, "fail - mission time expired");
 						print("fail - mission time expired");
 					}
