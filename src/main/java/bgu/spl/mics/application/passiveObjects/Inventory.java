@@ -52,9 +52,10 @@ public class Inventory {
 	 * @param gadget 		Name of the gadget to check if available
 	 * @return 	‘false’ if the gadget is missing, and ‘true’ otherwise
 	 */
-	public boolean getItem(String gadget){
-		if (gadgets != null && gadgets.contains(gadget)){
+	public boolean getItem(String gadget) {
+		if (gadgets.contains(gadget)) {
 			gadgets.remove(gadget);
+			System.out.println("checking getItem inventory");
 			return true;
 		}
 		return false;

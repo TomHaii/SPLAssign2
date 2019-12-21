@@ -59,8 +59,6 @@ public abstract class Subscriber extends RunnableSubPub {
     protected final <T, E extends Event<T>> void subscribeEvent(Class<E> type, Callback<E> callback) {
         broker.subscribeEvent(type, this);
         callbacks.putIfAbsent(type,callback);
-        System.out.println("added type " + type + " this callback " + callback);
-
     }
 
     /**
@@ -124,13 +122,14 @@ public abstract class Subscriber extends RunnableSubPub {
         while (!terminated) {
             try {
                 Message message = broker.awaitMessage(this);
-                Callback callbackFunction = callbacks.getOrDefault(message.getClass(), null);
-                if(callbackFunction == null){
-             //       System.out.println("no callback available for message : "+message.toString());
-                }
-                else{
-                    callbackFunction.call(message);
-                }
+                Callback callbackFunction = callbacks.get(message.getClass());
+//                if(callbackFunction == null){
+//             //       System.out.println("no callback available for message : "+message.toString());
+//                }
+//                else{
+//                    callbackFunction.call(message);
+//                }
+                callbackFunction.call(message);
             } catch (Exception ignored) {
             }
         }

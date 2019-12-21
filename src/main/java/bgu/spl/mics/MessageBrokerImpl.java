@@ -69,7 +69,6 @@ public class MessageBrokerImpl implements MessageBroker {
 
 	@Override
 	public <T> Future<T> sendEvent(Event<T> e) {
-		System.out.println("check");
 		if (eventMap.containsKey(e.getClass()) && !eventMap.get(e.getClass()).isEmpty()) {
 			synchronized (eventMap.get(e.getClass())) {
 				Subscriber subToSendEvent = eventMap.get(e.getClass()).poll();

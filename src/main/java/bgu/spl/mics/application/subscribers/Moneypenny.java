@@ -42,15 +42,17 @@ public class Moneypenny extends Subscriber {
 
 	@Override
 	protected void initialize() {
-		System.out.println(getName() + " " + getSerialNumber() + " started");
+		System.out.println(getName() + getSerialNumber() + " started");
 		subscribeBroadcast(TimeEndedBroadcast.class, b->{terminate();});
 		if (isAgentSender()) {
 			subscribeEvent(SendAgentsEvent.class, ev -> {
+				System.out.println(getName() + getSerialNumber() + " is handling a sendAgentsEvent");
 				squadInstance.sendAgents(ev.getAgentSerialNumbers(), ev.getTime());
 				complete(ev, "success");
 				print(SendAgentsEvent.class, "success");
 			});
 			subscribeEvent(ReleaseAgentsEvent.class, ev -> {
+				System.out.println(getName() + getSerialNumber() + " is handling a releaseAgentsEvent");
 				squadInstance.releaseAgents(ev.getAgentSerialNumbers());
 				complete(ev, "success");
 				print(ReleaseAgentsEvent.class, "success");
@@ -59,6 +61,7 @@ public class Moneypenny extends Subscriber {
 		}
 		else{
 			subscribeEvent(AgentsAvailableEvent.class, ev -> {
+				System.out.println(getName() + getSerialNumber() + " is handling an AgentsAvailableEvent");
 				while (!squadInstance.getAgents(ev.getAgentSerialNumbers())) {
 					try {
 						squadInstance.wait();
@@ -85,7 +88,7 @@ public class Moneypenny extends Subscriber {
 	}
 
 	private void print(String cl, String msg) {
-		System.out.println(getName() + " " + getSerialNumber() + " finished handling " +cl +" result: " +msg);
+		System.out.println(getName() + getSerialNumber() + " finished handling " +cl +" result: " +msg);
 
 	}
 

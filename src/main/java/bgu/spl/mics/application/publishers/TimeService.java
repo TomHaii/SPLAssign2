@@ -49,7 +49,6 @@ public class TimeService extends Publisher {
 			public void run(){
 				if(currTime<timeTicks) {
 					getSimplePublisher().sendBroadcast(new TickBroadcast(currTime));
-//					System.out.println(currTime);
 					currTime++;
 				}
 				else{

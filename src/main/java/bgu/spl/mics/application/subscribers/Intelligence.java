@@ -10,7 +10,6 @@ import com.google.gson.JsonObject;
 
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.List;
 
 /**
  * A Publisher\Subscriber.
@@ -39,8 +38,8 @@ public class Intelligence extends Subscriber {
 			mi.setTimeExpired(mission.get("timeExpired").getAsInt());
 			mi.setTimeIssued(mission.get("timeIssued").getAsInt());
 			if(!missionMap.containsKey(mi.getTimeIssued())){
-				LinkedList<MissionInfo> missionList = new LinkedList<MissionInfo>();
-				missionMap.putIfAbsent(mi.getTimeIssued(), missionList);
+				LinkedList<MissionInfo> missionList = new LinkedList<>();
+				missionMap.put(mi.getTimeIssued(), missionList);
 			}
 			missionMap.get(mi.getTimeIssued()).add(mi);
 		}
@@ -58,13 +57,11 @@ public class Intelligence extends Subscriber {
 
 	@Override
 	protected void initialize() {
-		System.out.println(getName() + " " + getSerialNumber() + " started");
-		subscribeBroadcast(TickBroadcast.class, b->{
-			System.out.println("hi event sent + ");
+		System.out.println(getName()+ getSerialNumber() + " started");
+		subscribeBroadcast(TickBroadcast.class,  b->{
 			if(missionMap.containsKey(b.getTime())){
-				System.out.println("Entered intelligence if");
 				for(int i = 0; i < missionMap.get(b.getTime()).size(); i++) {
-					System.out.println(getName() + " " + getSerialNumber() + " sent a missionReceivedEvent");
+					System.out.println(getName()+ getSerialNumber() + " sent a missionReceivedEvent");
 					getSimplePublisher().sendEvent(new MissionReceivedEvent(missionMap.get(b.getTime()).get(i)));
 				}
 			}

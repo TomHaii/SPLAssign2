@@ -25,13 +25,13 @@ public class M extends Subscriber {
 
 	@Override
 	protected void initialize() {
-		System.out.println(getName() + " " + getSerialNumber() + " started");
+		System.out.println(getName() + getSerialNumber() + " started");
 		subscribeBroadcast(TimeEndedBroadcast.class, b->{terminate();});
 		subscribeBroadcast(TickBroadcast.class, b->{
 			mTime = b.getTime();
 		});
 		subscribeEvent(MissionReceivedEvent.class, ev->{
-			System.out.println(getName() + " " + getSerialNumber() + " is handling a missionReceivedEvent");
+			System.out.println(getName() + getSerialNumber() + " is handling a missionReceivedEvent");
 			MissionInfo missionInfo = ev.getMissionInfo();
 			Future agentsAvailable = getSimplePublisher().sendEvent(new AgentsAvailableEvent(ev.getMissionInfo().getSerialAgentsNumbers()));
 			if(agentsAvailable.get().equals("success")){
@@ -69,7 +69,7 @@ public class M extends Subscriber {
 	}
 
 	private void print(String msg){
-		System.out.println(getName() + " " + getSerialNumber() + " finished handling missionReceivedEvent. result: " +msg);
+		System.out.println(getName() + getSerialNumber() + " finished handling missionReceivedEvent. result: " +msg);
 	}
 
 }
