@@ -29,6 +29,11 @@ public class MI6Runner {
             System.out.println("Invalid Arguments");
             return;
         }
+
+
+
+
+
         JsonObject object = (JsonObject) new JsonParser().parse(new FileReader(args[0]));
         JsonArray inv = object.get("inventory").getAsJsonArray();
         JsonArray squ =  object.get("squad").getAsJsonArray();
@@ -82,7 +87,7 @@ public class MI6Runner {
         String[] items = new String[inv.size()];
         for(int i = 0; i < items.length; i++) {
             items[i] = inv.get(i).getAsString();
-            System.out.println(inv.get(i).toString());
+            System.out.println(items[i]);
         }
         inventory.load(items);
     }
