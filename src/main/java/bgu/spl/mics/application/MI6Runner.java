@@ -64,8 +64,6 @@ public class MI6Runner {
         }
         new Thread(ts).start();
         new Thread(q).start();
-        Inventory inventory = Inventory.getInstance();
-        inventory.printToFile("inventory.json");
     }
 
 

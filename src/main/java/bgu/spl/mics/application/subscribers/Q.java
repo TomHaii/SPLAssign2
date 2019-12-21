@@ -24,7 +24,9 @@ public class Q extends Subscriber {
 	@Override
 	protected void initialize() {
 		System.out.println(getName() + " started");
-		subscribeBroadcast(TimeEndedBroadcast.class, b->{terminate();});
+		subscribeBroadcast(TimeEndedBroadcast.class, b->{terminate();
+		inventoryInstance.printToFile("inventory.json");
+		});
 		subscribeEvent(GadgetAvailableEvent.class, ev->{
 			System.out.println(ev.getGadget().toString());
 			if(!inventoryInstance.getItem(ev.getGadget())) {
