@@ -21,6 +21,7 @@ import java.util.Set;
  */
 public class MI6Runner {
     public static void main(String[] args) throws FileNotFoundException {
+        
         final Object lock = new Object();
         JsonObject object = (JsonObject) new JsonParser().parse(new FileReader(args[0]));
         JsonArray inv = object.get("inventory").getAsJsonArray();
