@@ -2,7 +2,7 @@ package bgu.spl.mics.application.messages;
 
 import bgu.spl.mics.Event;
 
-public class MTerminatedEvent implements Event {
+public class MTerminatedEvent implements Event<String> {
 
     private String sender;
 

@@ -31,8 +31,8 @@ public class M extends Subscriber {
 		System.out.println(getName() + getSerialNumber() + " started");
 		subscribeBroadcast(TimeEndedBroadcast.class, b -> {
 			getSimplePublisher().sendEvent(new MTerminatedEvent(getName()+getSerialNumber()));
-			terminate();
 			System.out.println(getName() + getSerialNumber() + " terminated");
+			terminate();
 
 		});
 		subscribeBroadcast(TickBroadcast.class, b -> {

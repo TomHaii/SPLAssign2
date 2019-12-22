@@ -26,10 +26,12 @@ public class Killer extends Subscriber {
     @Override
     protected void initialize() {
         subscribeEvent(MTerminatedEvent.class, ev->{
+            System.out.println("Entered Terminate Event " + ev.getSender());
             mTerminated.compareAndSet(mTerminated.get(), mTerminated.get()+1);
-            if(mTerminated.get() >= mAmount){
+            System.out.println(mTerminated);
+            if(mTerminated.get() == mAmount){
                 getSimplePublisher().sendBroadcast(new KillSubsBroadcast());
-                System.out.println("Killer Terminated");
+                System.out.println("Killer Terminated " + ev.getSender());
                 terminate();
             }
             complete(ev, "Killed");

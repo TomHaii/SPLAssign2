@@ -32,22 +32,16 @@ public class MessageBrokerImpl implements MessageBroker {
 	}
 	@Override
 	public <T> void subscribeEvent(Class<? extends Event<T>> type, Subscriber m) {
-		if(!eventMap.containsKey(type)){
-			eventMap.putIfAbsent(type, new ConcurrentLinkedQueue<>());
-		}
+		eventMap.putIfAbsent(type, new ConcurrentLinkedQueue<>());
 		eventMap.get(type).add(m);
-		if(topicsList.get(m) != null)
-			topicsList.get(m).add(type);
+		topicsList.get(m).add(type);
 	}
 
 	@Override
 	public void subscribeBroadcast(Class<? extends Broadcast> type, Subscriber m) {
-			if (!broadcastMap.containsKey(type)) {
-				broadcastMap.putIfAbsent(type, new ConcurrentLinkedQueue<>());
-			}
+			broadcastMap.putIfAbsent(type, new ConcurrentLinkedQueue<>());
 			broadcastMap.get(type).add(m);
-			if (topicsList.get(m) != null)
-				topicsList.get(m).add(type);
+			topicsList.get(m).add(type);
 	}
 
 	@Override
@@ -72,7 +66,7 @@ public class MessageBrokerImpl implements MessageBroker {
 
 	@Override
 	public <T> Future<T> sendEvent(Event<T> e) {
-		if (eventMap.containsKey(e.getClass()) && !eventMap.get(e.getClass()).isEmpty()) {
+		if (eventMap.containsKey(e.getClass())) {
 			synchronized (eventMap.get(e.getClass())) {
 				Subscriber subToSendEvent = eventMap.get(e.getClass()).poll();
 				Future<T> future = new Future<>();

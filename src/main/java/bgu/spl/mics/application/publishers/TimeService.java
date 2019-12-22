@@ -52,9 +52,10 @@ public class TimeService extends Publisher {
 					currTime++;
 				}
 				else{
-					timer.cancel();
 					getSimplePublisher().sendBroadcast(new TimeEndedBroadcast());
 					System.out.println("TimeService terminated");
+					timer.cancel();
+
 				}
 			}
 		},0, 100);

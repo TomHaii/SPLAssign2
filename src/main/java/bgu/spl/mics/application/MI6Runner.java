@@ -22,7 +22,10 @@ import java.util.Set;
  */
 public class MI6Runner {
     public static void main(String[] args) throws FileNotFoundException {
-
+        if(args.length != 3){
+            System.out.println("Incorrect amount of arguments");
+            return;
+        }
         final Object lock = new Object();
         JsonObject object = (JsonObject) new JsonParser().parse(new FileReader(args[0]));
         JsonArray inv = object.get("inventory").getAsJsonArray();
@@ -69,9 +72,9 @@ public class MI6Runner {
             threadsList.add(new Thread(moneypenny));
         for (Intelligence intelligence : intelligenceList)
             threadsList.add(new Thread(intelligence));
-        threadsList.add(new Thread(timeService));
 
         threadsList.add(new Thread(q));
+        threadsList.add(new Thread(timeService));
         threadsList.add(new Thread(killer));
         for (Thread t : threadsList) {
             t.start();
