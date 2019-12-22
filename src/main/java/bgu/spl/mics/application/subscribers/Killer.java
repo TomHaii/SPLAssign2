@@ -13,7 +13,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * You MAY change constructor signatures and even add new public constructors.
  */
 public class Killer extends Subscriber {
-    private int mTerminated = 0;
+    private AtomicInteger mTerminated = new AtomicInteger(0);
     private int mAmount;
     public Killer (int mAmount) {
         super("Killer");
@@ -26,14 +26,15 @@ public class Killer extends Subscriber {
     @Override
     protected void initialize() {
         subscribeEvent(MTerminatedEvent.class, ev->{
-            mTerminated++;
-            if(mTerminated >= mAmount){
+            mTerminated.compareAndSet(mTerminated.get(), mTerminated.get()+1);
+            if(mTerminated.get() >= mAmount){
                 System.out.println("KILLING STARTED MUAHAHAHA");
                 getSimplePublisher().sendBroadcast(new KillSubsBroadcast());
                 complete(ev, "success");
                 terminate();
                 System.out.println("Killer Terminated");
             }
+            complete(ev, "waiting");
         });
 
     }
