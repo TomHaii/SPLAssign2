@@ -34,8 +34,8 @@ public class M extends Subscriber {
 		System.out.println(getName() + getSerialNumber() + " started");
 		subscribeBroadcast(TimeEndedBroadcast.class, b -> {
 			diary.printToFile("diary.json");
-			terminate();
 			getSimplePublisher().sendEvent(new MTerminatedEvent());
+			terminate();
 			System.out.println(getName() + getSerialNumber() + " terminated");
 
 		});

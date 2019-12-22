@@ -48,6 +48,7 @@ public class MI6Runner {
             Thread t = new Thread(m);
             t.start();
         }
+        new Thread(killer).start();
         new Thread(ts).start();
         new Thread(q).start();
     }

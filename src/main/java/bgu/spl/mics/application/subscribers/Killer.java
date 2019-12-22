@@ -7,6 +7,8 @@ import bgu.spl.mics.application.messages.*;
 import bgu.spl.mics.application.passiveObjects.Inventory;
 import bgu.spl.mics.application.passiveObjects.Squad;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 /**
  * Only this type of Subscriber can access the squad.
  * Three are several Moneypenny-instances - each of them holds a unique serial number that will later be printed on the report.
@@ -15,11 +17,12 @@ import bgu.spl.mics.application.passiveObjects.Squad;
  * You MAY change constructor signatures and even add new public constructors.
  */
 public class Killer extends Subscriber {
-    private int mDesired;
+    private AtomicInteger mDesired;
     private int mAmount;
     public Killer (int mAmount) {
         super("Killer");
         this.mAmount = mAmount;
+        mDesired = new AtomicInteger(0);
     }
 
 
@@ -28,9 +31,11 @@ public class Killer extends Subscriber {
     @Override
     protected void initialize() {
         subscribeEvent(MTerminatedEvent.class, ev->{
-            mDesired++;
-            if(mDesired == mAmount){
+            mDesired.incrementAndGet();
+            if(mDesired.get() == mAmount){
                 getSimplePublisher().sendBroadcast(new KillSubsBroadcast());
+                complete(ev, "success");
+                terminate();
             }
         });
 
