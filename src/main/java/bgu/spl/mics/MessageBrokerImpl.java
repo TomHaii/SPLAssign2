@@ -54,7 +54,7 @@ public class MessageBrokerImpl implements MessageBroker {
 	public <T> void complete(Event<T> e, T result) {
 			Future<T> future = futureMap.get(e);
 			future.resolve(result);
-//			futureMap.remove(e);
+			futureMap.remove(e);
 	}
 
 	@Override

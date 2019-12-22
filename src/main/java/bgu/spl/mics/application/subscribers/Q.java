@@ -25,7 +25,6 @@ public class Q extends Subscriber {
 	protected void initialize() {
 		System.out.println(getName() + " started");
 		subscribeBroadcast(KillSubsBroadcast.class, b -> {
-		// 	inventoryInstance.printToFile("inventory.json");
 			terminate();
 			System.out.println(getName() + " terminated");
 		});

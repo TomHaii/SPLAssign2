@@ -22,7 +22,7 @@ public class MI6Runner {
     public static void main(String[] args) throws FileNotFoundException {
         JsonObject object = (JsonObject) new JsonParser().parse(new FileReader(args[0]));
         JsonArray inv = object.get("inventory").getAsJsonArray();
-        JsonArray squ =  object.get("squad").getAsJsonArray();
+        JsonArray squ = object.get("squad").getAsJsonArray();
         JsonObject services = object.get("services").getAsJsonObject();
         Killer killer = new Killer(services.get("M").getAsInt());
         new Thread(killer).start();
@@ -34,17 +34,14 @@ public class MI6Runner {
         Q q = new Q();
         new Thread(q).start();
         createServices(services, mList, mpList, intelligenceList);
-        for(Intelligence intelligence : intelligenceList){
-            Thread t = new Thread(intelligence);
-            t.start();
+        for (Intelligence intelligence : intelligenceList) {
+            new Thread(intelligence).start();
         }
-        for (M m : mList){
-            Thread t = new Thread(m);
-            t.start();
+        for (M m : mList) {
+            new Thread(m).start();
         }
-        for (Moneypenny mp : mpList){
-            Thread t = new Thread(mp);
-            t.start();
+        for (Moneypenny mp : mpList) {
+            new Thread(mp).start();
         }
         TimeService ts = new TimeService(services.get("time").getAsInt());
         try {
