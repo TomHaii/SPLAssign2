@@ -53,14 +53,14 @@ public class Moneypenny extends Subscriber {
 				complete(ev, "success");
 				print(SendAgentsEvent.class, "success");
 			});
+
+		} else {
 			subscribeEvent(ReleaseAgentsEvent.class, ev -> {
 				System.out.println(getName() + getSerialNumber() + " is handling a releaseAgentsEvent");
 				squadInstance.releaseAgents(ev.getAgentSerialNumbers());
 				complete(ev, "success");
 				print(ReleaseAgentsEvent.class, "success");
-
 			});
-		} else {
 			subscribeEvent(AgentsAvailableEvent.class, ev -> {
 				System.out.println(getName() + getSerialNumber() + " is handling an AgentsAvailableEvent");
 				ev.getReport().setMoneypenny(getSerialNumber());
