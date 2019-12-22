@@ -36,7 +36,8 @@ public class MessageBrokerImpl implements MessageBroker {
 		}
 		eventMap.get(type).add(m);
 		if(topicsList.get(m) != null)
-			topicsList.get(m).add(type);	}
+			topicsList.get(m).add(type);
+	}
 
 	@Override
 	public void subscribeBroadcast(Class<? extends Broadcast> type, Subscriber m) {
