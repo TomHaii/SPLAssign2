@@ -19,7 +19,7 @@ public class M extends Subscriber {
 	private Diary diary = Diary.getInstance();
 	private int serialNumber;
 	private int mTime;
-//dd
+
 	public M (int i){
 		super("M");
 		serialNumber = i;
@@ -41,12 +41,8 @@ public class M extends Subscriber {
 		});
 		subscribeEvent(MissionReceivedEvent.class, ev -> {
 			Report report = new Report();
-			report.setTimeCreated(mTime);
-			report.setMissionName(ev.getMissionInfo().getMissionName());
-			report.setTimeIssued(ev.getMissionInfo().getTimeIssued());
 			System.out.println(getName() + getSerialNumber() + " is handling a missionReceivedEvent from " +ev.getSender());
 			MissionInfo missionInfo = ev.getMissionInfo();
-			report.setM(serialNumber);
 			Future agentsAvailable = getSimplePublisher().sendEvent(new AgentsAvailableEvent(ev.getMissionInfo().getSerialAgentsNumbers(), report, getName()+getSerialNumber()));
 			if (agentsAvailable.get().equals("success")) {
 				Future gadgetAvailable = getSimplePublisher().sendEvent(new GadgetAvailableEvent(missionInfo.getGadget(), report, getName()+getSerialNumber()));
@@ -54,6 +50,11 @@ public class M extends Subscriber {
 					if (mTime < missionInfo.getTimeExpired()) {
 						getSimplePublisher().sendEvent(new SendAgentsEvent(ev.getMissionInfo().getSerialAgentsNumbers(), missionInfo.getDuration(), getName()+getSerialNumber()));
 						complete(ev, "success");
+						report.setTimeCreated(mTime);
+						report.setMissionName(ev.getMissionInfo().getMissionName());
+						report.setTimeIssued(ev.getMissionInfo().getTimeIssued());
+						report.setM(serialNumber);
+
 						diary.addReport(report);
 						print("success",ev.getSender());
 
