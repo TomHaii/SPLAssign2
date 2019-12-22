@@ -52,12 +52,9 @@ public class M extends Subscriber {
 						report.setTimeIssued(ev.getMissionInfo().getTimeIssued());
 						report.setM(serialNumber);
 						diary.addReport(report);
-						Future agentsSent = getSimplePublisher().sendEvent(new SendAgentsEvent(ev.getMissionInfo().getSerialAgentsNumbers(), missionInfo.getDuration(), getName()+getSerialNumber()));
-						if (agentsSent.get() == "success") {
-							getSimplePublisher().sendEvent(new ReleaseAgentsEvent(ev.getMissionInfo().getSerialAgentsNumbers(), getName() + getSerialNumber()));
-							complete(ev, "success");
-							print("success", ev.getSender());
-						}
+						getSimplePublisher().sendEvent(new SendAgentsEvent(ev.getMissionInfo().getSerialAgentsNumbers(), missionInfo.getDuration(), getName()+getSerialNumber()));
+						complete(ev, "success");
+						print("success",ev.getSender());
 					} else {
 						getSimplePublisher().sendEvent(new ReleaseAgentsEvent(ev.getMissionInfo().getSerialAgentsNumbers(), getName()+getSerialNumber()));
 						complete(ev, "fail - mission time expired");

@@ -28,7 +28,6 @@ public class Killer extends Subscriber {
         subscribeEvent(MTerminatedEvent.class, ev->{
             mTerminated.compareAndSet(mTerminated.get(), mTerminated.get()+1);
             if(mTerminated.get() >= mAmount){
-                System.out.println("KILLING STARTED MUAHAHAHA");
                 getSimplePublisher().sendBroadcast(new KillSubsBroadcast());
                 System.out.println("Killer Terminated");
                 terminate();
