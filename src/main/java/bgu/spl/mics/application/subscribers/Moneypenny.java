@@ -48,7 +48,7 @@ public class Moneypenny extends Subscriber {
 		});
 		if (isAgentSender()) {
 			subscribeEvent(SendAgentsEvent.class, ev -> {
-				System.out.println(getName() + getSerialNumber() + " is handling a sendAgentsEvent");
+				System.out.println(getName() + getSerialNumber() + " is handling a sendAgentsEvent from "+ev.getSender());
 				squadInstance.sendAgents(ev.getAgentSerialNumbers(), ev.getTime());
 				complete(ev, "success");
 				print(SendAgentsEvent.class, "success");
@@ -56,13 +56,13 @@ public class Moneypenny extends Subscriber {
 
 		} else {
 			subscribeEvent(ReleaseAgentsEvent.class, ev -> {
-				System.out.println(getName() + getSerialNumber() + " is handling a releaseAgentsEvent");
+				System.out.println(getName() + getSerialNumber() + " is handling a releaseAgentsEvent from "+ev.getSender());
 				squadInstance.releaseAgents(ev.getAgentSerialNumbers());
 				complete(ev, "success");
 				print(ReleaseAgentsEvent.class, "success");
 			});
 			subscribeEvent(AgentsAvailableEvent.class, ev -> {
-				System.out.println(getName() + getSerialNumber() + " is handling an AgentsAvailableEvent");
+				System.out.println(getName() + getSerialNumber() + " is handling an AgentsAvailableEvent from "+ev.getSender());
 				ev.getReport().setMoneypenny(getSerialNumber());
 				ev.getReport().setAgentsSerialNumbers(ev.getAgentSerialNumbers());
 				ev.getReport().setAgentsNames(squadInstance.getAgentsNames(ev.getAgentSerialNumbers()));

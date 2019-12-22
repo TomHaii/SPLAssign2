@@ -37,19 +37,25 @@ public class MI6Runner {
         Q q = new Q();
         new Thread(q).start();
         createServices(services, mList, mpList, intelligenceList);
-        for (Moneypenny mp : mpList){
-            Thread t = new Thread(mp);
+        for(Intelligence intelligence : intelligenceList){
+            Thread t = new Thread(intelligence);
             t.start();
         }
         for (M m : mList){
             Thread t = new Thread(m);
             t.start();
         }
-        for(Intelligence intelligence : intelligenceList){
-            Thread t = new Thread(intelligence);
+        for (Moneypenny mp : mpList){
+            Thread t = new Thread(mp);
             t.start();
         }
         TimeService ts = new TimeService(services.get("time").getAsInt());
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+//        for (int i=0; i<100;i++){}
         new Thread(ts).start();
 
     }

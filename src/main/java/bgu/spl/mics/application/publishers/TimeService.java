@@ -24,7 +24,7 @@ import java.util.TimerTask;
 public class TimeService extends Publisher {
 
 	private int timeTicks;
-	private int currTime = 0;
+	private int currTime = 1;
 	private Timer timer;
 	private int remainingTime;
 

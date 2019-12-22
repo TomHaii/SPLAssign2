@@ -6,10 +6,12 @@ import bgu.spl.mics.application.passiveObjects.Report;
 public class GadgetAvailableEvent implements Event<String> {
     private String gadget;
     private Report report;
+    private String sender;
 
-    public GadgetAvailableEvent(String gadget, Report report){
+    public GadgetAvailableEvent(String gadget, Report report, String sender){
         this.gadget = gadget;
         this.report = report;
+        this.sender = sender;
     }
 
     public String getGadget(){
@@ -18,5 +20,9 @@ public class GadgetAvailableEvent implements Event<String> {
 
     public Report getReport() {
         return report;
+    }
+
+    public String getSender() {
+        return sender;
     }
 }
