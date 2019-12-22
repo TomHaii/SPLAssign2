@@ -1,6 +1,7 @@
 package bgu.spl.mics.application;
 
 import bgu.spl.mics.application.passiveObjects.Agent;
+import bgu.spl.mics.application.passiveObjects.Diary;
 import bgu.spl.mics.application.passiveObjects.Inventory;
 import bgu.spl.mics.application.passiveObjects.Squad;
 import bgu.spl.mics.application.publishers.TimeService;
@@ -19,10 +20,6 @@ import java.util.LinkedList;
  */
 public class MI6Runner {
     public static void main(String[] args) throws FileNotFoundException {
-        if(args.length != 1){
-            System.out.println("Invalid Arguments");
-            return;
-        }
         JsonObject object = (JsonObject) new JsonParser().parse(new FileReader(args[0]));
         JsonArray inv = object.get("inventory").getAsJsonArray();
         JsonArray squ =  object.get("squad").getAsJsonArray();
@@ -55,9 +52,14 @@ public class MI6Runner {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-//        for (int i=0; i<100;i++){}
         new Thread(ts).start();
-
+        try {
+            Thread.sleep(services.get("time").getAsInt() * 100);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        Inventory.getInstance().printToFile(args[1]);
+        Diary.getInstance().printToFile(args[2]);
     }
 
 
