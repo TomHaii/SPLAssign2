@@ -41,7 +41,7 @@ public class M extends Subscriber {
 		});
 		subscribeEvent(MissionReceivedEvent.class, ev -> {
 			Report report = new Report();
-			System.out.println(getName() + getSerialNumber() + " is handling a missionReceivedEvent from " +ev.getSender());
+			System.out.println(getName() + getSerialNumber() + " is handling a missionReceivedEvent from " +ev.getSender()+ "  |  mission name: " +ev.getMissionInfo().getMissionName());
 			MissionInfo missionInfo = ev.getMissionInfo();
 			Future agentsAvailable = getSimplePublisher().sendEvent(new AgentsAvailableEvent(ev.getMissionInfo().getSerialAgentsNumbers(), report, getName()+getSerialNumber()));
 			if (agentsAvailable.get().equals("success")) {
