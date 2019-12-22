@@ -69,36 +69,40 @@ public class Squad {
 	 * @return ‘false’ if an agent of serialNumber ‘serial’ is missing, and ‘true’ otherwise
 	 */
 	public boolean getAgents(List<String> serials) {
+		boolean allExist = true;
 		for (String s : serials) {
-			if (agents.getOrDefault(s, null) == null) {
-				return false;
-			}
+			if (!agents.containsKey(s)) {
+				allExist = false;
+				break;}
 		}
-		synchronized (this){
-			try {
-				while (!acquireAgents(serials)) {
-					wait();
+		if (allExist) {
+			synchronized (this) {
+				try {
+					while (!acquireAgents(serials)) {
+						wait();
+					}
+				} catch (InterruptedException ignored) {
 				}
+				return true;
 			}
-			catch (InterruptedException ignored){}
 		}
-		return true;
+		return false;
 	}
 
 
-	private boolean acquireAgents(List<String> serials){
-		synchronized (this){
-			LinkedList<Agent> acquired = new LinkedList<>();
-			for(String s: serials){
-				if(!agents.get(s).isAvailable()) {
-					for (Agent agent : acquired)
-						agent.release();
-					return false;
-				}
-				acquired.add(agents.get(s));
+	private boolean acquireAgents(List<String> serials) {
+		LinkedList<Agent> acquired = new LinkedList<>();
+		for (String s : serials) {
+			if (!agents.get(s).isAvailable()) {
+				for (Agent agent : acquired)
+					agent.release();
+				return false;
 			}
-			return true;
+			agents.get(s).acquire();
+			acquired.add(agents.get(s));
 		}
+		return true;
+
 	}
 
 
@@ -108,6 +112,7 @@ public class Squad {
 	 * @return a list of the names of the agents with the specified serials.
 	 */
 	public List<String> getAgentsNames(List<String> serials){
+
 		List<String> list = new LinkedList<>();
 		for (String s : serials){
 			list.add(agents.get(s).getName());

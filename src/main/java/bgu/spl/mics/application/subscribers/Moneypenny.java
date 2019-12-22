@@ -62,7 +62,6 @@ public class Moneypenny extends Subscriber {
 			});
 		} else {
 			subscribeEvent(AgentsAvailableEvent.class, ev -> {
-
 				System.out.println(getName() + getSerialNumber() + " is handling an AgentsAvailableEvent");
 				ev.getReport().setMoneypenny(getSerialNumber());
 				ev.getReport().setAgentsSerialNumbers(ev.getAgentSerialNumbers());

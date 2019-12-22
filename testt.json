@@ -1,10 +1,10 @@
 {
   "inventory": [
-      "Mission1Tool",
-      "Mission2Tool",
-      "Mission3Tool-WillNotBeUsed",
-      "Mission4Tool",
-      "Mission5Tool"
+    "Mission1Tool",
+    "Mission2Tool",
+    "Mission3Tool-WillNotBeUsed",
+    "Mission4Tool",
+    "Mission5Tool"
   ],
   "services": {
     "M": 3,
@@ -62,7 +62,7 @@
         "missions": [
           {
             "serialAgentsNumbers": [
-              "002"
+              "000"
             ],
             "duration": 7,
             "gadget": "Mission3Tool-WillNotBeUsed",

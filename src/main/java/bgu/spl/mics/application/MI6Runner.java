@@ -35,6 +35,7 @@ public class MI6Runner {
         Q q = new Q();
         TimeService ts = new TimeService(services.get("time").getAsInt());
         Killer killer = new Killer(services.get("M").getAsInt());
+        new Thread(killer).start();
         createServices(services, mList, mpList, intelligenceList);
         for(Intelligence intelligence : intelligenceList){
             Thread t = new Thread(intelligence);
@@ -48,10 +49,8 @@ public class MI6Runner {
             Thread t = new Thread(m);
             t.start();
         }
-        new Thread(killer).start();
         new Thread(ts).start();
         new Thread(q).start();
-        new Thread(killer).start();
     }
 
 

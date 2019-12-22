@@ -50,7 +50,7 @@ public class TimeService extends Publisher {
 		timer.schedule(new TimerTask(){
 			public void run(){
 				if(currTime<timeTicks) {
-					getSimplePublisher().sendBroadcast(new TickBroadcast(currTime, remainingTime));
+					getSimplePublisher().sendBroadcast(new TickBroadcast(currTime));
 					remainingTime --;
 					currTime++;
 				}

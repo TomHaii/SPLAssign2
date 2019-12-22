@@ -1,11 +1,7 @@
 package bgu.spl.mics.application.subscribers;
 
-import bgu.spl.mics.Event;
-import bgu.spl.mics.Future;
 import bgu.spl.mics.Subscriber;
 import bgu.spl.mics.application.messages.*;
-import bgu.spl.mics.application.passiveObjects.Inventory;
-import bgu.spl.mics.application.passiveObjects.Squad;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -17,12 +13,12 @@ import java.util.concurrent.atomic.AtomicInteger;
  * You MAY change constructor signatures and even add new public constructors.
  */
 public class Killer extends Subscriber {
-    private AtomicInteger mDesired;
+    private AtomicInteger mTerminated;
     private int mAmount;
     public Killer (int mAmount) {
         super("Killer");
         this.mAmount = mAmount;
-        mDesired = new AtomicInteger(0);
+        mTerminated = new AtomicInteger(0);
     }
 
 
@@ -31,11 +27,12 @@ public class Killer extends Subscriber {
     @Override
     protected void initialize() {
         subscribeEvent(MTerminatedEvent.class, ev->{
-            mDesired.incrementAndGet();
-            if(mDesired.get() == mAmount){
+            mTerminated.incrementAndGet();
+            if(mTerminated.get() == mAmount){
                 getSimplePublisher().sendBroadcast(new KillSubsBroadcast());
                 complete(ev, "success");
                 terminate();
+                System.out.println("Killer Terminated");
             }
         });
 

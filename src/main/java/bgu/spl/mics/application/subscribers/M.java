@@ -18,14 +18,12 @@ import java.util.concurrent.TimeUnit;
 public class M extends Subscriber {
 	private Diary diary = Diary.getInstance();
 	private int serialNumber;
-	private int remainingTime;
 	private int mTime;
 
 
 	public M (int i){
 		super("M");
 		serialNumber = i;
-		remainingTime = 0;
 		mTime = 0;
 	}
 
@@ -40,7 +38,6 @@ public class M extends Subscriber {
 
 		});
 		subscribeBroadcast(TickBroadcast.class, b -> {
-			remainingTime = b.getRemainingTime();
 			mTime = b.getTime();
 		});
 		subscribeEvent(MissionReceivedEvent.class, ev -> {
