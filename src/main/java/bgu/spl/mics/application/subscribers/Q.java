@@ -28,21 +28,20 @@ public class Q extends Subscriber {
 			inventoryInstance.printToFile("inventory.json");
 			terminate();
 			System.out.println(getName() + " terminated");
-
 		});
 		subscribeBroadcast(TickBroadcast.class, b -> {
 			qTime = b.getTime();
 		});
 		subscribeEvent(GadgetAvailableEvent.class, ev -> {
 			System.out.println(getName() + " started handling gadgetAvailableEvent from "+ev.getSender());
-			ev.getReport().setQTime(qTime);
-			ev.getReport().setGadgetName(ev.getGadget());
 			if (!inventoryInstance.getItem(ev.getGadget())) {
 				complete(ev, "fail - gadget is not available");
 				print("fail - gadget is not available", ev.getSender());
 			} else {
 				complete(ev, "success");
 				print("success", ev.getSender());
+				ev.getReport().setQTime(qTime);
+				ev.getReport().setGadgetName(ev.getGadget());
 
 			}
 		});
