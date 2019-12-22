@@ -64,9 +64,7 @@ public class Moneypenny extends Subscriber {
 
 			subscribeEvent(AgentsAvailableEvent.class, ev -> {
 				System.out.println(getName() + getSerialNumber() + " is handling an AgentsAvailableEvent from "+ev.getSender());
-				ev.getReport().setMoneypenny(getSerialNumber());
-				ev.getReport().setAgentsSerialNumbers(ev.getAgentSerialNumbers());
-				ev.getReport().setAgentsNames(squadInstance.getAgentsNames(ev.getAgentSerialNumbers()));
+
 				if (!squadInstance.getAgents(ev.getAgentSerialNumbers())) {
 					complete(ev, "fail - agents requested do not exist");
 					print(AgentsAvailableEvent.class, "fail - agents requested do not exist", ev.getSender());
@@ -74,6 +72,10 @@ public class Moneypenny extends Subscriber {
 					complete(ev, "success");
 					print(AgentsAvailableEvent.class, "success", ev.getSender());
 				}
+				ev.getReport().setMoneypenny(getSerialNumber());
+				ev.getReport().setAgentsSerialNumbers(ev.getAgentSerialNumbers());
+				ev.getReport().setAgentsNames(squadInstance.getAgentsNames(ev.getAgentSerialNumbers()));
+
 			});
 		}
 	}
