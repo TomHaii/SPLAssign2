@@ -27,20 +27,16 @@ public class MI6Runner {
         JsonArray inv = object.get("inventory").getAsJsonArray();
         JsonArray squ =  object.get("squad").getAsJsonArray();
         JsonObject services = object.get("services").getAsJsonObject();
+        Killer killer = new Killer(services.get("M").getAsInt());
+        new Thread(killer).start();
         loadInventory(inv);
         loadSquad(squ);
         LinkedList<M> mList = new LinkedList<>();
         LinkedList<Moneypenny> mpList = new LinkedList<>();
         LinkedList<Intelligence> intelligenceList = new LinkedList<>();
         Q q = new Q();
-        TimeService ts = new TimeService(services.get("time").getAsInt());
-        Killer killer = new Killer(services.get("M").getAsInt());
-        new Thread(killer).start();
+        new Thread(q).start();
         createServices(services, mList, mpList, intelligenceList);
-        for(Intelligence intelligence : intelligenceList){
-            Thread t = new Thread(intelligence);
-            t.start();
-        }
         for (Moneypenny mp : mpList){
             Thread t = new Thread(mp);
             t.start();
@@ -49,8 +45,13 @@ public class MI6Runner {
             Thread t = new Thread(m);
             t.start();
         }
+        for(Intelligence intelligence : intelligenceList){
+            Thread t = new Thread(intelligence);
+            t.start();
+        }
+        TimeService ts = new TimeService(services.get("time").getAsInt());
         new Thread(ts).start();
-        new Thread(q).start();
+
     }
 
 
