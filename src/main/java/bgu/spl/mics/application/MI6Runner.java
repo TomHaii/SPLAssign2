@@ -12,6 +12,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 
 import java.util.LinkedList;
+import java.util.Set;
 
 
 /** This is the Main class of the application. You should parse the input file,
@@ -20,6 +21,7 @@ import java.util.LinkedList;
  */
 public class MI6Runner {
     public static void main(String[] args) throws FileNotFoundException {
+        final Object lock = new Object();
         JsonObject object = (JsonObject) new JsonParser().parse(new FileReader(args[0]));
         JsonArray inv = object.get("inventory").getAsJsonArray();
         JsonArray squ = object.get("squad").getAsJsonArray();
@@ -55,6 +57,14 @@ public class MI6Runner {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        while(Thread.activeCount() > 2){
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        System.out.println("Printing Files");
         Inventory.getInstance().printToFile(args[1]);
         Diary.getInstance().printToFile(args[2]);
     }
