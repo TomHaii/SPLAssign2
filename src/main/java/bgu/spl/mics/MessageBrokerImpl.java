@@ -28,6 +28,7 @@ public class MessageBrokerImpl implements MessageBroker {
 		eventMap = new ConcurrentHashMap<>();
 		futureMap = new ConcurrentHashMap<>();
 		broadcastMap = new ConcurrentHashMap<>();
+
 	}
 	@Override
 	public <T> void subscribeEvent(Class<? extends Event<T>> type, Subscriber m) {

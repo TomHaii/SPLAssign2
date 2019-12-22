@@ -45,6 +45,7 @@ public class Moneypenny extends Subscriber {
 			terminate();
 			System.out.println(getName() + getSerialNumber() + " terminated");
 
+
 		});
 		if (isAgentSender()) {
 			subscribeEvent(SendAgentsEvent.class, ev -> {

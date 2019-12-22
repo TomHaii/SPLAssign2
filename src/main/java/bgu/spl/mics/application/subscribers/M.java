@@ -54,7 +54,6 @@ public class M extends Subscriber {
 						report.setMissionName(ev.getMissionInfo().getMissionName());
 						report.setTimeIssued(ev.getMissionInfo().getTimeIssued());
 						report.setM(serialNumber);
-
 						diary.addReport(report);
 						print("success",ev.getSender());
 
