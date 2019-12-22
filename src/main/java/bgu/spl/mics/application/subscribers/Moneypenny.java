@@ -51,16 +51,17 @@ public class Moneypenny extends Subscriber {
 				System.out.println(getName() + getSerialNumber() + " is handling a sendAgentsEvent from "+ev.getSender());
 				squadInstance.sendAgents(ev.getAgentSerialNumbers(), ev.getTime());
 				complete(ev, "success");
-				print(SendAgentsEvent.class, "success");
+				print(SendAgentsEvent.class, "success", ev.getSender());
 			});
-
-		} else {
 			subscribeEvent(ReleaseAgentsEvent.class, ev -> {
 				System.out.println(getName() + getSerialNumber() + " is handling a releaseAgentsEvent from "+ev.getSender());
 				squadInstance.releaseAgents(ev.getAgentSerialNumbers());
 				complete(ev, "success");
-				print(ReleaseAgentsEvent.class, "success");
+				print(ReleaseAgentsEvent.class, "success",ev.getSender());
 			});
+
+		} else {
+
 			subscribeEvent(AgentsAvailableEvent.class, ev -> {
 				System.out.println(getName() + getSerialNumber() + " is handling an AgentsAvailableEvent from "+ev.getSender());
 				ev.getReport().setMoneypenny(getSerialNumber());
@@ -68,28 +69,28 @@ public class Moneypenny extends Subscriber {
 				ev.getReport().setAgentsNames(squadInstance.getAgentsNames(ev.getAgentSerialNumbers()));
 				if (!squadInstance.getAgents(ev.getAgentSerialNumbers())) {
 					complete(ev, "fail - agents requested do not exist");
-					print(AgentsAvailableEvent.class, "fail - agents requested do not exist");
+					print(AgentsAvailableEvent.class, "fail - agents requested do not exist", ev.getSender());
 				} else {
 					complete(ev, "success");
-					print(AgentsAvailableEvent.class, "success");
+					print(AgentsAvailableEvent.class, "success", ev.getSender());
 				}
 			});
 		}
 	}
 
-	private void print(Class<? extends Event<?>> cl, String msg) {
+	private void print(Class<? extends Event<?>> cl, String msg, String sender) {
 		if (cl == SendAgentsEvent.class) {
-			print("SendAgentEvent", msg);
+			print("SendAgentEvent", msg, sender);
 		} else if (cl == ReleaseAgentsEvent.class) {
-			print("ReleaseAgentsEvent", msg);
+			print("ReleaseAgentsEvent", msg, sender);
 		} else {
-			print("AgentsAvailableEvent", msg);
+			print("AgentsAvailableEvent", msg, sender);
 
 		}
 	}
 
-	private void print(String cl, String msg) {
-		System.out.println(getName() + getSerialNumber() + " finished handling " + cl + " result: " + msg);
+	private void print(String cl, String msg, String sender) {
+		System.out.println(getName() + getSerialNumber() + " finished handling " + cl +" for " +sender + ". result: " + msg);
 
 	}
 

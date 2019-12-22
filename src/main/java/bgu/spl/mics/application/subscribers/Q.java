@@ -39,17 +39,17 @@ public class Q extends Subscriber {
 			ev.getReport().setGadgetName(ev.getGadget());
 			if (!inventoryInstance.getItem(ev.getGadget())) {
 				complete(ev, "fail - gadget is not available");
-				print("fail - gadget is not available");
+				print("fail - gadget is not available", ev.getSender());
 			} else {
 				complete(ev, "success");
-				print("success");
+				print("success", ev.getSender());
 
 			}
 		});
 	}
 
-	private void print(String msg){
-		System.out.println(getName() + " finished handling gadgetAvailableEvent. result: " +msg);
+	private void print(String msg, String sender){
+		System.out.println(getName() + " finished handling gadgetAvailableEvent for "+sender+". result: " +msg);
 	}
 
 }

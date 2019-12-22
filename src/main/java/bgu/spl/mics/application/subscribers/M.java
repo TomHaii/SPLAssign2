@@ -56,22 +56,22 @@ public class M extends Subscriber {
 						getSimplePublisher().sendEvent(new SendAgentsEvent(ev.getMissionInfo().getSerialAgentsNumbers(), missionInfo.getDuration(), getName()+getSerialNumber()));
 						complete(ev, "success");
 						diary.addReport(report);
-						print("success");
+						print("success",ev.getSender());
 
 					} else {
 						getSimplePublisher().sendEvent(new ReleaseAgentsEvent(ev.getMissionInfo().getSerialAgentsNumbers(), getName()+getSerialNumber()));
 						complete(ev, "fail - mission time expired");
-						print("fail - mission time expired");
+						print("fail - mission time expired",ev.getSender());
 					}
 				} else {
 					getSimplePublisher().sendEvent(new ReleaseAgentsEvent(ev.getMissionInfo().getSerialAgentsNumbers(), getName()+getSerialNumber()));
 					complete(ev, "fail - gadget is not available");
-					print("fail - gadget is not available");
+					print("fail - gadget is not available",ev.getSender());
 
 				}
 			} else {
 				complete(ev, "fail - agents are not available");
-				print("fail - agents are not available");
+				print("fail - agents are not available",ev.getSender());
 			}
 			diary.incrementTotal();
 		});
@@ -81,8 +81,8 @@ public class M extends Subscriber {
 		return serialNumber;
 	}
 
-	private void print(String msg){
-		System.out.println(getName() + getSerialNumber() + " finished handling missionReceivedEvent. result: " +msg);
+	private void print(String msg, String sender){
+		System.out.println(getName() + getSerialNumber() + " finished handling missionReceivedEvent for "+sender+". result: " +msg);
 	}
 
 }
