@@ -2,11 +2,10 @@ package bgu.spl.mics.application.subscribers;
 
 import bgu.spl.mics.Subscriber;
 import bgu.spl.mics.application.messages.GadgetAvailableEvent;
+import bgu.spl.mics.application.messages.KillSubsBroadcast;
 import bgu.spl.mics.application.messages.TickBroadcast;
 import bgu.spl.mics.application.messages.TimeEndedBroadcast;
 import bgu.spl.mics.application.passiveObjects.Inventory;
-
-import java.util.LinkedList;
 
 /**
  * Q is the only Subscriber\Publisher that has access to the {@link bgu.spl.mics.application.passiveObjects.Inventory}.
@@ -25,7 +24,7 @@ public class Q extends Subscriber {
 	@Override
 	protected void initialize() {
 		System.out.println(getName() + " started");
-		subscribeBroadcast(TimeEndedBroadcast.class, b -> {
+		subscribeBroadcast(KillSubsBroadcast.class, b -> {
 			inventoryInstance.printToFile("inventory.json");
 			terminate();
 			System.out.println(getName() + " terminated");

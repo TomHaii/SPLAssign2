@@ -109,7 +109,6 @@ public abstract class Subscriber extends RunnableSubPub {
      */
     protected final void terminate() {
         this.terminated = true;
-        broker.unregister(this);
 
     }
 
@@ -134,6 +133,8 @@ public abstract class Subscriber extends RunnableSubPub {
             } catch (Exception ignored) {
             }
         }
+        broker.unregister(this);
+
     }
 
 }

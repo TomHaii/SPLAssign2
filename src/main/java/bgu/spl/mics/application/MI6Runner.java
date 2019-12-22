@@ -4,10 +4,7 @@ import bgu.spl.mics.application.passiveObjects.Agent;
 import bgu.spl.mics.application.passiveObjects.Inventory;
 import bgu.spl.mics.application.passiveObjects.Squad;
 import bgu.spl.mics.application.publishers.TimeService;
-import bgu.spl.mics.application.subscribers.Intelligence;
-import bgu.spl.mics.application.subscribers.M;
-import bgu.spl.mics.application.subscribers.Moneypenny;
-import bgu.spl.mics.application.subscribers.Q;
+import bgu.spl.mics.application.subscribers.*;
 import com.google.gson.*;
 
 import java.io.FileNotFoundException;
@@ -37,6 +34,7 @@ public class MI6Runner {
         LinkedList<Intelligence> intelligenceList = new LinkedList<>();
         Q q = new Q();
         TimeService ts = new TimeService(services.get("time").getAsInt());
+        Killer killer = new Killer(services.get("M").getAsInt());
         createServices(services, mList, mpList, intelligenceList);
         for(Intelligence intelligence : intelligenceList){
             Thread t = new Thread(intelligence);
