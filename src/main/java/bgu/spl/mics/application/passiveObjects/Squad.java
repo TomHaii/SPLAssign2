@@ -67,15 +67,8 @@ public class Squad {
 	 * @return ‘false’ if an agent of serialNumber ‘serial’ is missing, and ‘true’ otherwise
 	 */
 	public boolean getAgents(List<String> serials) {
-//		for (String s : serials) {
-//			System.out.println(s);
-//			if (!agents.containsKey(s)) {
-//				return false;
-//			}
-//		}
 		synchronized (this) {
 			for (String s : serials) {
-				System.out.println(s);
 				if(agents.getOrDefault(s, null) == null)
 					return false;
 				try {
@@ -89,22 +82,6 @@ public class Squad {
 			return true;
 		}
 	}
-
-
-//	private boolean acquireAgents(List<String> serials) {
-//		LinkedList<Agent> acquired = new LinkedList<>();
-//		for (String s : serials) {
-//			if (!agents.get(s).isAvailable()) {
-//				for (Agent agent : acquired)
-//					agent.release();
-//				return false;
-//			}
-//			agents.get(s).acquire();
-//			acquired.add(agents.get(s));
-//		}
-//		return true;
-//
-//	}
 
 
 	/**

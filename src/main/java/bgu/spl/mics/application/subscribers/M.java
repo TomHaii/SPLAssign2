@@ -20,7 +20,6 @@ public class M extends Subscriber {
 	private int serialNumber;
 	private int mTime;
 
-
 	public M (int i){
 		super("M");
 		serialNumber = i;
