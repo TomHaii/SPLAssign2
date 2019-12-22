@@ -12,6 +12,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 
@@ -21,44 +22,61 @@ import java.util.Set;
  */
 public class MI6Runner {
     public static void main(String[] args) throws FileNotFoundException {
-        
+
         final Object lock = new Object();
         JsonObject object = (JsonObject) new JsonParser().parse(new FileReader(args[0]));
         JsonArray inv = object.get("inventory").getAsJsonArray();
         JsonArray squ = object.get("squad").getAsJsonArray();
         JsonObject services = object.get("services").getAsJsonObject();
         Killer killer = new Killer(services.get("M").getAsInt());
-        new Thread(killer).start();
+        //  new Thread(killer).start();
         loadInventory(inv);
         loadSquad(squ);
         LinkedList<M> mList = new LinkedList<>();
         LinkedList<Moneypenny> mpList = new LinkedList<>();
         LinkedList<Intelligence> intelligenceList = new LinkedList<>();
         Q q = new Q();
-        new Thread(q).start();
         createServices(services, mList, mpList, intelligenceList);
-        for (Intelligence intelligence : intelligenceList) {
-            new Thread(intelligence).start();
+        //  new Thread(q).start();
+
+//        for (Intelligence intelligence : intelligenceList) {
+//            new Thread(intelligence).start();
+//        }
+//        for (M m : mList) {
+//            new Thread(m).start();
+//        }
+//        for (Moneypenny mp : mpList) {
+//            new Thread(mp).start();
+//        }
+//        TimeService ts = new TimeService(services.get("time").getAsInt());
+//        try {
+//            Thread.sleep(100);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+//        new Thread(ts).start();
+//        try {
+//            Thread.sleep(services.get("time").getAsInt() * 100);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+        List<Thread> threadsList = new LinkedList<>();
+        int time = services.get("time").getAsInt();
+        TimeService timeService = new TimeService(time);
+        for (M m : mList)
+            threadsList.add(new Thread(m));
+        for (Moneypenny moneypenny : mpList)
+            threadsList.add(new Thread(moneypenny));
+        for (Intelligence intelligence : intelligenceList)
+            threadsList.add(new Thread(intelligence));
+        threadsList.add(new Thread(timeService));
+
+        threadsList.add(new Thread(q));
+        threadsList.add(new Thread(killer));
+        for (Thread t : threadsList) {
+            t.start();
         }
-        for (M m : mList) {
-            new Thread(m).start();
-        }
-        for (Moneypenny mp : mpList) {
-            new Thread(mp).start();
-        }
-        TimeService ts = new TimeService(services.get("time").getAsInt());
-        try {
-            Thread.sleep(100);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        new Thread(ts).start();
-        try {
-            Thread.sleep(services.get("time").getAsInt() * 100);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        while(Thread.activeCount() > 2){
+        while (Thread.activeCount() > 2) {
             try {
                 Thread.sleep(100);
             } catch (InterruptedException e) {

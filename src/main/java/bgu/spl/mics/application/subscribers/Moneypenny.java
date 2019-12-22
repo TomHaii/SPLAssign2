@@ -25,7 +25,7 @@ public class Moneypenny extends Subscriber {
 	public Moneypenny(int i) {
 		super("MoneyPenny");
 		serialNumber = i;
-		agentSender = (i % 2 == 0);
+		agentSender = (i%2 == 0);
 	}
 
 
@@ -61,9 +61,7 @@ public class Moneypenny extends Subscriber {
 				complete(ev, "success");
 				print(ReleaseAgentsEvent.class, "success",ev.getSender());
 			});
-
 		} else {
-
 			subscribeEvent(AgentsAvailableEvent.class, ev -> {
 				System.out.println(getName() + getSerialNumber() + " is handling an AgentsAvailableEvent from "+ev.getSender());
 

@@ -47,15 +47,14 @@ public class M extends Subscriber {
 				Future gadgetAvailable = getSimplePublisher().sendEvent(new GadgetAvailableEvent(missionInfo.getGadget(), report, getName()+getSerialNumber()));
 				if (gadgetAvailable.get().equals("success")) {
 					if (mTime < missionInfo.getTimeExpired()) {
-						getSimplePublisher().sendEvent(new SendAgentsEvent(ev.getMissionInfo().getSerialAgentsNumbers(), missionInfo.getDuration(), getName()+getSerialNumber()));
-						complete(ev, "success");
-						print("success",ev.getSender());
 						report.setTimeCreated(mTime);
 						report.setMissionName(ev.getMissionInfo().getMissionName());
 						report.setTimeIssued(ev.getMissionInfo().getTimeIssued());
 						report.setM(serialNumber);
 						diary.addReport(report);
-
+						getSimplePublisher().sendEvent(new SendAgentsEvent(ev.getMissionInfo().getSerialAgentsNumbers(), missionInfo.getDuration(), getName()+getSerialNumber()));
+						complete(ev, "success");
+						print("success",ev.getSender());
 					} else {
 						getSimplePublisher().sendEvent(new ReleaseAgentsEvent(ev.getMissionInfo().getSerialAgentsNumbers(), getName()+getSerialNumber()));
 						complete(ev, "fail - mission time expired");

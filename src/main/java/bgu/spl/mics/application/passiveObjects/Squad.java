@@ -56,7 +56,7 @@ public class Squad {
 	public void sendAgents(List<String> serials, int time){
 		try {
 			Thread.sleep(time * 100);
-
+			releaseAgents(serials);
 		}
 		catch (Exception ignored){}
 	}

@@ -30,11 +30,10 @@ public class Killer extends Subscriber {
             if(mTerminated.get() >= mAmount){
                 System.out.println("KILLING STARTED MUAHAHAHA");
                 getSimplePublisher().sendBroadcast(new KillSubsBroadcast());
-                complete(ev, "success");
-                terminate();
                 System.out.println("Killer Terminated");
+                terminate();
             }
-            complete(ev, "waiting");
+            complete(ev, "Killed");
         });
 
     }

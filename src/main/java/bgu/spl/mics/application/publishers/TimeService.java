@@ -24,16 +24,14 @@ import java.util.TimerTask;
 public class TimeService extends Publisher {
 
 	private int timeTicks;
-	private int currTime = 1;
+	private int currTime = 0;
 	private Timer timer;
-	private int remainingTime;
 
 
 	public TimeService(int timeTicks) {
 		super("TimeService");
 		this.timeTicks = timeTicks;
 		timer = new Timer();
-		remainingTime = timeTicks;
 		initialize();
 
 	}
@@ -51,7 +49,6 @@ public class TimeService extends Publisher {
 			public void run(){
 				if(currTime<timeTicks) {
 					getSimplePublisher().sendBroadcast(new TickBroadcast(currTime));
-					remainingTime --;
 					currTime++;
 				}
 				else{
