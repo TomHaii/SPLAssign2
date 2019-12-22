@@ -7,6 +7,8 @@ import bgu.spl.mics.application.messages.*;
 import bgu.spl.mics.application.passiveObjects.Inventory;
 import bgu.spl.mics.application.passiveObjects.Squad;
 
+import java.util.List;
+
 /**
  * Only this type of Subscriber can access the squad.
  * Three are several Moneypenny-instances - each of them holds a unique serial number that will later be printed on the report.
@@ -65,16 +67,13 @@ public class Moneypenny extends Subscriber {
 				ev.getReport().setMoneypenny(getSerialNumber());
 				ev.getReport().setAgentsSerialNumbers(ev.getAgentSerialNumbers());
 				ev.getReport().setAgentsNames(squadInstance.getAgentsNames(ev.getAgentSerialNumbers()));
-				synchronized (squadInstance) {
-					while (!squadInstance.getAgents(ev.getAgentSerialNumbers())) {
-						try {
-							squadInstance.wait();
-						} catch (Exception ignored) {
-						}
-					}
+				if (!squadInstance.getAgents(ev.getAgentSerialNumbers())) {
+					complete(ev, "fail - agents requested do not exist");
+					print(AgentsAvailableEvent.class, "fail - agents requested do not exist");
+				} else {
+					complete(ev, "success");
+					print(AgentsAvailableEvent.class, "success");
 				}
-				complete(ev, "success");
-				print(AgentsAvailableEvent.class, "success");
 			});
 		}
 	}

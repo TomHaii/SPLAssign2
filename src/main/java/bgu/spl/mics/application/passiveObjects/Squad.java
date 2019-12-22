@@ -69,19 +69,33 @@ public class Squad {
 	 * @return ‘false’ if an agent of serialNumber ‘serial’ is missing, and ‘true’ otherwise
 	 */
 	public boolean getAgents(List<String> serials) {
-		synchronized (this) {
-			LinkedList<Agent> acquiredAgents = new LinkedList<>();
-			for (String s : serials) {
-				Agent agent = agents.get(s);
-				if (agent.isAvailable()) {
-					acquiredAgents.add(agent);
-					agent.acquire();
-				} else {
-					for (Agent a : acquiredAgents) {
-						a.release();
-					}
+		for (String s : serials) {
+			if (agents.getOrDefault(s, null) == null) {
+				return false;
+			}
+		}
+		synchronized (this){
+			try {
+				while (!acquireAgents(serials)) {
+					wait();
+				}
+			}
+			catch (InterruptedException ignored){}
+		}
+		return true;
+	}
+
+
+	private boolean acquireAgents(List<String> serials){
+		synchronized (this){
+			LinkedList<Agent> acquired = new LinkedList<>();
+			for(String s: serials){
+				if(!agents.get(s).isAvailable()) {
+					for (Agent agent : acquired)
+						agent.release();
 					return false;
 				}
+				acquired.add(agents.get(s));
 			}
 			return true;
 		}

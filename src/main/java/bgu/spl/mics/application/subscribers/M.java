@@ -52,10 +52,8 @@ public class M extends Subscriber {
 			MissionInfo missionInfo = ev.getMissionInfo();
 			report.setM(serialNumber);
 			Future agentsAvailable = getSimplePublisher().sendEvent(new AgentsAvailableEvent(ev.getMissionInfo().getSerialAgentsNumbers(), report));
-//			if (agentsAvailable.get(remainingTime*100,TimeUnit.MILLISECONDS).equals("success")) {
 			if (agentsAvailable.get().equals("success")) {
 				Future gadgetAvailable = getSimplePublisher().sendEvent(new GadgetAvailableEvent(missionInfo.getGadget(), report));
-//				if (gadgetAvailable.get(remainingTime * 100, TimeUnit.MILLISECONDS).equals("success")) {
 				if (gadgetAvailable.get().equals("success")) {
 					if (mTime < missionInfo.getTimeExpired()) {
 						getSimplePublisher().sendEvent(new SendAgentsEvent(ev.getMissionInfo().getSerialAgentsNumbers(), missionInfo.getDuration()));
