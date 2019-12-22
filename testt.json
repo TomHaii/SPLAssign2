@@ -14,7 +14,7 @@
         "missions": [
           {
             "serialAgentsNumbers": [
-              "001",
+              "000",
               "003"
             ],
             "duration": 7,
@@ -62,7 +62,7 @@
         "missions": [
           {
             "serialAgentsNumbers": [
-              "002"
+              "000"
             ],
             "duration": 7,
             "gadget": "Mission3Tool-WillNotBeUsed",
