@@ -19,7 +19,7 @@ public class M extends Subscriber {
 	private Diary diary = Diary.getInstance();
 	private int serialNumber;
 	private int mTime;
-
+//dd
 	public M (int i){
 		super("M");
 		serialNumber = i;
