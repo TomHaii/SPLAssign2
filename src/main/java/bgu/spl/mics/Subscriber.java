@@ -85,7 +85,6 @@ public abstract class Subscriber extends RunnableSubPub {
     protected final <B extends Broadcast> void subscribeBroadcast(Class<B> type, Callback<B> callback) {
         broker.subscribeBroadcast(type, this);
         callbacks.putIfAbsent(type, callback);
-//        System.out.println("check subscribe broadcast at subscriber");
     }
 
     /**
