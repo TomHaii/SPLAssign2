@@ -81,16 +81,14 @@ public class Future<T> {
      */
 	public T get(long timeout, TimeUnit unit) {
 		synchronized (this) {
-			timeout = TimeUnit.MILLISECONDS.convert(timeout,unit);
-			while (!isDone()) {
+			if (!isDone()) {
 				try {
-					wait(timeout);
-					return result;
+					wait(unit.toMillis(timeout));
 				} catch (InterruptedException e) {
 					System.out.println("Thread " +Thread.currentThread().getId() +" was interrupted");
 				}
 			}
-			return null;
+			return result;
 		}
 	}
 

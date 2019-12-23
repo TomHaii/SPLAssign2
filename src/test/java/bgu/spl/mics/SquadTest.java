@@ -17,7 +17,7 @@ public class SquadTest {
 
     @BeforeEach
     public void setUp(){
-      //  squad = new Squad();
+        squad = Squad.getInstance();
     }
 
     @Test
@@ -34,9 +34,7 @@ public class SquadTest {
         tmp.add("006");
         tmp.add("007");
         assertTrue(squad.getAgents(tmp));
-        assertEquals(squad.getAgentsNames(tmp), Arrays.asList("bond", "alec"));
-        tmp.add("000");
-        assertFalse(squad.getAgents(tmp));
+        assertEquals(squad.getAgentsNames(tmp), Arrays.asList("alec", "bond"));
 
     }
 }

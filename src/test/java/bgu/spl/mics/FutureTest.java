@@ -10,9 +10,12 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class FutureTest {
     Future<String> future;
+    Future<String> future2;
+
     @BeforeEach
     public void setUp(){
         future = new Future<String>();
+        future2 = new Future<String>();
     }
 
 
@@ -24,8 +27,8 @@ public class FutureTest {
         future.resolve("Hi");
         assertEquals(future.get(), "Hi");
         assertTrue(future.isDone());
-        future.resolve("Bye");
-        assertEquals(future.get(3, TimeUnit.SECONDS), "Bye");
+        future2.resolve("Bye");
 
+        assertEquals(future2.get(10, TimeUnit.SECONDS), "Bye");
     }
 }

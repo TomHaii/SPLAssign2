@@ -46,8 +46,7 @@ public class MI6Runner {
         while (Thread.activeCount() > 2) { //makes sure all threads were done before printing the files
             try {
                 Thread.sleep(100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            } catch (InterruptedException ignored) {
             }
         }
         System.out.println("Printing Files");

@@ -7,6 +7,7 @@ import bgu.spl.mics.Publisher;
 import bgu.spl.mics.application.messages.TickBroadcast;
 import bgu.spl.mics.application.messages.TimeEndedBroadcast;
 
+import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -49,7 +50,7 @@ public class TimeService extends Publisher {
 		timer.schedule(new TimerTask(){
 			public void run(){
 				if(currTime<timeTicks) {
-					getSimplePublisher().sendBroadcast(new TickBroadcast(currTime));
+					getSimplePublisher().sendBroadcast(new TickBroadcast(currTime, timeTicks));
 					currTime++;
 				}
 				else{

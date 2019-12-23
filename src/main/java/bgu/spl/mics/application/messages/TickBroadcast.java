@@ -4,9 +4,10 @@ import bgu.spl.mics.Broadcast;
 
 public class TickBroadcast implements Broadcast {
     private int time;
-
-    public TickBroadcast(int time){
+    private int totalTime;
+    public TickBroadcast(int time, int totalTime){
         this.time = time;
+        this.totalTime = totalTime;
     }
 
     public int getTime() {
@@ -14,4 +15,7 @@ public class TickBroadcast implements Broadcast {
         }
 
 
+    public int getTotalTime() {
+        return totalTime;
+    }
 }
