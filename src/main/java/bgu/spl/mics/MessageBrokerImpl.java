@@ -1,5 +1,7 @@
 package bgu.spl.mics;
 
+import bgu.spl.mics.application.messages.TimeEndedBroadcast;
+
 import java.util.concurrent.*;
 
 /**
@@ -54,6 +56,23 @@ public class MessageBrokerImpl implements MessageBroker {
 	@Override
 	//copying this broadcast subscribers queue and emptying it
 	public void sendBroadcast(Broadcast b) {
+//		if (b instanceof TimeEndedBroadcast) {
+//			System.out.println("timeout");
+//			synchronized (this) {
+//				ConcurrentLinkedQueue<Subscriber> tmpQ = new ConcurrentLinkedQueue<>(broadcastMap.get(b.getClass()));
+//				while (!tmpQ.isEmpty()) {
+//					Subscriber tmpSub = tmpQ.poll();
+//					for (Message m : subscriberList.get(tmpSub))
+//						if (m instanceof Event){
+//							complete((Event)m, null);
+//						}
+//					subscriberList.get(tmpSub).clear();
+//					subscriberList.get(tmpSub).add(b);
+//
+//				}
+//
+//			}
+//		}
 		if (broadcastMap.containsKey(b.getClass())) {
 			ConcurrentLinkedQueue<Subscriber> tmpQ = new ConcurrentLinkedQueue<>(broadcastMap.get(b.getClass()));
 			while (!tmpQ.isEmpty()) {

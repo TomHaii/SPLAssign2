@@ -36,11 +36,12 @@ public class MI6Runner {
         LinkedList<M> mList = new LinkedList<>();
         LinkedList<Moneypenny> mpList = new LinkedList<>();
         LinkedList<Intelligence> intelligenceList = new LinkedList<>();
-        createServices(services, mList, mpList, intelligenceList);
+        createServices(services, mList, mpList, intelligenceList, services.get("time").getAsInt());
         Killer killer = new Killer(services.get("M").getAsInt());
         TimeService timeService = new TimeService(services.get("time").getAsInt());
+        TimeUpdater timeUpdater = new TimeUpdater();
         Q q = new Q();
-        List<Thread> threadsList = new LinkedList<>(Arrays.asList(new Thread(q), new Thread(timeService), new Thread(killer)));
+        List<Thread> threadsList = new LinkedList<>(Arrays.asList(new Thread(q), new Thread(timeService), new Thread(killer), new Thread(timeUpdater)));
         threadsActivator(threadsList, mList, mpList, intelligenceList);
         while (Thread.activeCount() > 2) { //makes sure all threads were done before printing the files
             try {
@@ -88,7 +89,7 @@ public class MI6Runner {
         inventory.load(items);
     }
 
-    private static void createServices(JsonObject services, LinkedList<M> mList, LinkedList<Moneypenny> mpList, LinkedList<Intelligence> intelligenceList) {
+    private static void createServices(JsonObject services, LinkedList<M> mList, LinkedList<Moneypenny> mpList, LinkedList<Intelligence> intelligenceList, int time) {
         int mNumber = services.get("M").getAsInt();
         int mpNumber = services.get("Moneypenny").getAsInt();
         JsonArray allMissions = services.get("intelligence").getAsJsonArray();
@@ -100,7 +101,7 @@ public class MI6Runner {
             intelligenceList.add(intelligence);
         }
         for (int i = 1; i <= mNumber; i++){
-            M m = new M(i);
+            M m = new M(i,time);
             mList.add(m);
         }
         for (int i = 1; i <= mpNumber; i++){

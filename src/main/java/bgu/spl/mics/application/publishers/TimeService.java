@@ -39,6 +39,7 @@ public class TimeService extends Publisher {
 	@Override
 	protected void initialize() {
 		System.out.println("TimeService started");
+
 		
 	}
 
