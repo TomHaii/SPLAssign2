@@ -48,7 +48,6 @@ public class M extends Subscriber {
 			Future agentsAvailable = getSimplePublisher().sendEvent(new AgentsAvailableEvent(ev.getMissionInfo().getSerialAgentsNumbers(), report, getName() + getSerialNumber()));
 			if (agentsAvailable.get().equals("success")) {
 				mTime = getSimplePublisher().sendEvent(new TimeUpdateEvent()).get();
-				System.out.println("******the time is " + mTime + " and agents are now free for mission " +missionInfo.getMissionName());
 				Future gadgetAvailable = getSimplePublisher().sendEvent(new GadgetAvailableEvent(missionInfo.getGadget(), report, getName() + getSerialNumber()));
 				if (gadgetAvailable.get().equals("success")) {
 					if (mTime <TIME && mTime < missionInfo.getTimeExpired()) {
