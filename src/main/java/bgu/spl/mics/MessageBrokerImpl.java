@@ -11,11 +11,11 @@ public class MessageBrokerImpl implements MessageBroker {
 	private static class MessageBrokerSingletonHolder {
 		private volatile static MessageBroker instance = new MessageBrokerImpl();
 	}
-	private volatile ConcurrentHashMap<Event, Future> futureMap;
-	private volatile ConcurrentHashMap<Subscriber, LinkedBlockingQueue<Message>> subscriberList;
-	private volatile ConcurrentHashMap<Subscriber, ConcurrentLinkedQueue<Class<? extends Message>>> topicsList;
-	private volatile ConcurrentHashMap<Class<? extends Broadcast>, ConcurrentLinkedQueue<Subscriber>> broadcastMap;
-	private volatile ConcurrentHashMap<Class<? extends Event<?>>, ConcurrentLinkedQueue<Subscriber>> eventMap;
+	private volatile ConcurrentHashMap<Event, Future> futureMap;  //this map contains all the unresolved events and their matching futures
+	private volatile ConcurrentHashMap<Subscriber, LinkedBlockingQueue<Message>> subscriberList; //this map contains all the subscribers and their messages queue
+	private volatile ConcurrentHashMap<Subscriber, ConcurrentLinkedQueue<Class<? extends Message>>> topicsList; //this map contains all the subscribers and the topics they are subscribed to
+	private volatile ConcurrentHashMap<Class<? extends Broadcast>, ConcurrentLinkedQueue<Subscriber>> broadcastMap; //this maps contains all types of events adn the subscribers that are subscribed to it
+	private volatile ConcurrentHashMap<Class<? extends Event<?>>, ConcurrentLinkedQueue<Subscriber>> eventMap; //this maps contains all types of broadcasts adn the subscribers that are subscribed to it
 	/**
 	 * Retrieves the single instance of this class.
 	 */
@@ -52,28 +52,27 @@ public class MessageBrokerImpl implements MessageBroker {
 	}
 
 	@Override
+	//copying this broadcast subscribers queue and emptying it
 	public void sendBroadcast(Broadcast b) {
-		if(broadcastMap.containsKey(b.getClass())) {
-			//synchronized (broadcastMap.get(b.getClass())) {
-				ConcurrentLinkedQueue<Subscriber> tmpQ = new ConcurrentLinkedQueue<>(broadcastMap.get(b.getClass()));
-				while (!tmpQ.isEmpty()) {
-					Subscriber tmpSub = tmpQ.poll();
-					subscriberList.get(tmpSub).add(b);
-				}
-			//}
+		if (broadcastMap.containsKey(b.getClass())) {
+			ConcurrentLinkedQueue<Subscriber> tmpQ = new ConcurrentLinkedQueue<>(broadcastMap.get(b.getClass()));
+			while (!tmpQ.isEmpty()) {
+				Subscriber tmpSub = tmpQ.poll();
+				subscriberList.get(tmpSub).add(b);
+			}
 		}
 	}
 
 	@Override
 	public <T> Future<T> sendEvent(Event<T> e) {
 		if (eventMap.containsKey(e.getClass())) {
-			synchronized (eventMap.get(e.getClass())) {
-				Subscriber subToSendEvent = eventMap.get(e.getClass()).poll();
+			synchronized (eventMap.get(e.getClass())) {  //synchronizing the queue so that the round robin would work correctly
+				Subscriber subToSendEvent = eventMap.get(e.getClass()).poll(); //retrieving the subscriber at the head of the queue
 				Future<T> future = new Future<>();
-				futureMap.putIfAbsent(e, future);
+				futureMap.put(e, future);
 				if (subToSendEvent != null) {
 					subscriberList.get(subToSendEvent).add(e);
-					eventMap.get(e.getClass()).add(subToSendEvent);
+					eventMap.get(e.getClass()).add(subToSendEvent); //adding the subscriber we pulled at the tail of the queue
 					return future;
 				}
 				else{

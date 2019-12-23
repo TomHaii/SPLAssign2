@@ -11,6 +11,7 @@ import com.google.gson.*;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -23,63 +24,25 @@ import java.util.Set;
 public class MI6Runner {
     public static void main(String[] args) throws FileNotFoundException {
         if(args.length != 3){
-            System.out.println("Incorrect amount of arguments");
+            System.out.println("Invalid arguments number. Expected: 3  |  Was: "+args.length);
             return;
         }
-        final Object lock = new Object();
         JsonObject object = (JsonObject) new JsonParser().parse(new FileReader(args[0]));
         JsonArray inv = object.get("inventory").getAsJsonArray();
         JsonArray squ = object.get("squad").getAsJsonArray();
         JsonObject services = object.get("services").getAsJsonObject();
-        Killer killer = new Killer(services.get("M").getAsInt());
-        //  new Thread(killer).start();
         loadInventory(inv);
         loadSquad(squ);
         LinkedList<M> mList = new LinkedList<>();
         LinkedList<Moneypenny> mpList = new LinkedList<>();
         LinkedList<Intelligence> intelligenceList = new LinkedList<>();
-        Q q = new Q();
         createServices(services, mList, mpList, intelligenceList);
-        //  new Thread(q).start();
-
-//        for (Intelligence intelligence : intelligenceList) {
-//            new Thread(intelligence).start();
-//        }
-//        for (M m : mList) {
-//            new Thread(m).start();
-//        }
-//        for (Moneypenny mp : mpList) {
-//            new Thread(mp).start();
-//        }
-//        TimeService ts = new TimeService(services.get("time").getAsInt());
-//        try {
-//            Thread.sleep(100);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
-//        new Thread(ts).start();
-//        try {
-//            Thread.sleep(services.get("time").getAsInt() * 100);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
-        List<Thread> threadsList = new LinkedList<>();
-        int time = services.get("time").getAsInt();
-        TimeService timeService = new TimeService(time);
-        for (M m : mList)
-            threadsList.add(new Thread(m));
-        for (Moneypenny moneypenny : mpList)
-            threadsList.add(new Thread(moneypenny));
-        for (Intelligence intelligence : intelligenceList)
-            threadsList.add(new Thread(intelligence));
-
-        threadsList.add(new Thread(q));
-        threadsList.add(new Thread(timeService));
-        threadsList.add(new Thread(killer));
-        for (Thread t : threadsList) {
-            t.start();
-        }
-        while (Thread.activeCount() > 2) {
+        Killer killer = new Killer(services.get("M").getAsInt());
+        TimeService timeService = new TimeService(services.get("time").getAsInt());
+        Q q = new Q();
+        List<Thread> threadsList = new LinkedList<>(Arrays.asList(new Thread(q), new Thread(timeService), new Thread(killer)));
+        threadsActivator(threadsList, mList, mpList, intelligenceList);
+        while (Thread.activeCount() > 2) { //makes sure all threads were done before printing the files
             try {
                 Thread.sleep(100);
             } catch (InterruptedException e) {
@@ -91,6 +54,17 @@ public class MI6Runner {
         Diary.getInstance().printToFile(args[2]);
     }
 
+    private static void threadsActivator(List<Thread> threadsList, LinkedList<M> mList, LinkedList<Moneypenny> mpList, LinkedList<Intelligence> intelligenceList) {
+        for (M m : mList)
+            threadsList.add(new Thread(m));
+        for (Moneypenny moneypenny : mpList)
+            threadsList.add(new Thread(moneypenny));
+        for (Intelligence intelligence : intelligenceList)
+            threadsList.add(new Thread(intelligence));
+        for (Thread t : threadsList) {
+            t.start();
+        }
+    }
 
     private static void loadSquad(JsonArray squ){
         Squad squad = Squad.getInstance();
@@ -124,7 +98,6 @@ public class MI6Runner {
             JsonArray missionArray = missions.get("missions").getAsJsonArray();
             Intelligence intelligence = new Intelligence(i, missionArray);
             intelligenceList.add(intelligence);
-
         }
         for (int i = 1; i <= mNumber; i++){
             M m = new M(i);
