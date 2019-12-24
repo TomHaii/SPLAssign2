@@ -21,6 +21,7 @@ public class Moneypenny extends Subscriber {
 	private final static Squad squadInstance = Squad.getInstance();
 	private int serialNumber;
 	private boolean agentSender;
+	private List<String> agents;
 
 	public Moneypenny(int i) {
 		super("MoneyPenny");
@@ -45,6 +46,8 @@ public class Moneypenny extends Subscriber {
 		subscribeBroadcast(TimeEndedBroadcast.class, b -> {
 			terminate();
 			System.out.println(getName() + getSerialNumber() + " terminated");
+			Squad.getInstance().releaseAgents(agents);
+
 		});
 	//	if (isAgentSender()) {
 //			subscribeEvent(SendAgentsEvent.class, ev -> {
@@ -67,18 +70,21 @@ public class Moneypenny extends Subscriber {
 					complete(ev, "fail - agents requested do not exist");
 					print(AgentsAvailableEvent.class, "fail - agents requested do not exist", ev.getSender());
 				} else {
+					agents = ev.getAgentSerialNumbers();
 					ev.getReport().setMoneypenny(getSerialNumber());
 					ev.getReport().setAgentsSerialNumbers(ev.getAgentSerialNumbers());
 					ev.getReport().setAgentsNames(squadInstance.getAgentsNames(ev.getAgentSerialNumbers()));
-					complete(ev, "success");
 					print(AgentsAvailableEvent.class, "success", ev.getSender());
+					complete(ev, "success");
 					if(ev.getFuture().get().equals("success")){
+						System.out.println("Sending agents check");
 						squadInstance.sendAgents(ev.getAgentSerialNumbers(), ev.getTime());
 					}
-					else
+					else {
+						System.out.println("Couldn't resolve, releasing agents");
 						squadInstance.releaseAgents(ev.getAgentSerialNumbers());
+					}
 				}
-
 			});
 		}
 	//}

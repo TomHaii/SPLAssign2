@@ -77,7 +77,8 @@ public class MessageBrokerImpl implements MessageBroker {
 						subscriberList.get(subToSendEvent).add(e);
 						eventMap.get(e.getClass()).add(subToSendEvent); //adding the subscriber we pulled at the tail of the queue
 						return future;
-				} else {
+				}
+				else{
 					System.out.println("None of the subscribers is capable of handling this event");
 					complete(e, null);
 				}

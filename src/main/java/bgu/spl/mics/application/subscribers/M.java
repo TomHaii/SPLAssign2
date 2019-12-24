@@ -49,34 +49,34 @@ public class M extends Subscriber {
 			Future agentsAvailable = getSimplePublisher().sendEvent(new AgentsAvailableEvent(ev.getMissionInfo().getSerialAgentsNumbers(), report, getName() + getSerialNumber(), ev.getMissionInfo().getDuration(), missionFuture));
 			if (agentsAvailable != null && agentsAvailable.get().equals("success")) {
 				Future gadgetAvailable = getSimplePublisher().sendEvent(new GadgetAvailableEvent(missionInfo.getGadget(), report, getName() + getSerialNumber()));
-				missionFuture.resolve("success");
-
 				if (gadgetAvailable != null && gadgetAvailable.get().equals("success")) {
-					if (mTime < TIME && mTime < missionInfo.getTimeExpired()) {
+					if (mTime < missionInfo.getTimeExpired()) {
+						complete(ev, "success");
 						report.setTimeCreated(mTime);
 						report.setMissionName(ev.getMissionInfo().getMissionName());
 						report.setTimeIssued(ev.getMissionInfo().getTimeIssued());
 						report.setM(serialNumber);
+						missionFuture.resolve("success");
 						diary.addReport(report);
-					//	getSimplePublisher().sendEvent(new SendAgentsEvent(ev.getMissionInfo().getSerialAgentsNumbers(), missionInfo.getDuration(), getName() + getSerialNumber()));
-						complete(ev, "success");
+						//	getSimplePublisher().sendEvent(new SendAgentsEvent(ev.getMissionInfo().getSerialAgentsNumbers(), missionInfo.getDuration(), getName() + getSerialNumber()));
 						print("success", ev.getSender());
 					} else {
 				//		getSimplePublisher().sendEvent(new ReleaseAgentsEvent(ev.getMissionInfo().getSerialAgentsNumbers(), getName() + getSerialNumber()));
+						missionFuture.resolve("fail");
 						complete(ev, "fail - mission time expired");
 						print("fail - mission time expired", ev.getSender());
 					}
 				} else {
-				//	getSimplePublisher().sendEvent(new ReleaseAgentsEvent(ev.getMissionInfo().getSerialAgentsNumbers(), getName() + getSerialNumber()));
+					missionFuture.resolve("fail");
+					//	getSimplePublisher().sendEvent(new ReleaseAgentsEvent(ev.getMissionInfo().getSerialAgentsNumbers(), getName() + getSerialNumber()));
 					complete(ev, "fail - gadget is not available");
 					print("fail - gadget is not available", ev.getSender());
-
 				}
 			} else {
+				missionFuture.resolve("fail");
 				complete(ev, "fail - agents are not available");
 				print("fail - agents are not available", ev.getSender());
 			}
-
 		});
 	}
 
