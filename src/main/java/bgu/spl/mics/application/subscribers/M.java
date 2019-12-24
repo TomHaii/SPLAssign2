@@ -7,6 +7,7 @@ import bgu.spl.mics.application.passiveObjects.Diary;
 import bgu.spl.mics.application.passiveObjects.MissionInfo;
 import bgu.spl.mics.application.passiveObjects.Report;
 
+import java.sql.Time;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -32,10 +33,10 @@ public class M extends Subscriber {
 	protected void initialize() {
 		System.out.println(getName() + getSerialNumber() + " started");
 		subscribeBroadcast(TimeEndedBroadcast.class, b -> {
-			System.out.println(getName() + getSerialNumber() + " terminated");
 			terminate();
+            System.out.println(getName() + getSerialNumber() + " terminated");
 
-		});
+        });
 		subscribeBroadcast(TickBroadcast.class, b -> {
 			mTime = b.getTime();
 		});
@@ -46,10 +47,10 @@ public class M extends Subscriber {
 			MissionInfo missionInfo = ev.getMissionInfo();
 			Future agentsAvailable = getSimplePublisher().sendEvent(new AgentsAvailableEvent(ev.getMissionInfo().getSerialAgentsNumbers(), report, getName() + getSerialNumber()));
 			if (agentsAvailable != null) {
-				if (agentsAvailable.get().equals("success")) {
+				if (agentsAvailable.get(100*TIME,TimeUnit.MILLISECONDS)!= null && agentsAvailable.get(100*(TIME-mTime),TimeUnit.MILLISECONDS).equals("success")) {
 					Future gadgetAvailable = getSimplePublisher().sendEvent(new GadgetAvailableEvent(missionInfo.getGadget(), report, getName() + getSerialNumber()));
 					if (gadgetAvailable != null) {
-						if (gadgetAvailable.get().equals("success")) {
+						if (gadgetAvailable.get(100*TIME,TimeUnit.MILLISECONDS)!= null && gadgetAvailable.get(100*(TIME-mTime),TimeUnit.MILLISECONDS).equals("success")) {
 							if (mTime < TIME && mTime < missionInfo.getTimeExpired()) {
 								report.setTimeCreated(mTime);
 								report.setMissionName(ev.getMissionInfo().getMissionName());

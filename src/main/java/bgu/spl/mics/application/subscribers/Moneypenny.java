@@ -6,7 +6,9 @@ import bgu.spl.mics.Subscriber;
 import bgu.spl.mics.application.messages.*;
 import bgu.spl.mics.application.passiveObjects.Inventory;
 import bgu.spl.mics.application.passiveObjects.Squad;
+import javafx.util.Pair;
 
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -26,6 +28,7 @@ public class Moneypenny extends Subscriber {
 		super("MoneyPenny");
 		serialNumber = i;
 		agentSender = (i%2 == 0);
+
 	}
 
 
@@ -42,14 +45,15 @@ public class Moneypenny extends Subscriber {
 	protected void initialize() {
 		System.out.println(getName() + getSerialNumber() + " started");
 		subscribeBroadcast(TimeEndedBroadcast.class, b -> {
+			squadInstance.releaseAgents(null);
 			terminate();
 			System.out.println(getName() + getSerialNumber() + " terminated");
 		});
 		if (isAgentSender()) {
+
 			subscribeEvent(SendAgentsEvent.class, ev -> {
 				System.out.println(getName() + getSerialNumber() + " is handling a sendAgentsEvent from "+ev.getSender());
 				squadInstance.sendAgents(ev.getAgentSerialNumbers(), ev.getTime());
-				print(SendAgentsEvent.class, "success", ev.getSender());
 				complete(ev, "success");
 			});
 			subscribeEvent(ReleaseAgentsEvent.class, ev -> {
@@ -61,7 +65,6 @@ public class Moneypenny extends Subscriber {
 		} else {
 			subscribeEvent(AgentsAvailableEvent.class, ev -> {
 				System.out.println(getName() + getSerialNumber() + " is handling an AgentsAvailableEvent from "+ev.getSender());
-
 				if (!squadInstance.getAgents(ev.getAgentSerialNumbers())) {
 					complete(ev, "fail - agents requested do not exist");
 					print(AgentsAvailableEvent.class, "fail - agents requested do not exist", ev.getSender());
@@ -75,6 +78,7 @@ public class Moneypenny extends Subscriber {
 				}
 
 			});
+
 		}
 	}
 

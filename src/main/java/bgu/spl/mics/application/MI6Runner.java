@@ -38,15 +38,19 @@ public class MI6Runner {
         LinkedList<Intelligence> intelligenceList = new LinkedList<>();
         createServices(services, mList, mpList, intelligenceList, services.get("time").getAsInt());
         TimeService timeService = new TimeService(services.get("time").getAsInt());
+        Thread ts = new Thread(timeService);
         Q q = new Q();
-        List<Thread> threadsList = new LinkedList<>(Arrays.asList(new Thread(q), new Thread(timeService)));
-        threadsActivator(threadsList, mList, mpList, intelligenceList);
+//        Killer killer = new Killer(services.get("M").getAsInt());
+        //, new Thread(killer))
+        List<Thread> threadsList = new LinkedList<>();
+        threadsList.add(new Thread((q)));
+        threadsActivator(threadsList, mList, mpList, intelligenceList, ts);
         System.out.println("Printing Files");
         Inventory.getInstance().printToFile(args[1]);
         Diary.getInstance().printToFile(args[2]);
     }
 
-    private static void threadsActivator(List<Thread> threadsList, LinkedList<M> mList, LinkedList<Moneypenny> mpList, LinkedList<Intelligence> intelligenceList) {
+    private static void threadsActivator(List<Thread> threadsList, LinkedList<M> mList, LinkedList<Moneypenny> mpList, LinkedList<Intelligence> intelligenceList, Thread ts) {
         for (M m : mList)
             threadsList.add(new Thread(m));
         for (Moneypenny moneypenny : mpList)
@@ -56,6 +60,13 @@ public class MI6Runner {
         for (Thread t : threadsList) {
             t.start();
         }
+        threadsList.add(ts);
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        ts.start();
         for (Thread t : threadsList) {
             try {
                 t.join();
