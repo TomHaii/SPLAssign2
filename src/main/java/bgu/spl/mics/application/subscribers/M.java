@@ -32,7 +32,7 @@ public class M extends Subscriber {
 	protected void initialize() {
 		System.out.println(getName() + getSerialNumber() + " started");
 		subscribeBroadcast(TimeEndedBroadcast.class, b -> {
-			getSimplePublisher().sendEvent(new MTerminatedEvent(getName() + getSerialNumber()));
+			//getSimplePublisher().sendEvent(new MTerminatedEvent(getName() + getSerialNumber()));
 			System.out.println(getName() + getSerialNumber() + " terminated");
 			terminate();
 
@@ -45,11 +45,15 @@ public class M extends Subscriber {
 			Report report = new Report();
 			System.out.println(getName() + getSerialNumber() + " is handling a missionReceivedEvent from " + ev.getSender() + "  |  mission name: " + ev.getMissionInfo().getMissionName());
 			MissionInfo missionInfo = ev.getMissionInfo();
-			Future agentsAvailable = getSimplePublisher().sendEvent(new AgentsAvailableEvent(ev.getMissionInfo().getSerialAgentsNumbers(), report, getName() + getSerialNumber()));
+			Future<String> missionFuture = new Future<String>();
+			Future agentsAvailable = getSimplePublisher().sendEvent(new AgentsAvailableEvent(ev.getMissionInfo().getSerialAgentsNumbers(), report, getName() + getSerialNumber(), ev.getMissionInfo().getDuration(), missionFuture));
 			if (agentsAvailable != null && agentsAvailable.get().equals("success")) {
 				Future gadgetAvailable = getSimplePublisher().sendEvent(new GadgetAvailableEvent(missionInfo.getGadget(), report, getName() + getSerialNumber()));
+				missionFuture.resolve("success");
+
 				if (gadgetAvailable != null && gadgetAvailable.get().equals("success")) {
-					if (mTime <TIME && mTime < missionInfo.getTimeExpired()) {
+
+					if (mTime < TIME && mTime < missionInfo.getTimeExpired()) {
 						report.setTimeCreated(mTime);
 						report.setMissionName(ev.getMissionInfo().getMissionName());
 						report.setTimeIssued(ev.getMissionInfo().getTimeIssued());

@@ -1,6 +1,7 @@
 package bgu.spl.mics.application.passiveObjects;
 import javax.swing.*;
 import java.util.*;
+import java.util.concurrent.Semaphore;
 
 /**
  * Passive data-object representing a information about an agent in MI6.

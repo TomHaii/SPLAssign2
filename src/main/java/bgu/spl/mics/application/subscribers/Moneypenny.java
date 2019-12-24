@@ -41,24 +41,25 @@ public class Moneypenny extends Subscriber {
 	@Override
 	protected void initialize() {
 		System.out.println(getName() + getSerialNumber() + " started");
+
 		subscribeBroadcast(TimeEndedBroadcast.class, b -> {
 			terminate();
 			System.out.println(getName() + getSerialNumber() + " terminated");
 		});
-		if (isAgentSender()) {
-			subscribeEvent(SendAgentsEvent.class, ev -> {
-				System.out.println(getName() + getSerialNumber() + " is handling a sendAgentsEvent from "+ev.getSender());
-				squadInstance.sendAgents(ev.getAgentSerialNumbers(), ev.getTime());
-				print(SendAgentsEvent.class, "success", ev.getSender());
-				complete(ev, "success");
-			});
-			subscribeEvent(ReleaseAgentsEvent.class, ev -> {
-				System.out.println(getName() + getSerialNumber() + " is handling a releaseAgentsEvent from "+ev.getSender());
-				squadInstance.releaseAgents(ev.getAgentSerialNumbers());
-				print(ReleaseAgentsEvent.class, "success",ev.getSender());
-				complete(ev, "success");
-			});
-		} else {
+	//	if (isAgentSender()) {
+//			subscribeEvent(SendAgentsEvent.class, ev -> {
+//				System.out.println(getName() + getSerialNumber() + " is handling a sendAgentsEvent from "+ev.getSender());
+//				squadInstance.sendAgents(ev.getAgentSerialNumbers(), ev.getTime());
+//				print(SendAgentsEvent.class, "success", ev.getSender());
+//				complete(ev, "success");
+//			});
+//			subscribeEvent(ReleaseAgentsEvent.class, ev -> {
+//				System.out.println(getName() + getSerialNumber() + " is handling a releaseAgentsEvent from "+ev.getSender());
+//				squadInstance.releaseAgents(ev.getAgentSerialNumbers());
+//				print(ReleaseAgentsEvent.class, "success",ev.getSender());
+//				complete(ev, "success");
+//			});
+	//	} else {
 			subscribeEvent(AgentsAvailableEvent.class, ev -> {
 				System.out.println(getName() + getSerialNumber() + " is handling an AgentsAvailableEvent from "+ev.getSender());
 
@@ -71,12 +72,16 @@ public class Moneypenny extends Subscriber {
 					ev.getReport().setAgentsNames(squadInstance.getAgentsNames(ev.getAgentSerialNumbers()));
 					complete(ev, "success");
 					print(AgentsAvailableEvent.class, "success", ev.getSender());
-
+					if(ev.getFuture().get().equals("success")){
+						squadInstance.sendAgents(ev.getAgentSerialNumbers(), ev.getTime());
+					}
+					else
+						squadInstance.releaseAgents(ev.getAgentSerialNumbers());
 				}
 
 			});
 		}
-	}
+	//}
 
 	private void print(Class<? extends Event<?>> cl, String msg, String sender) {
 		if (cl == SendAgentsEvent.class) {

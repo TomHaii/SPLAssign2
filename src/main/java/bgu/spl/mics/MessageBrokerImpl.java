@@ -68,23 +68,23 @@ public class MessageBrokerImpl implements MessageBroker {
 
 	@Override
 	public <T> Future<T> sendEvent(Event<T> e) {
-		if (eventMap.containsKey(e.getClass()) && !eventMap.get(e.getClass()).isEmpty()) {
+		if (eventMap.containsKey(e.getClass())) {
 			synchronized (eventMap.get(e.getClass())) {  //synchronizing the queue so that the round robin would work correctly
 				Subscriber subToSendEvent = eventMap.get(e.getClass()).poll(); //retrieving the subscriber at the head of the queue
 				Future<T> future = new Future<>();
 				futureMap.put(e, future);
 				if (subToSendEvent != null) {
-					subscriberList.get(subToSendEvent).add(e);
-					eventMap.get(e.getClass()).add(subToSendEvent); //adding the subscriber we pulled at the tail of the queue
-					return future;
-				}
-				else{
+						subscriberList.get(subToSendEvent).add(e);
+						eventMap.get(e.getClass()).add(subToSendEvent); //adding the subscriber we pulled at the tail of the queue
+						return future;
+				} else {
 					System.out.println("None of the subscribers is capable of handling this event");
 					complete(e, null);
 				}
 			}
 		}
 		return null;
+
 	}
 
 
