@@ -40,7 +40,6 @@ public class Q extends Subscriber {
 				print("success", ev.getSender());
 				ev.getReport().setQTime(qTime);
 				ev.getReport().setGadgetName(ev.getGadget());
-
 			}
 		});
 	}
