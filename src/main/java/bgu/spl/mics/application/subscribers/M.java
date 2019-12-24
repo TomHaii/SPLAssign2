@@ -32,7 +32,6 @@ public class M extends Subscriber {
 	protected void initialize() {
 		System.out.println(getName() + getSerialNumber() + " started");
 		subscribeBroadcast(TimeEndedBroadcast.class, b -> {
-//			getSimplePublisher().sendEvent(new MTerminatedEvent(getName() + getSerialNumber()));
 			System.out.println(getName() + getSerialNumber() + " terminated");
 			terminate();
 
@@ -48,7 +47,6 @@ public class M extends Subscriber {
 			Future agentsAvailable = getSimplePublisher().sendEvent(new AgentsAvailableEvent(ev.getMissionInfo().getSerialAgentsNumbers(), report, getName() + getSerialNumber()));
 			if (agentsAvailable != null) {
 				if (agentsAvailable.get().equals("success")) {
-//				mTime = getSimplePublisher().sendEvent(new TimeUpdateEvent()).get();
 					Future gadgetAvailable = getSimplePublisher().sendEvent(new GadgetAvailableEvent(missionInfo.getGadget(), report, getName() + getSerialNumber()));
 					if (gadgetAvailable != null) {
 						if (gadgetAvailable.get().equals("success")) {
@@ -91,7 +89,6 @@ public class M extends Subscriber {
 				complete(ev, "fail - time ended");
 				print("fail - time ended", ev.getSender());
 			}
-
 		});
 	}
 

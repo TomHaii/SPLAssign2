@@ -2,7 +2,6 @@ package bgu.spl.mics.application.subscribers;
 
 import bgu.spl.mics.Subscriber;
 import bgu.spl.mics.application.messages.GadgetAvailableEvent;
-import bgu.spl.mics.application.messages.KillSubsBroadcast;
 import bgu.spl.mics.application.messages.TickBroadcast;
 import bgu.spl.mics.application.messages.TimeEndedBroadcast;
 import bgu.spl.mics.application.passiveObjects.Inventory;
@@ -24,10 +23,6 @@ public class Q extends Subscriber {
 	@Override
 	protected void initialize() {
 		System.out.println(getName() + " started");
-//		subscribeBroadcast(KillSubsBroadcast.class, b -> {
-//			terminate();
-//			System.out.println(getName() + " terminated");
-//		});
 		subscribeBroadcast(TimeEndedBroadcast.class, b -> {
 			terminate();
 			System.out.println(getName() + " terminated");
