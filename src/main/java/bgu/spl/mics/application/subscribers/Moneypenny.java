@@ -41,10 +41,6 @@ public class Moneypenny extends Subscriber {
 	@Override
 	protected void initialize() {
 		System.out.println(getName() + getSerialNumber() + " started");
-//		subscribeBroadcast(KillSubsBroadcast.class, b -> {
-//			System.out.println(getName() + getSerialNumber() + " terminated");
-//			terminate();
-//		});
 		subscribeBroadcast(TimeEndedBroadcast.class, b -> {
 			terminate();
 			System.out.println(getName() + getSerialNumber() + " terminated");
