@@ -37,18 +37,10 @@ public class MI6Runner {
         LinkedList<Moneypenny> mpList = new LinkedList<>();
         LinkedList<Intelligence> intelligenceList = new LinkedList<>();
         createServices(services, mList, mpList, intelligenceList, services.get("time").getAsInt());
-        Killer killer = new Killer(services.get("M").getAsInt());
         TimeService timeService = new TimeService(services.get("time").getAsInt());
-        TimeUpdater timeUpdater = new TimeUpdater();
         Q q = new Q();
-        List<Thread> threadsList = new LinkedList<>(Arrays.asList(new Thread(q), new Thread(timeService), new Thread(killer), new Thread(timeUpdater)));
+        List<Thread> threadsList = new LinkedList<>(Arrays.asList(new Thread(q), new Thread(timeService)));
         threadsActivator(threadsList, mList, mpList, intelligenceList);
-        while (Thread.activeCount() > 2) { //makes sure all threads were done before printing the files
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException ignored) {
-            }
-        }
         System.out.println("Printing Files");
         Inventory.getInstance().printToFile(args[1]);
         Diary.getInstance().printToFile(args[2]);
@@ -63,6 +55,11 @@ public class MI6Runner {
             threadsList.add(new Thread(intelligence));
         for (Thread t : threadsList) {
             t.start();
+        }
+        for (Thread t : threadsList) {
+            try {
+                t.join();
+            } catch (InterruptedException ignored) {}
         }
     }
 
@@ -79,6 +76,7 @@ public class MI6Runner {
         }
         squad.load(agents);
     }
+
     private static void loadInventory(JsonArray inv){
         Inventory inventory = Inventory.getInstance();
         String[] items = new String[inv.size()];

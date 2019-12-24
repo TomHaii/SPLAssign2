@@ -24,7 +24,11 @@ public class Q extends Subscriber {
 	@Override
 	protected void initialize() {
 		System.out.println(getName() + " started");
-		subscribeBroadcast(KillSubsBroadcast.class, b -> {
+//		subscribeBroadcast(KillSubsBroadcast.class, b -> {
+//			terminate();
+//			System.out.println(getName() + " terminated");
+//		});
+		subscribeBroadcast(TimeEndedBroadcast.class, b -> {
 			terminate();
 			System.out.println(getName() + " terminated");
 		});

@@ -67,7 +67,7 @@ public class MessageBrokerImpl implements MessageBroker {
 
 	@Override
 	public <T> Future<T> sendEvent(Event<T> e) {
-		if (eventMap.containsKey(e.getClass())) {
+		if (eventMap.containsKey(e.getClass()) && !eventMap.get(e.getClass()).isEmpty()) {
 			synchronized (eventMap.get(e.getClass())) {  //synchronizing the queue so that the round robin would work correctly
 				Subscriber subToSendEvent = eventMap.get(e.getClass()).poll(); //retrieving the subscriber at the head of the queue
 				Future<T> future = new Future<>();
