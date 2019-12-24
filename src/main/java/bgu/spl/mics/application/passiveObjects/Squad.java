@@ -43,8 +43,15 @@ public class Squad {
 	 */
 	public void releaseAgents(List<String> serials) {
 		synchronized (this) {
-			for (String s : serials) {
-				agents.get(s).release();
+			if (serials == null){
+				for (String s: agents.keySet()){
+					agents.get(s).release();
+				}
+			}
+			else {
+				for (String s : serials) {
+					agents.get(s).release();
+				}
 			}
 			notifyAll();
 		}
@@ -55,11 +62,14 @@ public class Squad {
 	 * @param time   milliseconds to sleep
 	 */
 	public void sendAgents(List<String> serials, int time){
-		try {
-			Thread.sleep(time * 100);
-			releaseAgents(serials);
+		synchronized (this) {
+			try {
+				Thread.sleep(time * 100);
+				releaseAgents(serials);
+
+			} catch (Exception ignored) {
+			}
 		}
-		catch (Exception ignored){}
 	}
 
 	/**

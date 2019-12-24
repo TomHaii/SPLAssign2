@@ -3,7 +3,9 @@ package bgu.spl.mics.application.messages;
 import bgu.spl.mics.Event;
 import bgu.spl.mics.Future;
 import bgu.spl.mics.application.passiveObjects.Report;
+import javafx.util.Pair;
 
+import java.util.LinkedList;
 import java.util.List;
 
 public class AgentsAvailableEvent implements Event<String>{
