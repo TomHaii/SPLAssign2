@@ -2,8 +2,8 @@
   "reports": [
     {
       "missionName": "Mission1CanHappen",
-      "mId": 1,
-      "moneypennyId": 1,
+      "mId": 2,
+      "moneypennyId": 3,
       "serialAgentsNumbers": [
         "001",
         "003"
@@ -30,9 +30,26 @@
         "AGENT004"
       ],
       "gadgetName": "Mission2Tool",
-      "qTime": 8,
+      "qTime": 7,
       "timeIssued": 0,
       "timeCreated": 1
+    },
+    {
+      "missionName": "Mission5OrMission6Will2",
+      "mId": 3,
+      "moneypennyId": 3,
+      "serialAgentsNumbers": [
+        "004",
+        "003"
+      ],
+      "agentsNames": [
+        "AGENT004",
+        "AGENT003"
+      ],
+      "gadgetName": "Mission5Tool",
+      "qTime": 9,
+      "timeIssued": 0,
+      "timeCreated": 7
     }
   ],
   "total": 6

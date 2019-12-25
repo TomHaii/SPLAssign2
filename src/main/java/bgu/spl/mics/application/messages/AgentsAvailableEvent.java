@@ -12,15 +12,12 @@ public class AgentsAvailableEvent implements Event<String>{
     private List<String> agentSerialNumbers;
     private Report report;
     private String sender;
-    private Future<String> future;
-    private int time;
 
-    public AgentsAvailableEvent(List<String> agentsSerialNumbers, Report report, String sender, int time, Future<String> future){
+    public AgentsAvailableEvent(List<String> agentsSerialNumbers, Report report, String sender){
         this.agentSerialNumbers = agentsSerialNumbers;
         this.report = report;
         this.sender = sender;
-        this.time = time;
-        this.future = future;
+
     }
 
     public List<String> getAgentSerialNumbers(){
@@ -36,11 +33,4 @@ public class AgentsAvailableEvent implements Event<String>{
         return sender;
     }
 
-    public Future<String> getFuture() {
-        return future;
-    }
-
-    public int getTime() {
-        return time;
-    }
 }

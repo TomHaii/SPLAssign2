@@ -40,8 +40,6 @@ public class MI6Runner {
         TimeService timeService = new TimeService(services.get("time").getAsInt());
         Thread ts = new Thread(timeService);
         Q q = new Q();
-//        Killer killer = new Killer(services.get("M").getAsInt());
-        //, new Thread(killer))
         List<Thread> threadsList = new LinkedList<>();
         threadsList.add(new Thread((q)));
         threadsActivator(threadsList, mList, mpList, intelligenceList, ts);
