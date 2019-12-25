@@ -38,19 +38,6 @@ public class MessageBrokerTest {
     @Test
     public void test(){
         assertNotNull(broker);
-        //broker.subscribeEvent(exampleEvent.getClass(), exampleEventHandlerSubscriber);
-    //    eventSender.getSimplePublisher().sendEvent(exampleEvent).resolve("Hello from evHandler");
-      //  assertEquals(eventSender.getSimplePublisher().sendEvent(exampleEvent).get(), "Hello from evHandler");
 
-//        broker.subscribeEvent(exampleEvent.getClass(), s1);
-//        assertNotNull(broker.sendEvent(exampleEvent));
-//        broker.unregister(s1);
-//        assertNull(broker.sendEvent(exampleEvent));
-//        broker.subscribeEvent(exampleEvent.getClass(), s1);
-//        Future o1 = broker.sendEvent(exampleEvent);
-//        assertFalse(o1.isDone());
-//        broker.complete(exampleEvent, "YES");
-//        assertTrue(o1.isDone());
-//        assertEquals(o1.get(1, TimeUnit.SECONDS), "YES");
     }
 }

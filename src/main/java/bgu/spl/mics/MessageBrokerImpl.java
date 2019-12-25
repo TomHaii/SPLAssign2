@@ -70,13 +70,13 @@ public class MessageBrokerImpl implements MessageBroker {
         if (eventMap.containsKey(e.getClass()) && !eventMap.get(e.getClass()).isEmpty()) {
             synchronized (eventMap.get(e.getClass())) {  //synchronizing the queue so that the round robin would work correctly
 					Subscriber subToSendEvent = eventMap.get(e.getClass()).poll(); //retrieving the subscriber at the head of the
-					//synchronized (subscriberList.get(subToSendEvent)) {
+					synchronized (subscriberList.get(subToSendEvent)) {
 						Future<T> future = new Future<>();
 						futureMap.put(e, future);
 						subscriberList.get(subToSendEvent).add(e);
 						eventMap.get(e.getClass()).add(subToSendEvent); //adding the subscriber we pulled at the tail of the queue
 						return future;
-					//}
+					}
 			}
         } else {
         	System.out.println("none of the subscribers is capable of handling this event  " +e.getClass());
