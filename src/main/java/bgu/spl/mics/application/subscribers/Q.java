@@ -44,6 +44,7 @@ public class Q extends Subscriber {
 		});
 	}
 
+
 	private void print(String msg, String sender){
 		System.out.println(getName() + " finished handling gadgetAvailableEvent for "+sender+". result: " +msg);
 	}

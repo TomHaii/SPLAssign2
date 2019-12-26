@@ -72,7 +72,6 @@ public class Intelligence extends Subscriber {
 		});
 
 	}
-
 	public int getSerialNumber(){
 		return serialNumber;
 	}

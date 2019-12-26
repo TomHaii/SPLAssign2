@@ -85,7 +85,6 @@ public class MessageBrokerImpl implements MessageBroker {
         }
     }
 
-
 	@Override
 	public void register(Subscriber m) {
 		subscriberList.putIfAbsent(m, new LinkedBlockingQueue<>());

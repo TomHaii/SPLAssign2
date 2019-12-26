@@ -31,7 +31,6 @@ public class Moneypenny extends Subscriber {
 
 	}
 
-
 	public int getSerialNumber() {
 		return serialNumber;
 	}

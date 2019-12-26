@@ -43,7 +43,6 @@ public class Future<T> {
 			return result;
 		}
 	}
-	
 	/**
      * Resolves the result of this Future object.
      */

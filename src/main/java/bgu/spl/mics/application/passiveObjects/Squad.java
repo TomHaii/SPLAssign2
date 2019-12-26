@@ -96,7 +96,6 @@ public class Squad {
 		}
 	}
 
-
 	/**
 	 * gets the agents names
 	 * @param serials the serial numbers of the agents

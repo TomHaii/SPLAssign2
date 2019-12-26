@@ -132,7 +132,6 @@ public abstract class Subscriber extends RunnableSubPub {
             } catch (Exception ignored) {}
         }
         broker.unregister(this);
-
     }
 
 }

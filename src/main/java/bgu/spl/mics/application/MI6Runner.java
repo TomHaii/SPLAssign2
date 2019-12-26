@@ -114,6 +114,5 @@ public class MI6Runner {
             Moneypenny mp = new Moneypenny(i);
             mpList.add(mp);
         }
-
     }
 }

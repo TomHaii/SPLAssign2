@@ -46,7 +46,6 @@ public class M extends Subscriber {
 			System.out.println(getName() + getSerialNumber() + " is handling a missionReceivedEvent from " + ev.getSender() + "  |  mission name: " + ev.getMissionInfo().getMissionName());
 			MissionInfo missionInfo = ev.getMissionInfo();
 			Future agentsAvailable = getSimplePublisher().sendEvent(new AgentsAvailableEvent(ev.getMissionInfo().getSerialAgentsNumbers(), report, getName() + getSerialNumber()));
-
 			if (agentsAvailable != null) {
 				if (agentsAvailable.get(100*TIME,TimeUnit.MILLISECONDS)!= null && agentsAvailable.get(100*(TIME),TimeUnit.MILLISECONDS).equals("success")) {
 					Future gadgetAvailable = getSimplePublisher().sendEvent(new GadgetAvailableEvent(missionInfo.getGadget(), report, getName() + getSerialNumber()));
